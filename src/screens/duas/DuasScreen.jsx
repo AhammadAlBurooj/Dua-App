@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { UI_TEXT } from '../../utils/translations';
+import TopSlidingBanner from './TopSlidingBanner';
+import AsmaulHusnaModal from './AsmaulHusnaModal';
 
 // Icon mapping
 const ICON_MAP = {
@@ -49,9 +51,11 @@ export default function DuasScreen({
   onToggleFavorite, 
   onTogglePlay, 
   onSelectDua,
-  settings 
+  settings,
+  onNavigateTab
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAsmaulHusnaOpen, setIsAsmaulHusnaOpen] = useState(false);
   const searchInputRef = useRef(null);
 
   const lang = settings?.language || 'ml';
@@ -237,58 +241,15 @@ export default function DuasScreen({
            CASE 3: HOME SCREEN (Screen 1: Mosque Hero & Categories)
            ======================================================== */
         <div className="home-screen-view">
-          {/* Islamic Dome & Mosque Silhouette Hero Banner */}
-          <div className="home-hero-banner">
-            {/* Centered Mosque Silhouette Artwork */}
-            <div className="hero-mosque-graphic">
-              <svg viewBox="0 0 400 120" fill="none" className="mosque-silhouette-svg">
-                {/* Crescent Moon */}
-                <path d="M200 18 A6 6 0 1 0 206 24 A5 5 0 1 1 200 18 Z" fill="rgba(255,255,255,0.7)" />
-                {/* Center Main Dome */}
-                <path d="M165 95 C165 50, 200 28, 200 28 C200 28, 235 50, 235 95 Z" fill="rgba(255, 255, 255, 0.22)" />
-                {/* Secondary Left Dome */}
-                <path d="M125 95 C125 65, 150 48, 150 48 C150 48, 175 65, 175 95 Z" fill="rgba(255, 255, 255, 0.16)" />
-                {/* Secondary Right Dome */}
-                <path d="M225 95 C225 65, 250 48, 250 48 C250 48, 275 65, 275 95 Z" fill="rgba(255, 255, 255, 0.16)" />
-                {/* Far Left Minaret */}
-                <path d="M90 95 L90 40 L94 36 L94 95 Z" fill="rgba(255, 255, 255, 0.18)" />
-                <path d="M88 40 L96 40 L92 32 Z" fill="rgba(255, 255, 255, 0.25)" />
-                {/* Far Right Minaret */}
-                <path d="M306 95 L306 40 L310 36 L310 95 Z" fill="rgba(255, 255, 255, 0.18)" />
-                <path d="M304 40 L312 40 L308 32 Z" fill="rgba(255, 255, 255, 0.25)" />
-              </svg>
-
-              <div className="hero-titles-wrap">
-                <h1 className="hero-app-title-en">Islamic Dua</h1>
-                <h2 className="hero-app-title-ml">ദുആകൾ</h2>
-                <p className="hero-app-tagline">
-                  {isEnglish ? "Supplications to draw closer to Allah..." : "അല്ലാഹുവിനോട് അടുത്തേക്കാനുള്ള പ്രാർത്ഥന..."}
-                </p>
-              </div>
-            </div>
-
-            {/* Floating Search Bar (matching Screen 1) */}
-            <div className="hero-floating-search-wrap">
-              <Search size={18} className="hero-search-icon" />
-              <input 
-                ref={searchInputRef}
-                type="text" 
-                className="hero-floating-search-input"
-                placeholder="Search duas..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button 
-                  className="hero-search-clear-btn" 
-                  onClick={() => setSearchQuery('')}
-                  aria-label="Clear search"
-                >
-                  <X size={15} />
-                </button>
-              )}
-            </div>
-          </div>
+          {/* Dynamic Scenic Header & Auto/Manual Sliding Cards (Quran, Asmaul Husna, Daily Duas) */}
+          <TopSlidingBanner 
+            onSelectCategory={onSelectCategory}
+            onNavigateTab={onNavigateTab}
+            onOpenAsmaulHusna={() => setIsAsmaulHusnaOpen(true)}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            settings={settings}
+          />
 
           {/* Section: Main Categories (പ്രധാന വിഭാഗങ്ങൾ) */}
           <div className="home-categories-section">
@@ -335,6 +296,13 @@ export default function DuasScreen({
           </div>
         </div>
       )}
+
+      {/* 99 Names of Allah Modal Explorer */}
+      <AsmaulHusnaModal 
+        isOpen={isAsmaulHusnaOpen}
+        onClose={() => setIsAsmaulHusnaOpen(false)}
+        settings={settings}
+      />
     </div>
   );
 }
