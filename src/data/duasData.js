@@ -12,8 +12,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 5376, സഹീഹ് മുസ്ലിം 2017',
     benefitMl: 'ഭക്ഷണത്തിൽ ബറക്കത്ത് ലഭിക്കാനും പിശാചിന്റെ സാന്നിധ്യം തടയാനും ഇത് ചൊല്ലുക.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-182.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഭക്ഷണം', 'food', 'daily', 'തുടക്കം']
   },
   {
@@ -28,8 +26,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 3850, ജാമിഉത്-തിർമുദി 3457',
     benefitMl: 'ഭക്ഷണത്തിന് നന്ദി പ്രകാശിപ്പിക്കുന്നതിലൂടെ അല്ലാഹുവിന്റെ തൃപ്തിയും പാപമോചനവും ലഭിക്കുന്നു.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-184.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഭക്ഷണം', 'food', 'നന്ദി', 'alhamdulillah']
   },
   {
@@ -44,8 +40,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 5095, ജാമിഉത്-തിർമുദി 3426 (ഹസൻ)',
     benefitMl: 'ഈ ദുആ ചൊല്ലി ഇറങ്ങിയാൽ ‘നീ സംരക്ഷിക്കപ്പെട്ടിരിക്കുന്നു, മാർഗ്ഗദർശനം നൽകപ്പെട്ടിരിക്കുന്നു’ എന്ന് മലക്കുകൾ അറിയിക്കുന്നു.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-016.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വീട്', 'യാത്ര', 'സംരക്ഷണം', 'home', 'leaving']
   },
   {
@@ -60,8 +54,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 5096',
     benefitMl: 'വീട്ടിൽ പ്രവേശിക്കുമ്പോൾ സലാം പറയുകയും ഈ ദുആ ചൊല്ലുകയും ചെയ്താൽ പിശാച് അവിടെ രാത്രി തങ്ങുകയില്ല.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-018.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വീട്', 'പ്രവേശനം', 'home', 'peace']
   },
   {
@@ -76,8 +68,6 @@ export const DUAS = [
     reference: 'മുസ്നദ് അഹ്മദ് 24392, ഇബ്നു ഹിബ്ബാൻ',
     benefitMl: 'നല്ല സ്വഭാവത്തിനും വിനയത്തിനും വേണ്ടിയുള്ള പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-203.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['കണ്ണാടി', 'സ്വഭാവം', 'mirror', 'character']
   },
   {
@@ -92,8 +82,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 4023, സുനൻ തിർമുദി 3458',
     benefitMl: 'ഇത് ചൊല്ലുന്ന വ്യക്തിയുടെ മുൻകഴിഞ്ഞ ചെറുപാപങ്ങൾ പൊറുക്കപ്പെടുമെന്ന് നബി (സ) അരുളി.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-005.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വസ്ത്രം', 'clothes', 'നന്ദി']
   },
 
@@ -110,8 +98,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 6306',
     benefitMl: 'രാവിലെ ഉറച്ച വിശ്വാസത്തോടെ ചൊല്ലി അന്ന് വൈകുന്നേരത്തിന് മുൻപ് മരണപ്പെട്ടാൽ അല്ലെങ്കിൽ വൈകുന്നേരം ചൊല്ലി രാവിലെയ്ക്ക് മുൻപ് മരണപ്പെട്ടാൽ അവൻ സ്വർഗ്ഗാവകാശിയാകും.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-075.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['സയ്യിദുൽ ഇസ്തിഗ്ഫാർ', 'morning', 'evening', 'സ്വർഗ്ഗം', 'പാപമോചനം']
   },
   {
@@ -126,8 +112,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 5088, ജാമിഉത്-തിർമുദി 3388 (സ്വഹീഹ്)',
     benefitMl: 'രാവിലെയും വൈകുന്നേരവും 3 തവണ ചൊല്ലുന്നവന് യാതൊരു ഉപദ്രവവും അന്ന് ഏൽക്കുകയില്ല.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-085.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['സംരക്ഷണം', 'morning', 'evening', 'protection', 'വിഷമം']
   },
   {
@@ -142,8 +126,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 2723',
     benefitMl: 'പ്രഭാതം ധന്യമാക്കാനും ദിവസം മുഴുവൻ അല്ലാഹുവിന്റെ കാവലിലാവാനും നബി (സ) പതിവാക്കിയ പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-076.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['പ്രഭാതം', 'morning', 'അധീശത്വം', 'തൗഹീദ്']
   },
   {
@@ -158,8 +140,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 2723',
     benefitMl: 'രാത്രിയിൽ സാന്ത്വനവും സമാധാനവും സംരക്ഷണവും ലഭിക്കാൻ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-076.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['സായാഹ്നം', 'evening', 'സമാധാനം']
   },
   {
@@ -174,8 +154,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 2709',
     benefitMl: 'വൈകുന്നേരം 3 തവണ ചൊല്ലുന്നവന് അന്ന് വിഷജീവികളുടെ ദംശനമോ മറ്റു ഉപദ്രവങ്ങളോ ഏൽക്കുകയില്ല.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-086.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വിഷജീവികൾ', 'evening', 'കാവൽ', 'സംരക്ഷണം']
   },
   {
@@ -190,8 +168,8 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ ബഖറ 2:255',
     benefitMl: 'രാവിലെയും വൈകുന്നേരവും ഓരോ നമസ്കാരത്തിന് ശേഷവും ഉറങ്ങുന്നതിന് മുമ്പും ഓതാൻ നബി (സ) പ്രത്യേകം ഉപദേശിച്ച വിശുദ്ധ സൂക്തം.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-074.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
+    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/002255.mp3',
+    reciter: 'മിശാരി റാശിദ് അൽ-അഫാസി (Mishary Alafasy)',
     tags: ['ഖുർആൻ', 'ആയത്തുൽ കുർസി', 'കാവൽ', 'quran', 'throne']
   },
 
@@ -208,8 +186,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 6324',
     benefitMl: 'ഉറക്കത്തിലേക്ക് പോകുമ്പോൾ മനസ്സ് അല്ലാഹുവിലേക്ക് സമർപ്പിക്കുന്ന ലളിതവും ഗംഭീരവുമായ പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-098.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഉറക്കം', 'sleep', 'രാത്രി', 'നിദ്ര']
   },
   {
@@ -224,8 +200,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 6312, സഹീഹ് മുസ്ലിം 2711',
     benefitMl: 'പുതിയൊരു ദിവസത്തെ ഉന്മേഷത്തോടെയും നന്ദിയോടെയും സ്വീകരിക്കാനുള്ള പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-001.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഉണരുമ്പോൾ', 'waking', 'പുലർച്ചെ', 'നന്ദി']
   },
   {
@@ -233,15 +207,13 @@ export const DUAS = [
     categoryId: 'sleep_wake',
     titleMl: 'കിടക്കയിൽ ചാരിനിൽക്കുമ്പോഴുള്ള തസ്ബീഹ് (ഫാത്തിമ തസ്ബീഹ്)',
     titleEn: 'Night Tasbeeh of Fatimah (RA)',
-    arabic: 'سُبْحَانَ اللَّهِ (33) ، الْحَمْدُ لِلَّهِ (33) ، اللَّهُ أَكْبَرُ (34)',
+    arabic: 'سُبْحَانَ اللَّهِ ، الْحَمْدُ لِلَّهِ ، اللَّهُ أَكْبَرُ',
     transliteration: 'Subḥānallāh (33x), Al-ḥamdulillāh (33x), Allāhu Akbar (34x)',
     meaningMl: 'അല്ലാഹു എത്രയോ പരിശുദ്ധൻ (33 തവണ), സർവ്വസ്തുതിയും അല്ലാഹുവിന് (33 തവണ), അല്ലാഹു ഏറ്റവും വലിയവൻ (34 തവണ).',
     meaningEn: 'Glory be to Allah (33 times), Praise be to Allah (33 times), Allah is the Greatest (34 times).',
     reference: 'സഹീഹ് അൽ-ബുഖാരി 3705, സഹീഹ് മുസ്ലിം 2727',
     benefitMl: 'ശാരീരിക ക്ഷീണം മാറാനും മനസ്സിന് ശക്തി ലഭിക്കാനും നബി (സ) തന്റെ പ്രിയപുത്രി ഫാത്തിമ (റ) ക്ക് പഠിപ്പിച്ചു കൊടുത്ത മഹത്തായ ദിക്ർ.',
     recommendedCount: 100,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-103.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['തസ്ബീഹ്', 'tasbeeh', 'ഉറക്കം', 'ക്ഷീണം']
   },
   {
@@ -256,8 +228,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 3893, ജാമിഉത്-തിർമുദി 3528',
     benefitMl: 'ദുഃസ്വപ്നങ്ങൾ കാണുമ്പോഴും രാത്രി ഞെട്ടിയുണരുമ്പോഴും ഈ ദുആ ചൊല്ലുക.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-109.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['പേടി', 'ദുഃസ്വപ്നം', 'nightmare', 'ഭയം']
   },
   {
@@ -272,8 +242,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 6320, സഹീഹ് മുസ്ലിം 2714',
     benefitMl: 'ഉറക്കത്തിൽ ശരീരവും ആത്മാവും അല്ലാഹുവിന്റെ അതിവിശാലമായ കാരുണ്യത്തിന് ഏൽപ്പിക്കുന്നു.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-099.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ആത്മാവ്', 'കരുണ', 'soul', 'protection']
   },
 
@@ -290,8 +258,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 234, ജാമിഉത്-തിർമുദി 55',
     benefitMl: 'വുദുവിന് ശേഷം ഇത് ചൊല്ലുന്ന വ്യക്തിക്ക് സ്വർഗ്ഗത്തിന്റെ 8 കവാടങ്ങളും തുറക്കപ്പെടുകയും ഇഷ്ടമുള്ള കവാടത്തിലൂടെ പ്രവേശിക്കുകയും ചെയ്യാം.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-014.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വുദു', 'wudhu', 'തൗബ', 'സ്വർഗ്ഗം', 'ശുദ്ധി']
   },
   {
@@ -306,8 +272,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 713, സുനൻ ഇബ്നു മാജ 771',
     benefitMl: 'പള്ളിയിലേക്ക് വലതുകാൽ വെച്ച് പ്രവേശിക്കുമ്പോൾ ചൊല്ലേണ്ട പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-020.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['പള്ളി', 'mosque', 'കാരുണ്യം', 'mercy']
   },
   {
@@ -322,8 +286,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 713',
     benefitMl: 'ഇടതുകാൽ വെച്ച് പള്ളിയിൽ നിന്ന് ഇറങ്ങുമ്പോൾ ചൊല്ലുക.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-021.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['പള്ളി', 'mosque', 'ഔദാര്യം', 'bounty']
   },
   {
@@ -338,8 +300,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 591',
     benefitMl: 'നമസ്കാരത്തിൽ സലാം വീട്ടിയ ഉടനെ 3 തവണ അസ്തഗ്ഫിറുല്ലാഹ് ചൊല്ലി ഇത് ചൊല്ലുക.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-066.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['നമസ്കാരം', 'salah', 'സലാം', 'സമാധാനം']
   },
   {
@@ -354,8 +314,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 870, തിർമുദി 261',
     benefitMl: 'ഒരാൾ അല്ലാഹുവിലേക്ക് ഏറ്റവും അടുക്കുന്നത് അവൻ സുജൂദിലായിരിക്കുമ്പോഴാണ്. അതിനാൽ സുജൂദിൽ ദുആകൾ അധികരിപ്പിക്കുക.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-043.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['സുജൂദ്', 'sujood', 'പ്രാർത്ഥന', 'നമസ്കാരം']
   },
   {
@@ -370,8 +328,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 1425, ജാമിഉത്-തിർമുദി 464 (സ്വഹീഹ്)',
     benefitMl: 'വിത്ർ നമസ്കാരത്തിൽ റസൂലുല്ലാഹി (സ) തന്റെ പേരമകൻ ഹസൻ (റ) വിന് പഠിപ്പിച്ചു കൊടുത്ത അതിമനോഹരമായ പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-116.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഖുനൂത്', 'qunoot', 'വിത്ർ', 'ഹിദായത്ത്']
   },
 
@@ -388,7 +344,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ ഇസ്രാഅ് 17:24',
     benefitMl: 'മാതാപിതാക്കൾ ജീവിച്ചിരിക്കുമ്പോഴും മരണശേഷവും ഒരു മകൻ അല്ലെങ്കിൽ മകൾ എപ്പോഴും ചെയ്യേണ്ട ഏറ്റവും ഉത്തമമായ പ്രാർത്ഥന.',
     recommendedCount: 3,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/017024.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['മാതാപിതാക്കൾ', 'parents', 'ഉമ്മ', 'ഉപ്പ', 'കരുണ']
   },
@@ -404,7 +359,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ ഫുർഖാൻ 25:74',
     benefitMl: 'കുടുംബജീവിതത്തിൽ സ്നേഹവും സമാധാനവും സദ്സ്വഭാവമുള്ള മക്കളെയും ലഭിക്കാൻ.',
     recommendedCount: 1,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/025074.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['ഭാര്യ', 'മക്കൾ', 'കുടുംബം', 'spouse', 'children']
   },
@@ -420,7 +374,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തു ആലു ഇംറാൻ 3:38',
     benefitMl: 'കുട്ടികൾ ഉണ്ടാകാനും അവർ സച്ചരിതരാവാനും വേണ്ടി സകരിയ്യാ നബി (അ) അല്ലാഹുവിനോട് തേടിയ പ്രാർത്ഥന.',
     recommendedCount: 1,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/003038.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['മക്കൾ', 'സന്താനം', 'offspring', 'ഖുർആൻ']
   },
@@ -436,7 +389,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്ത് ഇബ്രാഹിം 14:40',
     benefitMl: 'സ്വന്തത്തിനും മക്കൾക്കും നമസ്കാരത്തിൽ നിഷ്ഠയും ശ്രദ്ധയും ലഭിക്കാൻ.',
     recommendedCount: 1,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/014040.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['നമസ്കാരം', 'മക്കൾ', 'ഇബ്രാഹിം', 'prayer']
   },
@@ -454,8 +406,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുസ്സുഖ്റുഫ് 43:13-14, സഹീഹ് മുസ്ലിം 1342',
     benefitMl: 'കാർ, ബസ്, ബൈക്ക്, ട്രെയിൻ, വിമാനം തുടങ്ങിയ ഏതു വാഹനത്തിലും കയറുമ്പോൾ ചൊല്ലേണ്ട സുന്നത്ത് ദുആ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-206.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['വാഹനം', 'യാത്ര', 'vehicle', 'travel']
   },
   {
@@ -470,8 +420,6 @@ export const DUAS = [
     reference: 'സഹീഹ് മുസ്ലിം 1342',
     benefitMl: 'യാത്രയിൽ ക്ഷീണവും അപകടങ്ങളും ഇല്ലാതെ ലക്ഷ്യസ്ഥാനത്ത് സുരക്ഷിതമായി എത്തിച്ചേരാൻ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-208.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['യാത്ര', 'travel', 'സുരക്ഷ', 'ഭയഭക്തി']
   },
   {
@@ -486,8 +434,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 1797, സഹീഹ് മുസ്ലിം 1342',
     benefitMl: 'സ്വദേശത്തേക്കും കുടുംബത്തിലേക്കും തിരിച്ചെത്തുമ്പോൾ നന്ദിയോടെ ചൊല്ലുക.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-216.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['തിരിച്ചുവരവ്', 'return', 'സന്തോഷം']
   },
   {
@@ -502,8 +448,6 @@ export const DUAS = [
     reference: 'ജാമിഉത്-തിർമുദി 3443, സുനൻ അബൂദാവൂദ് 2600',
     benefitMl: 'യാത്ര പുറപ്പെടുന്ന സഹോദരനോ സുഹൃത്തിനോ കുടുംബാംഗത്തിനോ വേണ്ടി പ്രാർത്ഥിക്കാൻ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-209.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['യാത്രയയപ്പ്', 'farewell', 'വിട']
   },
 
@@ -520,8 +464,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 2893',
     benefitMl: 'മനസ്സിന് ഭാരവും ടെൻഷനും സാമ്പത്തിക ഞെരുക്കവും അനുഭവപ്പെടുമ്പോൾ പതിവാക്കേണ്ട മഹത്തായ ദുആ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-121.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ടെൻഷൻ', 'വിഷമം', 'കടം', 'debt', 'anxiety', 'relief']
   },
   {
@@ -536,8 +478,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 5675, സഹീഹ് മുസ്ലിം 2191',
     benefitMl: 'രോഗം ബാധിച്ച ശരീരഭാഗത്ത് വലതുകൈ വെച്ച് ചൊല്ലുക.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-147.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['രോഗം', 'ശിഫ', 'ശമനം', 'health', 'cure']
   },
   {
@@ -552,8 +492,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 3371',
     benefitMl: 'കുട്ടികൾക്ക് കണ്ണേറ് ഏൽക്കാതിരിക്കാൻ ഇബ്രാഹിം നബി (അ) തന്റെ മക്കളായ ഇസ്മാഈലിനും ഇസ്ഹാഖിനും ഓതിക്കൊടുത്തിരുന്ന ദുആ.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-146.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['കണ്ണേറ്', 'കുട്ടികൾ', 'evil eye', 'കാവൽ']
   },
   {
@@ -568,8 +506,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തു ആലു ഇംറാൻ 3:173, സഹീഹ് അൽ-ബുഖാരി 4563',
     benefitMl: 'തീക്കുണ്ടത്തിലേക്ക് എറിയപ്പെട്ടപ്പോൾ ഇബ്രാഹിം നബി (അ) ചൊല്ലിയതും മുസ്ലിംകൾ പ്രയാസഘട്ടങ്ങളിൽ ഉരുവിട്ടതുമായ വചനം.',
     recommendedCount: 7,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-125.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['തവക്കുൽ', 'ഭയം', 'വിശ്വാസം', 'trust', 'protection']
   },
   {
@@ -584,8 +520,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 1537, മുസ്നദ് അഹ്മദ് (സ്വഹീഹ്)',
     benefitMl: 'അക്രമികളെയോ ഭരണാധികാരികളെയോ ഭയം തോന്നുമ്പോൾ നബി (സ) പഠിപ്പിച്ചു തന്ന ദുആ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-126.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഭയം', 'ശത്രുക്കൾ', 'ധൈര്യം']
   },
   {
@@ -600,8 +534,6 @@ export const DUAS = [
     reference: 'സഹീഹ് അൽ-ബുഖാരി 6384, സഹീഹ് മുസ്ലിം 2704',
     benefitMl: 'സ്വർഗ്ഗത്തിലെ നിധികളിൽ പെട്ട ഒരു നിധിയാണിത്. പ്രയാസങ്ങളെ ദൂരീകരിക്കാൻ ഏറ്റവും അനുയോജ്യം.',
     recommendedCount: 33,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-256.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['നിധി', 'തസ്ബീഹ്', 'സഹായം', 'power']
   },
 
@@ -618,8 +550,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ അൻബിയാഅ് 21:87, തിർമുദി 3505',
     benefitMl: 'ഏതൊരു മുസ്ലിമും ഏത് വിഷമഘട്ടത്തിലും ഈ ദുആ ചൊല്ലി പ്രാർത്ഥിച്ചാൽ അല്ലാഹു ഉത്തരം നൽകുമെന്നാണ് റസൂലുല്ലാഹി (സ) യുടെ വാഗ്ദാനം.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-124.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['യൂനുസ്', 'ഖുർആൻ', 'പാപമോചനം', 'relief', 'yunus']
   },
   {
@@ -634,7 +564,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ അഅ്റാഫ് 7:23',
     benefitMl: 'തെറ്റുകൾ സംഭവിച്ചാൽ ആത്മാർത്ഥമായി അല്ലാഹുവിലേക്ക് മടങ്ങാൻ ആദം നബിയും ഹവ്വാ ബീവിയും തേടിയ പ്രാർത്ഥന.',
     recommendedCount: 3,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/007023.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['ആദം', 'തൗബ', 'ഖുർആൻ', 'adam', 'repentance']
   },
@@ -650,7 +579,6 @@ export const DUAS = [
     reference: 'വിശുദ്ധ ഖുർആൻ — സൂറത്തുൽ ബഖറ 2:201, സഹീഹ് അൽ-ബുഖാരി 4522',
     benefitMl: 'നബി (സ) ഏറ്റവും അധികം പ്രാർത്ഥിച്ചിരുന്ന സർവ്വതോമുഖമായ അതിമഹത്തായ ഖുർആനിക ദുആ.',
     recommendedCount: 3,
-    audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/002201.mp3',
     reciter: 'Mishary Rashid Alafasy',
     tags: ['ദുനിയാവ്', 'ആഖിറത്ത്', 'സ്വർഗ്ഗം', 'ഖുർആൻ', 'hasanah']
   },
@@ -666,8 +594,6 @@ export const DUAS = [
     reference: 'സുനൻ അബൂദാവൂദ് 1517, ജാമിഉത്-തിർമുദി 3577 (സ്വഹീഹ്)',
     benefitMl: 'ഇത് 3 തവണ ചൊല്ലുന്നവന്റെ പാപങ്ങൾ യുദ്ധമുഖത്തുനിന്ന് പിന്തിരിഞ്ഞോടിയതുപോലുള്ള മഹാപാപമാണെങ്കിൽ പോലും പൊറുക്കപ്പെടും.',
     recommendedCount: 3,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-261.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഇസ്തിഗ്ഫാർ', 'istighfar', 'തൗബ', 'മാപ്പ്']
   },
   {
@@ -682,8 +608,6 @@ export const DUAS = [
     reference: 'ജാമിഉത്-തിർമുദി 2140 (സ്വഹീഹ്)',
     benefitMl: 'ഈമാനികമായ പതർച്ചകൾ വരാതെ ഈമാനിൽ സ്ഥിരത ലഭിക്കാൻ പ്രവാചകൻ (സ) എപ്പോഴും പ്രാർത്ഥിച്ചിരുന്ന ദുആ.',
     recommendedCount: 1,
-    audioUrl: 'https://audio.opendua.org/hisn/v0.0.2/OD-265.mp3',
-    reciter: 'Muhammad Jumah (OpenDua)',
     tags: ['ഹൃദയം', 'ഈമാൻ', 'faith', 'steadfastness']
   }
 ];
