@@ -11,6 +11,11 @@ import {
   Compass, 
   ShieldCheck, 
   HeartHandshake,
+  HeartPulse,
+  LifeBuoy,
+  Utensils,
+  BookOpen,
+  GraduationCap,
   ChevronRight
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
@@ -27,7 +32,12 @@ const ICON_MAP = {
   Users,
   Compass,
   ShieldCheck,
-  HeartHandshake
+  HeartHandshake,
+  HeartPulse,
+  LifeBuoy,
+  Utensils,
+  BookOpen,
+  GraduationCap
 };
 
 export default function DuasScreen({ 

@@ -241,10 +241,26 @@ export default function DuaDetailModal({
       <div className="detail-body">
         {/* Header Title & Category */}
         <div className="detail-header-card">
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="dua-badge">
               {categoryTitle}
             </span>
+            {dua.authenticity && (
+              <span 
+                className="dua-badge authenticity-badge"
+                style={{ 
+                  backgroundColor: dua.sourceType === 'bukhari' || dua.sourceType === 'muslim' 
+                    ? 'rgba(23, 107, 80, 0.15)' 
+                    : (dua.sourceType === 'quran' ? 'rgba(8, 131, 149, 0.15)' : 'rgba(180, 83, 9, 0.15)'),
+                  color: dua.sourceType === 'bukhari' || dua.sourceType === 'muslim' 
+                    ? '#176B50' 
+                    : (dua.sourceType === 'quran' ? '#088395' : '#B45309'),
+                  fontWeight: 700
+                }}
+              >
+                {dua.authenticity}
+              </span>
+            )}
             {targetCount > 1 && (
               <span className="dua-badge" style={{ backgroundColor: 'var(--accent-gold-soft)', color: 'var(--accent-gold)' }}>
                 {targetCount} {isEnglish ? 'times' : 'തവണ ചൊല്ലുക'}
@@ -382,7 +398,7 @@ export default function DuaDetailModal({
         {settings?.showTransliteration !== false && dua.transliteration && (
           <div className="detail-text-card">
             <div className="detail-section-label">
-              <span>{isEnglish ? "English Transliteration" : "ഉച്ചാരണം • Transliteration"}</span>
+              <span>{isEnglish ? "Malayalam Transliteration" : "മലയാളത്തിലുള്ള ഉച്ചാരണം"}</span>
             </div>
             <p className="transliteration-text">
               {dua.transliteration}
@@ -431,7 +447,7 @@ export default function DuaDetailModal({
           <BookOpen size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
           <div>
             <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.4px', opacity: 0.85 }}>
-              {isEnglish ? "Authentic Reference" : "വിശ്വാസ്യതയുള്ള റഫറൻസ് (Authentic Source)"}
+              {isEnglish ? "Authentic Reference" : (dua.authenticity ? dua.authenticity + " • റഫറൻസ്" : "വിശ്വാസ്യതയുള്ള റഫറൻസ്")}
             </div>
             <div style={{ marginTop: '2px' }}>
               {dua.reference}

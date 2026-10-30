@@ -28,10 +28,27 @@ export default function DuaCard({
     >
       <div className="dua-card-header">
         <div className="dua-card-meta">
-          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="dua-badge">
               {categoryTitle}
             </span>
+            {dua.authenticity && (
+              <span 
+                className="dua-badge authenticity-badge"
+                style={{
+                  backgroundColor: dua.sourceType === 'bukhari' || dua.sourceType === 'muslim'
+                    ? 'rgba(23, 107, 80, 0.12)'
+                    : (dua.sourceType === 'quran' ? 'rgba(8, 131, 149, 0.12)' : 'rgba(180, 83, 9, 0.12)'),
+                  color: dua.sourceType === 'bukhari' || dua.sourceType === 'muslim'
+                    ? '#176B50'
+                    : (dua.sourceType === 'quran' ? '#088395' : '#B45309'),
+                  fontWeight: 600,
+                  fontSize: '11px'
+                }}
+              >
+                {dua.authenticity}
+              </span>
+            )}
             {dua.recommendedCount > 1 && (
               <span className="dua-badge" style={{ backgroundColor: 'var(--accent-gold-soft)', color: 'var(--accent-gold)' }}>
                 {countText}
