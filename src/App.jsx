@@ -5,10 +5,12 @@ import Toast from './components/Toast';
 import { DuasScreen, DuaDetailModal } from './screens/duas';
 import { FavoritesScreen } from './screens/favorites';
 import { SettingsScreen } from './screens/settings';
-import { DUAS, DUA_OF_THE_DAY_ID } from './data/duasData';
+import { DUAS } from './data/duasData';
 import { 
   getStoredFavorites, 
   saveStoredFavorites, 
+  getStoredBookmarks,
+  saveStoredBookmarks,
   getStoredSettings, 
   saveStoredSettings,
   addStoredRecent
@@ -16,10 +18,11 @@ import {
 import { audioService } from './utils/audioService';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('duas'); // Default is now the Duas screen
+  const [activeTab, setActiveTab] = useState('duas'); // 'duas' | 'favorites' | 'bookmarks' | 'settings'
   const [selectedDua, setSelectedDua] = useState(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [favorites, setFavorites] = useState(() => getStoredFavorites());
+  const [bookmarks, setBookmarks] = useState(() => getStoredBookmarks());
   const [settings, setSettings] = useState(() => getStoredSettings());
   const [theme, setTheme] = useState(() => getStoredSettings().theme || 'light');
   const [isFullWidth, setIsFullWidth] = useState(false);
@@ -74,7 +77,23 @@ export default function App() {
     saveStoredFavorites(updated);
   };
 
-  // Select Dua to open details
+  // Toggle Bookmarks
+  const handleToggleBookmark = (duaId) => {
+    let updated;
+    const isAlreadyBm = bookmarks.includes(duaId);
+    if (isAlreadyBm) {
+      updated = bookmarks.filter(id => id !== duaId);
+      showToast('ബുക്ക്മാർക്കിൽ നിന്ന് നീക്കം ചെയ്തു');
+    } else {
+      updated = [duaId, ...bookmarks];
+      showToast('ബുക്ക്മാർക്കിൽ ചേർത്തു 🔖');
+      audioService.playChime(640, 0.04);
+    }
+    setBookmarks(updated);
+    saveStoredBookmarks(updated);
+  };
+
+  // Select Dua to open dedicated page
   const handleSelectDua = (dua) => {
     setSelectedDua(dua);
     addStoredRecent(dua.id);
@@ -82,6 +101,10 @@ export default function App() {
 
   // Toggle audio playback
   const handleTogglePlay = (dua) => {
+    if (!dua.audioUrl) {
+      showToast('ഈ ദുആയ്ക്കുള്ള യഥാർത്ഥ സ്റ്റുഡിയോ ഓഡിയോ ഉടൻ ലഭ്യമാകും');
+      return;
+    }
     if (audioState.isPlaying && audioState.currentDuaId === dua.id) {
       audioService.pause();
     } else {
@@ -97,15 +120,20 @@ export default function App() {
     }, 2200);
   };
 
-  const heroDua = DUAS.find(d => d.id === DUA_OF_THE_DAY_ID) || DUAS[0];
+  // Category duas for currently selected dua (used for pagination 1/10.. 10/10)
+  const currentCategoryDuas = selectedDua
+    ? (selectedCategoryId
+        ? DUAS.filter(d => d.categoryId === selectedCategoryId)
+        : DUAS.filter(d => d.categoryId === selectedDua.categoryId))
+    : [];
 
   return (
     <div className={`device-viewport ${isFullWidth ? 'full-width' : ''}`}>
-      {/* Native App Status Bar (Simulated clock, wifi, battery) */}
+      {/* Native App Status Bar (9:41, wifi, battery) matching reference image */}
       <div className="app-status-bar">
-        <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        <span>9:41</span>
         <div className="status-bar-icons">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <svg width="15" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
             <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
             <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
@@ -119,18 +147,21 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main App Header */}
-      <Header 
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-        isFullWidth={isFullWidth}
-        onToggleWidth={handleToggleWidth}
-        activeTab={activeTab}
-        language={settings.language}
-      />
+      {/* Main App Header (rendered on Favorites, Bookmarks, and Settings tabs) */}
+      {activeTab !== 'duas' && (
+        <Header 
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
+          isFullWidth={isFullWidth}
+          onToggleWidth={handleToggleWidth}
+          activeTab={activeTab}
+          language={settings.language}
+        />
+      )}
 
       {/* Main Content Area based on Active Tab */}
-      <main className="app-content" id="main-content">
+      <main className="app-content" id="main-content" style={{ padding: activeTab === 'duas' ? 0 : undefined }}>
+        {/* Tab 1: Duas (Home & Category List screens matching Screen 1 & 2) */}
         {activeTab === 'duas' && (
           <DuasScreen 
             duas={DUAS}
@@ -141,11 +172,11 @@ export default function App() {
             onToggleFavorite={handleToggleFavorite}
             onTogglePlay={handleTogglePlay}
             onSelectDua={handleSelectDua}
-            heroDua={heroDua}
             settings={settings}
           />
         )}
 
+        {/* Tab 2: Favorites (പ്രിയപ്പെട്ടവ) */}
         {activeTab === 'favorites' && (
           <FavoritesScreen 
             duas={DUAS}
@@ -162,6 +193,24 @@ export default function App() {
           />
         )}
 
+        {/* Tab 3: Bookmarks (ബുക്ക്മാർക്ക്) */}
+        {activeTab === 'bookmarks' && (
+          <FavoritesScreen 
+            duas={DUAS}
+            favorites={bookmarks}
+            playingDuaId={audioState.isPlaying ? audioState.currentDuaId : null}
+            onToggleFavorite={handleToggleBookmark}
+            onTogglePlay={handleTogglePlay}
+            onSelectDua={handleSelectDua}
+            onExploreDuas={() => {
+              setSelectedCategoryId(null);
+              setActiveTab('duas');
+            }}
+            settings={settings}
+          />
+        )}
+
+        {/* Tab 4: Settings (കൂടുതൽ) */}
         {activeTab === 'settings' && (
           <SettingsScreen 
             settings={settings}
@@ -174,7 +223,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom Navigation (Duas, Favorites, Settings) */}
+      {/* Bottom Navigation (ഹോം, പ്രിയപ്പെട്ടവ, ബുക്ക്മാർക്ക്, കൂടുതൽ) */}
       <BottomNav 
         activeTab={activeTab}
         onSelectTab={(tab) => {
@@ -187,16 +236,15 @@ export default function App() {
         language={settings.language}
       />
 
-      {/* Full Dua Detail Modal */}
+      {/* Full Dedicated Dua Detail Page (matching Screens 3, 4, 5, 6) */}
       {selectedDua && (
         <DuaDetailModal 
           dua={selectedDua}
-          allDuas={DUAS}
+          categoryDuas={currentCategoryDuas}
           isFavorite={favorites.includes(selectedDua.id)}
           onToggleFavorite={handleToggleFavorite}
           onClose={() => setSelectedDua(null)}
           onSelectDua={handleSelectDua}
-          onShowToast={showToast}
           settings={settings}
           onUpdateSettings={handleUpdateSettings}
         />

@@ -1,10 +1,10 @@
 import React from 'react';
-import { BookOpen, Heart, Settings } from 'lucide-react';
+import { Home, Heart, Settings } from 'lucide-react';
 
 export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, language = 'ml' }) {
   const tabs = [
-    { id: 'duas', labelMl: 'Duas', labelEn: 'Duas', icon: BookOpen },
-    { id: 'favorites', labelMl: 'Favorites', labelEn: 'Favorites', icon: Heart, badge: favoritesCount },
+    { id: 'duas', labelMl: 'Home', labelEn: 'Home', icon: Home },
+    { id: 'favorites', labelMl: 'Favourites', labelEn: 'Favourites', icon: Heart, badge: favoritesCount },
     { id: 'settings', labelMl: 'Settings', labelEn: 'Settings', icon: Settings }
   ];
 
@@ -24,12 +24,16 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
             aria-current={isActive ? 'page' : undefined}
           >
             <div className="nav-icon-wrap" style={{ position: 'relative' }}>
-              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} fill={isActive && tab.id === 'favorites' ? 'currentColor' : 'none'} />
+              <Icon 
+                size={22} 
+                strokeWidth={isActive ? 2.4 : 1.9} 
+                fill={isActive && tab.id === 'favorites' ? 'currentColor' : 'none'} 
+              />
               {tab.badge > 0 && tab.id === 'favorites' && (
                 <span style={{
                   position: 'absolute',
                   top: '-3px',
-                  right: '-4px',
+                  right: '-6px',
                   backgroundColor: '#C0392B',
                   color: 'white',
                   borderRadius: '10px',

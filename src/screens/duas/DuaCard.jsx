@@ -19,10 +19,11 @@ export default function DuaCard({
   const subTitle = isEnglish ? dua.titleMl : dua.titleEn;
   const meaningText = isEnglish && dua.meaningEn ? dua.meaningEn : dua.meaningMl;
   const countText = isEnglish ? `${dua.recommendedCount} times` : `${dua.recommendedCount} തവണ`;
+  const hasAudio = Boolean(dua.audioUrl);
 
   return (
     <article 
-      className="dua-card" 
+      className={`dua-card ${isPlaying ? 'is-playing-card' : ''}`}
       onClick={() => onSelectDua(dua)}
       id={`dua-card-${dua.id}`}
     >
@@ -76,7 +77,8 @@ export default function DuaCard({
         </button>
       </div>
 
-      <div className="arabic-text dua-card-arabic">
+      {/* Arabic text with audio-playing highlight */}
+      <div className={`arabic-text dua-card-arabic ${isPlaying ? 'arabic-playing-highlight' : ''}`}>
         {dua.arabic}
       </div>
 
@@ -91,24 +93,30 @@ export default function DuaCard({
         </div>
 
         <div className="dua-card-actions">
-          <button 
-            className="icon-btn"
-            style={{
-              width: '34px',
-              height: '34px',
-              backgroundColor: isPlaying ? 'var(--primary)' : 'var(--bg-sage)',
-              color: isPlaying ? 'white' : 'var(--primary)',
-              border: 'none'
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onTogglePlay(dua);
-            }}
-            title={isPlaying ? (isEnglish ? "Pause Audio" : "ഓഡിയോ നിർത്തുക") : (isEnglish ? "Play Audio" : "ഓഡിയോ കേൾക്കുക")}
-            aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
-          >
-            {isPlaying ? <Pause size={15} /> : <Play size={15} style={{ marginLeft: '1px' }} />}
-          </button>
+          {hasAudio ? (
+            <button 
+              className="icon-btn"
+              style={{
+                width: '34px',
+                height: '34px',
+                backgroundColor: isPlaying ? 'var(--primary)' : 'var(--bg-sage)',
+                color: isPlaying ? 'white' : 'var(--primary)',
+                border: 'none'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTogglePlay(dua);
+              }}
+              title={isPlaying ? (isEnglish ? "Pause Audio" : "ഓഡിയോ നിർത്തുക") : (isEnglish ? "Play Audio" : "ഓഡിയോ കേൾക്കുക")}
+              aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
+            >
+              {isPlaying ? <Pause size={15} /> : <Play size={15} style={{ marginLeft: '1px' }} />}
+            </button>
+          ) : (
+            <span className="audio-soon-pill" title={isEnglish ? "Studio audio in upcoming update" : "യഥാർത്ഥ സ്റ്റുഡിയോ ഓഡിയോ ഉടൻ ലഭ്യമാകും"}>
+              {isEnglish ? "Audio soon" : "ഓഡിയോ ഉടൻ"}
+            </span>
+          )}
         </div>
       </div>
     </article>

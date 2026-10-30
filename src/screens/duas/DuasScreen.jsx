@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Search, 
   X, 
@@ -16,11 +16,11 @@ import {
   Utensils,
   BookOpen,
   GraduationCap,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  Heart
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
-import DuaCard from './DuaCard';
-import HeroDua from './HeroDua';
 import { UI_TEXT } from '../../utils/translations';
 
 // Icon mapping
@@ -44,16 +44,15 @@ export default function DuasScreen({
   duas, 
   selectedCategoryId, 
   onSelectCategory, 
-  favorites, 
+  favorites = [], 
   playingDuaId, 
   onToggleFavorite, 
   onTogglePlay, 
   onSelectDua,
-  heroDua,
   settings 
 }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('categories'); // 'categories' | 'all'
+  const searchInputRef = useRef(null);
 
   const lang = settings?.language || 'ml';
   const t = UI_TEXT[lang] || UI_TEXT.ml;
@@ -61,7 +60,7 @@ export default function DuasScreen({
 
   const activeCategory = CATEGORIES.find(c => c.id === selectedCategoryId);
 
-  // If a category is selected, filter duas belonging to that category
+  // Duas belonging to the selected category
   const categoryDuas = activeCategory 
     ? duas.filter(d => d.categoryId === activeCategory.id)
     : [];
@@ -72,23 +71,26 @@ export default function DuasScreen({
     : duas.filter(d => 
         d.titleMl.toLowerCase().includes(searchQuery.toLowerCase()) ||
         d.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        d.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (d.transliteration && d.transliteration.toLowerCase().includes(searchQuery.toLowerCase())) ||
         d.arabic.includes(searchQuery) ||
         d.meaningMl.includes(searchQuery) ||
-        (d.tags && d.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())))
+        (d.tags && d.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
       );
 
   return (
-    <div className="categories-screen duas-screen">
-      {/* 1. If Searching: Show Global Search Results */}
+    <div className="reference-ui-screen">
+      {/* ========================================================
+          CASE 1: SEARCH ACTIVE (Global search results view)
+          ======================================================== */}
       {searchQuery.trim() !== '' ? (
-        <div>
-          <div className="search-bar-wrap" style={{ marginTop: '4px' }}>
+        <div className="search-active-container">
+          <div className="search-bar-wrap" style={{ marginTop: '6px' }}>
             <Search size={18} className="search-icon-left" />
             <input 
+              ref={searchInputRef}
               type="text" 
               className="search-input"
-              placeholder={t.searchPlaceholder}
+              placeholder="Search duas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
@@ -101,194 +103,236 @@ export default function DuasScreen({
             </button>
           </div>
 
-          <div className="section-header">
-            <h3 className="section-title">
-              <span>{t.searchResults} ({searchResults.length})</span>
+          <div className="section-header" style={{ marginTop: '14px', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
+              {isEnglish ? "Search Results" : "തിരച്ചിൽ ഫലങ്ങൾ"} ({searchResults.length})
             </h3>
           </div>
 
           {searchResults.length === 0 ? (
             <div className="empty-state">
-              <p className="empty-title">{t.noDuasFound}</p>
+              <p className="empty-title">{isEnglish ? "No Duas Found" : "ദുആകൾ കണ്ടെത്താനായില്ല"}</p>
               <p className="empty-desc">
-                {t.noDuasFoundDesc}
+                {isEnglish ? "Please try another keyword." : "മറ്റൊരു വാക്ക് നൽകി വീണ്ടും തിരയുക."}
               </p>
             </div>
           ) : (
-            searchResults.map(d => (
-              <DuaCard 
-                key={d.id} 
-                dua={d} 
-                isFavorite={favorites.includes(d.id)}
-                isPlaying={playingDuaId === d.id}
-                onToggleFavorite={onToggleFavorite}
-                onTogglePlay={onTogglePlay}
-                onSelectDua={onSelectDua}
-                settings={settings}
-              />
-            ))
-          )}
-        </div>
-      ) : activeCategory ? (
-        /* 2. Specific Category Dua List View */
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', paddingTop: '4px' }}>
-            <button 
-              className="icon-btn"
-              onClick={() => onSelectCategory(null)}
-              title={isEnglish ? "Back to categories" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
-              aria-label="Back to categories"
-            >
-              <ArrowLeft size={18} />
-            </button>
-            <div>
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)', lineHeight: 1.2 }}>
-                {isEnglish ? activeCategory.titleEn : activeCategory.titleMl}
-              </h2>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)' }}>
-                {activeCategory.count} {isEnglish ? 'Duas' : 'ദുആകൾ'} • {isEnglish ? activeCategory.titleMl : activeCategory.titleEn}
-              </div>
-            </div>
-          </div>
-
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginBottom: '16px', lineHeight: 1.5 }}>
-            {isEnglish ? activeCategory.descriptionEn : activeCategory.descriptionMl}
-          </p>
-
-          {/* List of Duas in Selected Category */}
-          {categoryDuas.map(d => (
-            <DuaCard 
-              key={d.id} 
-              dua={d} 
-              isFavorite={favorites.includes(d.id)}
-              isPlaying={playingDuaId === d.id}
-              onToggleFavorite={onToggleFavorite}
-              onTogglePlay={onTogglePlay}
-              onSelectDua={onSelectDua}
-              settings={settings}
-            />
-          ))}
-        </div>
-      ) : (
-        /* 3. Main Duas Screen: Featured Dua of the Day, Search & Categories */
-        <div>
-          {/* Top Title */}
-          <div style={{ marginBottom: '14px', paddingTop: '4px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
-              {isEnglish ? 'Islamic Supplications' : 'ഇസ്ലാമിക് ദുആകൾ'}
-            </h2>
-            <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginTop: '2px' }}>
-              {isEnglish ? 'Authentic supplications with meanings and recitation' : 'ആധികാരിക പ്രാർത്ഥനകൾ, അർത്ഥവും ഓഡിയോയും സഹിതം'}
-            </p>
-          </div>
-
-          {/* Search Bar */}
-          <div className="search-bar-wrap">
-            <Search size={18} className="search-icon-left" />
-            <input 
-              type="text" 
-              className="search-input"
-              placeholder={t.searchPlaceholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {/* Featured Dua of the Day */}
-          {heroDua && (
-            <HeroDua 
-              dua={heroDua}
-              isFavorite={favorites.includes(heroDua.id)}
-              isPlaying={playingDuaId === heroDua.id}
-              onTogglePlay={onTogglePlay}
-              onToggleFavorite={onToggleFavorite}
-              onSelectDua={onSelectDua}
-              settings={settings}
-            />
-          )}
-
-          {/* Toggle between Category view and All Duas view */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-            <button
-              className={`chip-btn ${viewMode === 'categories' ? 'active' : ''}`}
-              onClick={() => setViewMode('categories')}
-            >
-              {t.allCategories}
-            </button>
-            <button
-              className={`chip-btn ${viewMode === 'all' ? 'active' : ''}`}
-              onClick={() => setViewMode('all')}
-            >
-              {t.allDuas} ({duas.length})
-            </button>
-          </div>
-
-          {viewMode === 'categories' ? (
-            /* 8 Categories Cards */
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {CATEGORIES.map(cat => {
-                const Icon = ICON_MAP[cat.icon] || Sparkles;
-                const catTitle = isEnglish ? cat.titleEn : cat.titleMl;
-                const catDesc = isEnglish ? cat.descriptionEn : cat.descriptionMl;
-
+            <div className="category-duas-list">
+              {searchResults.map((d, index) => {
+                const cat = CATEGORIES.find(c => c.id === d.categoryId);
                 return (
                   <div 
-                    key={cat.id} 
-                    className="dua-card"
-                    onClick={() => onSelectCategory(cat.id)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '16px',
-                      marginBottom: 0
+                    key={d.id} 
+                    className="dua-list-item-card"
+                    onClick={() => {
+                      onSelectDua(d);
+                      if (!selectedCategoryId) {
+                        onSelectCategory(d.categoryId);
+                      }
                     }}
-                    id={`category-item-${cat.id}`}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div 
-                        className="category-icon-box"
-                        style={{ backgroundColor: cat.bgLight, color: cat.color, flexShrink: 0 }}
-                      >
-                        <Icon size={22} />
+                    <div className="dua-item-num-badge">
+                      {index + 1}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="dua-item-title-text">
+                        {isEnglish ? d.titleEn : d.titleMl}
                       </div>
-                      <div>
-                        <h3 style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)', lineHeight: 1.3 }}>
-                          {catTitle}
-                        </h3>
-                        <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-malayalam)', marginTop: '2px', lineClamp: 1, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                          {catDesc}
-                        </p>
+                      <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <span>{cat ? (isEnglish ? cat.titleEn : cat.titleMl) : ''}</span>
+                        {d.authenticity && <span>• {d.authenticity}</span>}
                       </div>
                     </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className="dua-badge" style={{ backgroundColor: 'var(--bg-sage)', color: 'var(--primary)', flexShrink: 0 }}>
-                        {cat.count}
-                      </span>
-                      <ChevronRight size={17} color="var(--text-tertiary)" />
-                    </div>
+                    <ChevronRight size={18} className="dua-item-chevron" />
                   </div>
                 );
               })}
             </div>
-          ) : (
-            /* All Duas List View */
-            <div>
-              {duas.map(d => (
-                <DuaCard 
-                  key={d.id} 
-                  dua={d} 
-                  isFavorite={favorites.includes(d.id)}
-                  isPlaying={playingDuaId === d.id}
-                  onToggleFavorite={onToggleFavorite}
-                  onTogglePlay={onTogglePlay}
-                  onSelectDua={onSelectDua}
-                  settings={settings}
-                />
-              ))}
+          )}
+        </div>
+      ) : activeCategory ? (
+        /* ========================================================
+           CASE 2: CATEGORY SELECTED (Screen 2: Category Duas List)
+           ======================================================== */
+        <div className="category-view-container">
+          {/* Header matching Screen 2 */}
+          <div className="category-view-header">
+            <button 
+              className="icon-btn category-back-btn"
+              onClick={() => onSelectCategory(null)}
+              title={isEnglish ? "Back to categories" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
+              aria-label="Back to categories"
+            >
+              <ArrowLeft size={19} />
+            </button>
+
+            <div className="category-header-title-wrap">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {(() => {
+                  const Icon = ICON_MAP[activeCategory.icon] || Sparkles;
+                  return <Icon size={20} style={{ color: activeCategory.color || 'var(--primary)' }} />;
+                })()}
+                <h1 className="category-main-heading">
+                  {isEnglish ? activeCategory.titleEn : activeCategory.titleMl}
+                </h1>
+              </div>
+              <div className="category-subtitle-count">
+                {categoryDuas.length} {isEnglish ? "Duas" : "ദുആകൾ"}
+              </div>
+            </div>
+          </div>
+
+          {/* Numbered List of Duas in this category (Screen 2) */}
+          <div className="category-duas-list">
+            {categoryDuas.map((dua, index) => {
+              const isFav = favorites.includes(dua.id);
+              return (
+                <div 
+                  key={dua.id} 
+                  className="dua-list-item-card"
+                  onClick={() => onSelectDua(dua)}
+                >
+                  <div className="dua-item-num-badge">
+                    {index + 1}
+                  </div>
+                  <span className="dua-item-title-text">
+                    {isEnglish ? dua.titleEn : dua.titleMl}
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {isFav && (
+                      <Heart size={14} fill="#C0392B" color="#C0392B" />
+                    )}
+                    <ChevronRight size={18} className="dua-item-chevron" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom Pagination Preview Bar matching Screen 2 */}
+          {categoryDuas.length > 0 && (
+            <div className="category-bottom-bar">
+              <button 
+                className="icon-btn pagination-arrow-btn"
+                disabled={true}
+                title="Previous"
+              >
+                <ChevronLeft size={17} />
+              </button>
+              <span className="category-pagination-pill">
+                1 / {categoryDuas.length}
+              </span>
+              <button 
+                className="icon-btn pagination-arrow-btn"
+                onClick={() => onSelectDua(categoryDuas[0])}
+                title={isEnglish ? "Open first dua" : "ആദ്യത്തെ ദുആ തുറക്കുക"}
+              >
+                <ChevronRight size={17} />
+              </button>
             </div>
           )}
+        </div>
+      ) : (
+        /* ========================================================
+           CASE 3: HOME SCREEN (Screen 1: Mosque Hero & Categories)
+           ======================================================== */
+        <div className="home-screen-view">
+          {/* Islamic Dome & Mosque Silhouette Hero Banner */}
+          <div className="home-hero-banner">
+            {/* Centered Mosque Silhouette Artwork */}
+            <div className="hero-mosque-graphic">
+              <svg viewBox="0 0 400 120" fill="none" className="mosque-silhouette-svg">
+                {/* Crescent Moon */}
+                <path d="M200 18 A6 6 0 1 0 206 24 A5 5 0 1 1 200 18 Z" fill="rgba(255,255,255,0.7)" />
+                {/* Center Main Dome */}
+                <path d="M165 95 C165 50, 200 28, 200 28 C200 28, 235 50, 235 95 Z" fill="rgba(255, 255, 255, 0.22)" />
+                {/* Secondary Left Dome */}
+                <path d="M125 95 C125 65, 150 48, 150 48 C150 48, 175 65, 175 95 Z" fill="rgba(255, 255, 255, 0.16)" />
+                {/* Secondary Right Dome */}
+                <path d="M225 95 C225 65, 250 48, 250 48 C250 48, 275 65, 275 95 Z" fill="rgba(255, 255, 255, 0.16)" />
+                {/* Far Left Minaret */}
+                <path d="M90 95 L90 40 L94 36 L94 95 Z" fill="rgba(255, 255, 255, 0.18)" />
+                <path d="M88 40 L96 40 L92 32 Z" fill="rgba(255, 255, 255, 0.25)" />
+                {/* Far Right Minaret */}
+                <path d="M306 95 L306 40 L310 36 L310 95 Z" fill="rgba(255, 255, 255, 0.18)" />
+                <path d="M304 40 L312 40 L308 32 Z" fill="rgba(255, 255, 255, 0.25)" />
+              </svg>
+
+              <div className="hero-titles-wrap">
+                <h1 className="hero-app-title-en">Islamic Dua</h1>
+                <h2 className="hero-app-title-ml">ദുആകൾ</h2>
+                <p className="hero-app-tagline">
+                  {isEnglish ? "Supplications to draw closer to Allah..." : "അല്ലാഹുവിനോട് അടുത്തേക്കാനുള്ള പ്രാർത്ഥന..."}
+                </p>
+              </div>
+            </div>
+
+            {/* Floating Search Bar (matching Screen 1) */}
+            <div className="hero-floating-search-wrap">
+              <Search size={18} className="hero-search-icon" />
+              <input 
+                ref={searchInputRef}
+                type="text" 
+                className="hero-floating-search-input"
+                placeholder="Search duas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button 
+                  className="hero-search-clear-btn" 
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                >
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Section: Main Categories (പ്രധാന വിഭാഗങ്ങൾ) */}
+          <div className="home-categories-section">
+            <h2 className="home-section-title">
+              {isEnglish ? "Main Categories" : "പ്രധാന വിഭാഗങ്ങൾ"}
+            </h2>
+
+            {/* Vertical list of Category Cards matching Screen 1 */}
+            <div className="reference-categories-list">
+              {CATEGORIES.map((category) => {
+                const Icon = ICON_MAP[category.icon] || Sparkles;
+                return (
+                  <div 
+                    key={category.id} 
+                    className="reference-category-card"
+                    onClick={() => onSelectCategory(category.id)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div 
+                      className="category-icon-bubble"
+                      style={{ 
+                        backgroundColor: category.bgLight || '#EAF3EF', 
+                        color: category.color || 'var(--primary)' 
+                      }}
+                    >
+                      <Icon size={21} strokeWidth={2.2} />
+                    </div>
+
+                    <div className="category-meta-info">
+                      <span className="category-meta-title">
+                        {isEnglish ? category.titleEn : category.titleMl}
+                      </span>
+                      <span className="category-meta-count">
+                        ({category.count})
+                      </span>
+                    </div>
+
+                    <ChevronRight size={18} className="category-meta-chevron" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
     </div>
