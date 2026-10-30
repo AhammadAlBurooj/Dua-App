@@ -323,7 +323,7 @@ export default function SettingsScreen({
         </div>
 
         <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-tertiary)' }}>
-          <span>Created by Burooj App v1.0.0</span>
+          <span>Created by Burooj 4 Tech App v1.0.0</span>
           <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'Simple • Serene • Authentic'}</span>
         </div>
       </div>

@@ -39,7 +39,7 @@ export const UI_TEXT = {
     noFavoritesTitle: 'No Favorites Saved',
     noFavoritesDesc: 'Tap the heart (❤️) icon on any Dua to save it here for quick access.',
     exploreDuasBtn: 'Add New Dua',
-    allFilter: 'എല്ലാം',
+    allFilter: 'All',
     settingsTitle: 'Settings',
     settingsSubtitle: 'നിങ്ങൾക്ക് അനുയോജ്യമായ രീതിയിൽ ആപ്പ് ക്രമീകരിക്കുക',
     languageSection: 'Language & Translation',

@@ -62,7 +62,7 @@ export default function FavoritesScreen({
             <input 
               type="text" 
               className="search-input"
-              placeholder={isEnglish ? "Search in favorites..." : "ഫേവറിറ്റ്സിൽ തിരയുക..."}
+              placeholder={isEnglish ? "Search in favorites..." : "Search in favorites..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
