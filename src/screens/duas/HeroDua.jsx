@@ -15,10 +15,11 @@ export default function HeroDua({
   const isEnglish = settings?.language === 'en';
   const title = isEnglish ? dua.titleEn : dua.titleMl;
   const meaning = isEnglish && dua.meaningEn ? dua.meaningEn : dua.meaningMl;
+  const hasAudio = Boolean(dua.audioUrl);
 
   return (
     <div 
-      className="hero-card"
+      className={`hero-card ${isPlaying ? 'hero-playing-highlight' : ''}`}
       onClick={() => onSelectDua(dua)}
       role="button"
       tabIndex={0}
@@ -31,7 +32,7 @@ export default function HeroDua({
 
       <h2 className="hero-title">{title}</h2>
 
-      <div className="arabic-text hero-arabic">
+      <div className={`arabic-text hero-arabic ${isPlaying ? 'arabic-playing-highlight' : ''}`}>
         {dua.arabic}
       </div>
 
@@ -40,17 +41,23 @@ export default function HeroDua({
       </p>
 
       <div className="hero-footer">
-        <button 
-          className="hero-play-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            onTogglePlay(dua);
-          }}
-          aria-label={isPlaying ? (isEnglish ? "Pause Audio" : "നിർത്തുക") : (isEnglish ? "Listen Audio" : "ഓഡിയോ കേൾക്കുക")}
-        >
-          {isPlaying ? <Pause size={15} /> : <Play size={15} style={{ marginLeft: '1px' }} />}
-          <span>{isPlaying ? (isEnglish ? "Stop" : "നിർത്തുക") : (isEnglish ? "Listen Audio" : "ഓഡിയോ കേൾക്കുക")}</span>
-        </button>
+        {hasAudio ? (
+          <button 
+            className="hero-play-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onTogglePlay(dua);
+            }}
+            aria-label={isPlaying ? (isEnglish ? "Pause Audio" : "നിർത്തുക") : (isEnglish ? "Listen Audio" : "ഓഡിയോ കേൾക്കുക")}
+          >
+            {isPlaying ? <Pause size={15} /> : <Play size={15} style={{ marginLeft: '1px' }} />}
+            <span>{isPlaying ? (isEnglish ? "Stop" : "നിർത്തുക") : (isEnglish ? "Listen Audio" : "ഓഡിയോ കേൾക്കുക")}</span>
+          </button>
+        ) : (
+          <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.75)', fontFamily: 'var(--font-malayalam)', background: 'rgba(255, 255, 255, 0.1)', padding: '5px 10px', borderRadius: '8px' }}>
+            {isEnglish ? "Audio coming soon" : "യഥാർത്ഥ ഓഡിയോ ഉടൻ"}
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button 

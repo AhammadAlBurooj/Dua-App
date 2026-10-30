@@ -323,8 +323,8 @@ export default function SettingsScreen({
         </div>
 
         <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-tertiary)' }}>
-          <span>Dua App v1.0.0</span>
-          <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'ലളിതം • ശാന്തം • വിശ്വസനീയം'}</span>
+          <span>Created by Burooj App v1.0.0</span>
+          <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'Simple • Serene • Authentic'}</span>
         </div>
       </div>
     </div>
