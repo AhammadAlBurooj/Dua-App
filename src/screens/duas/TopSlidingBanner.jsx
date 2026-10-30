@@ -133,7 +133,7 @@ export default function TopSlidingBanner({
       {/* Background Scenic Mosque Header */}
       <div className="banner-mosque-backdrop">
         <img 
-          src="/banner.png" 
+          src="/image.png" 
           alt="Islamic Mosque Banner" 
           className="banner-scenic-img" 
         />
