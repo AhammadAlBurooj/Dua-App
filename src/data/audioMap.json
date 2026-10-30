@@ -1,0 +1,164 @@
+{
+  "daily-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-009.mp3",
+    "duration": 2,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say when undressing"
+  },
+  "daily-2": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-106.mp3",
+    "duration": 9,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say before sleeping"
+  },
+  "daily-3": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-009.mp3",
+    "duration": 2,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say when undressing"
+  },
+  "daily-4": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-009.mp3",
+    "duration": 2,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say when undressing"
+  },
+  "daily-6": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-106.mp3",
+    "duration": 9,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say before sleeping"
+  },
+  "morning-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-079.mp3",
+    "duration": 50,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Words of remembrance for morning and evening"
+  },
+  "morning-2": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-086.mp3",
+    "duration": 16,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Words of remembrance for morning and evening"
+  },
+  "morning-3": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-077-1.mp3",
+    "duration": 78,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Words of remembrance for morning and evening"
+  },
+  "morning-4": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-077-2.mp3",
+    "duration": 83,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Words of remembrance for morning and evening"
+  },
+  "morning-5": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-097.mp3",
+    "duration": 9,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Words of remembrance for morning and evening"
+  },
+  "morning-6": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-071.mp3",
+    "duration": 65,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say after completing the prayer"
+  },
+  "sleep-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-105.mp3",
+    "duration": 6,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say before sleeping"
+  },
+  "sleep-2": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-001.mp3",
+    "duration": 16,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Supplications for when you wake up"
+  },
+  "sleep-3": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-069.mp3",
+    "duration": 28,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say after completing the prayer"
+  },
+  "prayer-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-002.mp3",
+    "duration": 49,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Supplications for when you wake up"
+  },
+  "prayer-2": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-009.mp3",
+    "duration": 2,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say when undressing"
+  },
+  "prayer-3": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-009.mp3",
+    "duration": 2,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "What to say when undressing"
+  },
+  "prayer-5": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-041.mp3",
+    "duration": 4,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocations during Sujood"
+  },
+  "prayer-6": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-116.mp3",
+    "duration": 48,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocations for Qunut in the Witr prayer"
+  },
+  "travel-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-206.mp3",
+    "duration": 57,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocation for riding in a vehicle or on an animal"
+  },
+  "travel-2": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-207-1.mp3",
+    "duration": 78,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocation for traveling"
+  },
+  "protect-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-121.mp3",
+    "duration": 20,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocations in times of worry and grief"
+  },
+  "protect-4": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-128.mp3",
+    "duration": 4,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocations for when you meet an adversary or a powerful ruler"
+  },
+  "protect-6": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-002.mp3",
+    "duration": 49,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Supplications for when you wake up"
+  },
+  "forgive-1": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-124.mp3",
+    "duration": 14,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocations for anguish"
+  },
+  "forgive-3": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-235.mp3",
+    "duration": 14,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Invocation to be recited between the Yemenite Corner and the Black Stone"
+  },
+  "forgive-4": {
+    "audioUrl": "https://audio.opendua.org/hisn/v0.0.2/OD-250.mp3",
+    "duration": 15,
+    "reciter": "Muhammad Jumah",
+    "chapterTitle": "Repentance and seeking forgiveness"
+  }
+}
