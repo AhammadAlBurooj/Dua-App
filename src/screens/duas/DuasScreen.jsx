@@ -23,7 +23,7 @@ import {
 import { CATEGORIES } from '../../data/categories';
 import { UI_TEXT } from '../../utils/translations';
 import TopSlidingBanner from './TopSlidingBanner';
-import AsmaulHusnaModal from './AsmaulHusnaModal';
+import AsmaulHusnaScreen from './AsmaulHusnaScreen';
 
 // Icon mapping
 const ICON_MAP = {
@@ -84,9 +84,14 @@ export default function DuasScreen({
   return (
     <div className="reference-ui-screen">
       {/* ========================================================
-          CASE 1: SEARCH ACTIVE (Global search results view)
+          CASE 0: ASMAUL HUSNA FULL PAGE (Quran Duas Slide Format)
           ======================================================== */}
-      {searchQuery.trim() !== '' ? (
+      {isAsmaulHusnaOpen ? (
+        <AsmaulHusnaScreen 
+          onBack={() => setIsAsmaulHusnaOpen(false)}
+          settings={settings}
+        />
+      ) : searchQuery.trim() !== '' ? (
         <div className="search-active-container">
           <div className="search-bar-wrap" style={{ marginTop: '6px' }}>
             <Search size={18} className="search-icon-left" />
@@ -296,13 +301,6 @@ export default function DuasScreen({
           </div>
         </div>
       )}
-
-      {/* 99 Names of Allah Modal Explorer */}
-      <AsmaulHusnaModal 
-        isOpen={isAsmaulHusnaOpen}
-        onClose={() => setIsAsmaulHusnaOpen(false)}
-        settings={settings}
-      />
     </div>
   );
 }
