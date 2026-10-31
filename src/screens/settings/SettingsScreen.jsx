@@ -20,7 +20,8 @@ export default function SettingsScreen({
   theme, 
   onToggleTheme, 
   onShowToast, 
-  totalDuasCount = 30 
+  totalDuasCount = 30,
+  onShowSplash
 }) {
   const [testNotificationShown, setTestNotificationShown] = useState(false);
   const lang = settings.language || 'ml';
@@ -321,6 +322,19 @@ export default function SettingsScreen({
             </p>
           </div>
         </div>
+
+        {onShowSplash && (
+          <div style={{ marginTop: '14px' }}>
+            <button 
+              className="chip-btn"
+              onClick={onShowSplash}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
+            >
+              <Sparkles size={13} color="var(--primary)" />
+              <span>{lang === 'en' ? 'View Splash Screen' : 'സ്പ്ലാഷ് സ്ക്രീൻ കാണുക'}</span>
+            </button>
+          </div>
+        )}
 
         <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-tertiary)' }}>
           <span>Created by Burooj 4 Tech App v1.0.0</span>

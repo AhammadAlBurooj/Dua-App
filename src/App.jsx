@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Toast from './components/Toast';
+import SplashScreen from './components/SplashScreen';
 import { DuasScreen, DuaDetailModal } from './screens/duas';
 import { FavoritesScreen } from './screens/favorites';
 import { SettingsScreen } from './screens/settings';
@@ -18,6 +19,7 @@ import {
 import { audioService } from './utils/audioService';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [activeTab, setActiveTab] = useState('duas'); // 'duas' | 'favorites' | 'bookmarks' | 'settings'
   const [selectedDua, setSelectedDua] = useState(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
@@ -129,6 +131,10 @@ export default function App() {
 
   return (
     <div className={`device-viewport ${isFullWidth ? 'full-width' : ''}`}>
+      {/* Animated Splash Screen */}
+      {showSplash && (
+        <SplashScreen onFinish={() => setShowSplash(false)} />
+      )}
 
       {/* Main App Header (rendered on Favorites, Bookmarks, and Settings tabs) */}
       {activeTab !== 'duas' && (
@@ -203,6 +209,7 @@ export default function App() {
             onToggleTheme={handleToggleTheme}
             onShowToast={showToast}
             totalDuasCount={DUAS.length}
+            onShowSplash={() => setShowSplash(true)}
           />
         )}
       </main>
