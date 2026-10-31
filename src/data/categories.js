@@ -12,7 +12,7 @@ export const CATEGORIES = [
   },
   {
     id: 'prayer',
-    titleMl: 'നമസ്കാര ദുആകൾ',
+    titleMl: 'നമസ്കാരം',
     titleEn: 'Prayer & Salah Duas',
     icon: 'Sparkles',
     descriptionMl: 'ഇസ്തിഫ്താഹ്, റുകൂഅ്, സുജൂദ്, തശഹ്ഹുദ്, സ്വലാത്ത്, നമസ്കാരശേഷമുള്ള ദുആകൾ',
@@ -23,7 +23,7 @@ export const CATEGORIES = [
   },
   {
     id: 'forgiveness',
-    titleMl: 'പാപമോചനത്തിനുള്ള ദുആകൾ',
+    titleMl: 'പാപമോചനം',
     titleEn: 'Forgiveness & Repentance',
     icon: 'HeartHandshake',
     descriptionMl: 'സയ്യിദുൽ ഇസ്തിഗ്ഫാർ, തൗബ, അല്ലാഹുവിന്റെ കാരുണ്യം തേടാനുള്ള പ്രാർത്ഥനകൾ',
@@ -34,7 +34,7 @@ export const CATEGORIES = [
   },
   {
     id: 'protection',
-    titleMl: 'സംരക്ഷണത്തിനുള്ള ദുആകൾ',
+    titleMl: 'സംരക്ഷണം',
     titleEn: 'Protection & Safety',
     icon: 'ShieldCheck',
     descriptionMl: 'തിന്മകൾ, പിശാച്, കണ്ണേറ്, ഉപദ്രവങ്ങൾ, ഭയം, ബാത്ത്റൂം തുടങ്ങിയവയിൽ നിന്നുള്ള കാവൽ',
@@ -45,7 +45,7 @@ export const CATEGORIES = [
   },
   {
     id: 'health',
-    titleMl: 'ആരോഗ്യവും രോഗശമനവും',
+    titleMl: 'രോഗം (ആരോഗ്യം)',
     titleEn: 'Health & Healing',
     icon: 'HeartPulse',
     descriptionMl: 'രോഗശമനം (ശിഫാ), രോഗി സന്ദർശനം, മാറാരോഗങ്ങളിൽ നിന്നുള്ള കാവൽ, മനഃശാന്തി',
@@ -56,7 +56,7 @@ export const CATEGORIES = [
   },
   {
     id: 'distress',
-    titleMl: 'വിഷമങ്ങളും പ്രയാസങ്ങളും',
+    titleMl: 'വിഷമം (പ്രയാസം)',
     titleEn: 'Relief from Distress',
     icon: 'LifeBuoy',
     descriptionMl: 'ഉത്കണ്ഠ, ദുഃഖം, മടി, കടബാധ്യത, കാഠിന്യങ്ങൾ, ക്ഷമ എന്നിവയ്ക്കുള്ള ദുആകൾ',
@@ -67,7 +67,7 @@ export const CATEGORIES = [
   },
   {
     id: 'food',
-    titleMl: 'ഭക്ഷണവുമായി ബന്ധപ്പെട്ടവ',
+    titleMl: 'ഭക്ഷണം (കുടി)',
     titleEn: 'Food & Drink',
     icon: 'Utensils',
     descriptionMl: 'ഭക്ഷണത്തിന് മുമ്പും ശേഷവും, പാൽ കുടിക്കുമ്പോൾ, മറവി വന്നാൽ, നോമ്പ് തുറക്കുമ്പോൾ',
@@ -78,7 +78,7 @@ export const CATEGORIES = [
   },
   {
     id: 'travel',
-    titleMl: 'യാത്രാ ദുആകൾ',
+    titleMl: 'യാത്രാ',
     titleEn: 'Travel & Journey',
     icon: 'Compass',
     descriptionMl: 'യാത്ര ആരംഭിക്കുമ്പോഴും വാഹനത്തിലും പുതിയ സ്ഥലത്തും മടങ്ങിയെത്തുമ്പോഴുമുള്ള ദുആകൾ',
@@ -89,7 +89,7 @@ export const CATEGORIES = [
   },
   {
     id: 'family',
-    titleMl: 'കുടുംബത്തിനുള്ള ദുആകൾ',
+    titleMl: 'കുടുംബം',
     titleEn: 'Family & Loved Ones',
     icon: 'Users',
     descriptionMl: 'മാതാപിതാക്കൾ, മക്കൾ, ഇണ, കുടുംബ സംരക്ഷണം, സൽസ്വഭാവം എന്നിവയ്ക്കുള്ള ദുആകൾ',
@@ -111,7 +111,7 @@ export const CATEGORIES = [
   },
   {
     id: 'ramadan',
-    titleMl: 'റമദാനിലെ ദുആകൾ',
+    titleMl: 'റമദാൻ',
     titleEn: 'Ramadan & Fasting',
     icon: 'Moon',
     descriptionMl: 'മാസപ്പിറവി, അത്താഴം, നോമ്പ് തുറക്കൽ, ലൈലത്തുൽ ഖദ്ർ, റമദാനിലെ പാപമോചനം',

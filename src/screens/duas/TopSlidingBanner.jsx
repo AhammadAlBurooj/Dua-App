@@ -136,6 +136,7 @@ export default function TopSlidingBanner({
           src="/image.png" 
           alt="Islamic Mosque Banner" 
           className="banner-scenic-img" 
+          onError={(e) => { e.currentTarget.src = '/banner.png'; }}
         />
         <div className="banner-backdrop-overlay" />
       </div>
