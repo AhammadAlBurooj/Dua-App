@@ -160,10 +160,10 @@ export default function TopSlidingBanner({
           </div>
 
           <div className="banner-brand-text">
-            <h1 className="banner-title-en">Islamic Dua</h1>
-            <h2 className="banner-title-ml">ദുആകൾ</h2>
+            <h1 className="banner-title-en">مناجاة</h1>
+            {/* <h2 className="banner-title-ml">ദുആകൾ</h2> */}
             <p className="banner-tagline">
-              {isEnglish ? "Supplications to draw closer to Allah..." : "അല്ലാഹുവിലേക്ക് കൂടുതൽ അടുക്കാനുള്ള പ്രാർത്ഥനകൾ.."}
+              {/* {isEnglish ? "Supplications to draw closer to Allah..." : "അല്ലാഹുവിലേക്ക് കൂടുതൽ അടുക്കാനുള്ള പ്രാർത്ഥനകൾ.."} */}
             </p>
           </div>
         </div>

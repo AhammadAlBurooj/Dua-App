@@ -15,12 +15,12 @@ export default function SplashScreen({ onFinish }) {
         }
         return prev + 12;
       });
-    }, 280);
+    }, 80);
 
     // Auto dismiss after 2.8 seconds
     const dismissTimer = setTimeout(() => {
       handleDismiss();
-    }, 2800);
+    }, 1000);
 
     return () => {
       clearInterval(progressTimer);
@@ -45,8 +45,8 @@ export default function SplashScreen({ onFinish }) {
       {/* Background Poster Image */}
       <div className="splash-image-wrapper">
         <img 
-          src="/splash.jpg" 
-          alt="Adhkar by Burooj 4 Tech" 
+          src="/splash2.png" 
+          // alt="Adhkar by Burooj 4 Tech" 
           className="splash-hero-image"
           onError={(e) => {
             // Fallback in case of path issue
@@ -59,26 +59,26 @@ export default function SplashScreen({ onFinish }) {
 
       {/* Bottom Loading Progress & Skip Action */}
       <div className="splash-bottom-controls" onClick={e => e.stopPropagation()}>
-        <div className="splash-progress-track">
+        {/* <div className="splash-progress-track">
           <div 
             className="splash-progress-fill" 
             style={{ width: `${progress}%` }}
           />
-        </div>
+        </div> */}
 
         <div className="splash-footer-row">
           <span className="splash-status-text">
-            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            {/* بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ */}
           </span>
 
-          <button 
+          {/* <button 
             className="splash-skip-btn"
             onClick={handleDismiss}
             aria-label="Enter App"
           >
             <span>തുടങ്ങുക</span>
             <ArrowRight size={14} strokeWidth={2.4} />
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
