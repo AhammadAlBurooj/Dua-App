@@ -336,32 +336,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         </div>
       )}
 
-      {/* ========================================================
-          3. BOTTOM PAGINATION CONTROLS BAR (Matches Quran Duas Slides)
-          ======================================================== */}
-      {viewMode === 'slide' && (
-        <div className="ref-detail-bottom-nav-bar">
-          <button 
-            className="ref-nav-prev-btn"
-            disabled={!hasPrev}
-            onClick={handlePrev}
-          >
-            <span>← {isEnglish ? "Previous" : "മുമ്പത്തേത്"}</span>
-          </button>
 
-          <div className="ref-pagination-center-text">
-            {currentIndex + 1} / {totalNames}
-          </div>
-
-          <button 
-            className="ref-nav-next-btn"
-            disabled={!hasNext}
-            onClick={handleNext}
-          >
-            <span>{isEnglish ? "Next" : "അടുത്തത്"} →</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 }

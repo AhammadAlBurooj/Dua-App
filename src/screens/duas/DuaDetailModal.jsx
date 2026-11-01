@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, 
   Heart, 
   BookOpen, 
   Play, 
   Pause, 
-  Repeat, 
   ChevronDown,
   Volume2
 } from 'lucide-react';
@@ -34,6 +33,10 @@ export default function DuaDetailModal({
 }) {
   const [audioState, setAudioState] = useState(audioService.getState());
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const mouseStartX = useRef(0);
+  const isMouseDown = useRef(false);
 
   const lang = settings?.language || 'ml';
   const isEnglish = lang === 'en';
@@ -46,16 +49,9 @@ export default function DuaDetailModal({
     return unsubscribe;
   }, []);
 
-  if (!dua) return null;
-
-  const category = CATEGORIES.find(c => c.id === dua.categoryId);
-  const categoryTitle = category 
-    ? (isEnglish ? category.titleEn : category.titleMl) 
-    : (isEnglish ? 'Dua' : 'ദുആ');
-
-  // Find index in category list for pagination
-  const currentList = categoryDuas.length > 0 ? categoryDuas : [dua];
-  const currentIndex = currentList.findIndex(d => d.id === dua.id);
+  // Find index in category list for swiping
+  const currentList = categoryDuas.length > 0 ? categoryDuas : (dua ? [dua] : []);
+  const currentIndex = dua ? currentList.findIndex(d => d.id === dua.id) : -1;
   const safeIndex = currentIndex !== -1 ? currentIndex : 0;
   const totalCount = currentList.length;
 
@@ -73,6 +69,62 @@ export default function DuaDetailModal({
     if (hasNext) {
       audioService.stop();
       onSelectDua(currentList[safeIndex + 1]);
+    }
+  };
+
+  // Screen swiping keyboard navigation for desktop
+  useEffect(() => {
+    if (!dua) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [dua, safeIndex, hasPrev, hasNext]);
+
+  // Touch Swipe Handlers for mobile screen swiping
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX.current - touchEndX;
+    const diffY = touchStartY.current - touchEndY;
+
+    // Detect horizontal swipe across screen
+    if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+      if (diffX > 0 && hasNext) {
+        handleNext();
+      } else if (diffX < 0 && hasPrev) {
+        handlePrev();
+      }
+    }
+  };
+
+  // Mouse Drag Handlers for desktop screen swiping
+  const handleMouseDown = (e) => {
+    if (e.target.closest('button, input, .ref-scrubber-track, .ref-inline-audio-bar')) return;
+    mouseStartX.current = e.clientX;
+    isMouseDown.current = true;
+  };
+
+  const handleMouseUp = (e) => {
+    if (!isMouseDown.current) return;
+    isMouseDown.current = false;
+    const diffX = mouseStartX.current - e.clientX;
+    if (Math.abs(diffX) > 45) {
+      if (diffX > 0 && hasNext) {
+        handleNext();
+      } else if (diffX < 0 && hasPrev) {
+        handlePrev();
+      }
     }
   };
 
@@ -117,13 +169,26 @@ export default function DuaDetailModal({
   const currentTimeSec = isThisDuaCurrent ? audioState.currentTime : 0;
   const durationSec = isThisDuaCurrent ? audioState.duration : 0;
 
+  if (!dua) return null;
+
+  const category = CATEGORIES.find(c => c.id === dua.categoryId);
+  const categoryTitle = category 
+    ? (isEnglish ? category.titleEn : category.titleMl) 
+    : (isEnglish ? 'Dua' : 'ദുആ');
+
   const isQuranic = dua.sourceType === 'quran';
   const refLabel = isQuranic 
     ? (isEnglish ? "Quran Reference" : "ഖുർആൻ റഫറൻസ്")
     : (isEnglish ? "Hadith Reference" : "ഹദീസ് റഫറൻസ്");
 
   return (
-    <div className="reference-dua-detail-screen">
+    <div 
+      className="reference-dua-detail-screen"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
       {/* ========================================================
           1. TOP APP BAR (Back, Title, Category Pill, Favorite)
           ======================================================== */}
@@ -144,9 +209,16 @@ export default function DuaDetailModal({
           <h1 className="ref-dua-title-heading">
             {isEnglish ? dua.titleEn : dua.titleMl}
           </h1>
-          <span className="ref-category-badge-pill">
-            {categoryTitle}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px' }}>
+            <span className="ref-category-badge-pill">
+              {categoryTitle}
+            </span>
+            {totalCount > 1 && (
+              <span className="ref-category-badge-pill" style={{ background: '#E2ECE6', color: '#0E5C43', fontWeight: 700 }}>
+                {safeIndex + 1} / {totalCount}
+              </span>
+            )}
+          </div>
         </div>
 
         <button 
@@ -164,7 +236,7 @@ export default function DuaDetailModal({
       </div>
 
       {/* ========================================================
-          2. BODY CONTENT (Scrollable area)
+          2. BODY CONTENT (Scrollable screen)
           ======================================================== */}
       <div className="ref-detail-scroll-body">
         {/* Arabic Card (Centered large font in soft light green card) */}
@@ -301,31 +373,6 @@ export default function DuaDetailModal({
             </div>
           )}
         </div>
-      </div>
-
-      {/* ========================================================
-          3. BOTTOM PAGINATION CONTROLS BAR (Screen 3-6)
-          ======================================================== */}
-      <div className="ref-detail-bottom-nav-bar">
-        <button 
-          className="ref-nav-prev-btn"
-          disabled={!hasPrev}
-          onClick={handlePrev}
-        >
-          <span>← {isEnglish ? "Previous" : "മുമ്പത്തേത്"}</span>
-        </button>
-
-        <div className="ref-pagination-center-text">
-          {safeIndex + 1} / {totalCount}
-        </div>
-
-        <button 
-          className="ref-nav-next-btn"
-          disabled={!hasNext}
-          onClick={handleNext}
-        >
-          <span>{isEnglish ? "Next" : "അടുത്തത്"} →</span>
-        </button>
       </div>
     </div>
   );
