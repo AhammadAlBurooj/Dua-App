@@ -218,28 +218,7 @@ export default function DuasScreen({
             })}
           </div>
 
-          {/* Bottom Pagination Preview Bar matching Screen 2 */}
-          {categoryDuas.length > 0 && (
-            <div className="category-bottom-bar">
-              <button 
-                className="icon-btn pagination-arrow-btn"
-                disabled={true}
-                title="Previous"
-              >
-                <ChevronLeft size={17} />
-              </button>
-              <span className="category-pagination-pill">
-                1 / {categoryDuas.length}
-              </span>
-              <button 
-                className="icon-btn pagination-arrow-btn"
-                onClick={() => onSelectDua(categoryDuas[0])}
-                title={isEnglish ? "Open first dua" : "ആദ്യത്തെ ദുആ തുറക്കുക"}
-              >
-                <ChevronRight size={17} />
-              </button>
-            </div>
-          )}
+
         </div>
       ) : (
         /* ========================================================
