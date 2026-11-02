@@ -42,7 +42,7 @@ export default function Header({
         <button 
           className="icon-btn" 
           onClick={onToggleWidth}
-          title={isFullWidth ? (language === 'en' ? "Switch to mobile view" : "മൊബൈൽ വ്യൂവിലേക്ക് മാറ്റുക") : (language === 'en' ? "Switch to full view" : "ഫുൾ സ്ക്രീൻ വ്യൂവിലേക്ക് മാറ്റുക")}
+          title={isFullWidth ? (language === 'en' ? "Switch to mobile view" : "Switch to mobile view") : (language === 'en' ? "Switch to ipad size" : "Switch to ipad size")}
           aria-label="Toggle mobile / full view"
         >
           {isFullWidth ? <Smartphone size={17} /> : <Maximize2 size={17} />}
@@ -51,7 +51,7 @@ export default function Header({
         <button 
           className="icon-btn" 
           onClick={onToggleTheme}
-          title={theme === 'dark' ? (language === 'en' ? "Light mode" : "ലൈറ്റ് മോഡ്") : (language === 'en' ? "Dark mode" : "ഡാർക്ക് മോഡ്")}
+          title={theme === 'dark' ? (language === 'en' ? "Light mode" : "Light mode") : (language === 'en' ? "Dark mode" : "Dark mode")}
           aria-label="Toggle Theme"
         >
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
