@@ -111,8 +111,7 @@ export default function FavoritesScreen({
           <p className="empty-title">{t.noFavoritesTitle}</p>
           <p className="empty-desc">
             {t.noFavoritesDesc}
-          </p>
-          <button 
+              <button 
             className="hero-play-btn"
             style={{ backgroundColor: 'var(--primary)', color: 'white', marginTop: '8px' }}
             onClick={onExploreDuas}
@@ -120,6 +119,8 @@ export default function FavoritesScreen({
             <Sparkles size={16} />
             <span>{t.exploreDuasBtn}</span>
           </button>
+          </p>
+        
         </div>
       ) : filteredFavorites.length === 0 ? (
         <div className="empty-state">

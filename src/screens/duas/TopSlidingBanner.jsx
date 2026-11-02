@@ -169,7 +169,7 @@ export default function TopSlidingBanner({
         </div>
 
         {/* Right Top Action Buttons: Bookmark & Settings */}
-        <div className="banner-header-actions">
+        {/* <div className="banner-header-actions">
           <button 
             className="banner-round-action-btn"
             onClick={() => onNavigateTab && onNavigateTab('bookmarks')}
@@ -187,7 +187,7 @@ export default function TopSlidingBanner({
           >
             <SettingsIcon size={18} strokeWidth={2.2} />
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Sliding Cards Carousel */}
@@ -273,11 +273,11 @@ export default function TopSlidingBanner({
         <input 
           type="text"
           className="floating-search-input"
-          placeholder={isEnglish ? "Search duas..." : "Search duas..."}
+          placeholder={isEnglish ? "Search" : "Search"}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
         />
-        {searchQuery ? (
+        {/* {searchQuery ? (
           <button 
             className="search-clear-btn-floating" 
             onClick={() => onSearchChange('')}
@@ -294,7 +294,7 @@ export default function TopSlidingBanner({
           >
             <SlidersHorizontal size={17} strokeWidth={2.2} />
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );
