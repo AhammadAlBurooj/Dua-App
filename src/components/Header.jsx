@@ -39,14 +39,14 @@ export default function Header({
       </div>
 
       <div className="header-actions">
-        <button 
+        {/* <button 
           className="icon-btn" 
           onClick={onToggleWidth}
           title={isFullWidth ? (language === 'en' ? "Switch to mobile view" : "മൊബൈൽ വ്യൂവിലേക്ക് മാറ്റുക") : (language === 'en' ? "Switch to full view" : "ഫുൾ സ്ക്രീൻ വ്യൂവിലേക്ക് മാറ്റുക")}
           aria-label="Toggle mobile / full view"
         >
           {isFullWidth ? <Smartphone size={17} /> : <Maximize2 size={17} />}
-        </button>
+        </button> */}
 
         <button 
           className="icon-btn" 
