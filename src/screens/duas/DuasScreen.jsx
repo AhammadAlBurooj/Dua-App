@@ -99,7 +99,7 @@ export default function DuasScreen({
               ref={searchInputRef}
               type="text" 
               className="search-input"
-              placeholder="Search duas..."
+              placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus

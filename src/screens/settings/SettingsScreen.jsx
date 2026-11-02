@@ -152,22 +152,22 @@ export default function SettingsScreen({
       </div>
 
       {/* 2. വായനയും ടൈപ്പോഗ്രാഫിയും (Reading & Typography) */}
-      <div className="settings-section">
+      {/* <div className="settings-section">
         <h3 className="settings-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Sliders size={15} color="var(--primary)" />
           <span>{t.readingSection}</span>
-        </h3>
+        </h3> */}
 
         {/* Arabic Font Size Slider with Live Preview */}
-        <div style={{ padding: '8px 0 14px' }}>
+        {/* <div style={{ padding: '8px 0 14px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <span className="settings-label-title">{t.arabicFontSizeLabel}</span>
             <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--primary)', background: 'var(--bg-sage)', padding: '2px 8px', borderRadius: '10px' }}>
               {settings.arabicFontSize}px
             </span>
-          </div>
+          </div> */}
 
-          <input 
+          {/* <input 
             type="range"
             min="20"
             max="42"
@@ -175,10 +175,10 @@ export default function SettingsScreen({
             onChange={handleFontSizeChange}
             className="font-slider"
             aria-label="Arabic font size"
-          />
+          /> */}
 
           {/* Live Arabic Font Preview Card */}
-          <div style={{
+          {/* <div style={{
             marginTop: '12px',
             padding: '14px',
             backgroundColor: 'var(--bg-surface-soft)',
@@ -197,7 +197,7 @@ export default function SettingsScreen({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* 3. രൂപകൽപ്പന & തീം (Theme & Appearance) */}
       <div className="settings-section">
@@ -223,9 +223,9 @@ export default function SettingsScreen({
       </div>
 
       {/* 4. ഓഡിയോ ക്രമീകരണങ്ങൾ (Audio Settings) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title">{t.audioSection}</h3>
-        <div className="settings-row">
+      {/* <div className="settings-section">
+        <h3 className="settings-section-title">{t.audioSection}</h3> */}
+        {/* <div className="settings-row">
           <div className="settings-label">
             <span className="settings-label-title">{t.audioSpeedLabel}</span>
             <span className="settings-label-sub">{t.audioSpeedSub}</span>
@@ -242,9 +242,9 @@ export default function SettingsScreen({
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
 
-        <div className="settings-row">
+        {/* <div className="settings-row">
           <div className="settings-label">
             <span className="settings-label-title">{t.autoReplayLabel}</span>
             <span className="settings-label-sub">{t.autoReplaySub}</span>
@@ -257,8 +257,8 @@ export default function SettingsScreen({
             />
             <span className="slider"></span>
           </label>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       {/* 5. ഓഫ്ലൈൻ & സംഭരണം (Offline Storage Status) */}
       <div className="settings-section">
@@ -331,14 +331,14 @@ export default function SettingsScreen({
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
             >
               <Sparkles size={13} color="var(--primary)" />
-              <span>{lang === 'en' ? 'View Splash Screen' : 'സ്പ്ലാഷ് സ്ക്രീൻ കാണുക'}</span>
+              <span>{lang === 'en' ? 'View Splash Screen' : 'View Splash Screen'}</span>
             </button>
           </div>
         )}
 
         <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-tertiary)' }}>
-          <span>Created by Burooj 4 Tech App v1.0.0</span>
-          <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'Simple • Serene • Authentic'}</span>
+          <span>Created by Burooj 4 Tech v1.0.0</span>
+          {/* <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'Simple • Serene • Authentic'}</span> */}
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default function Header({
   language = 'ml'
 }) {
   const today = new Date();
-  const dateStr = today.toLocaleDateString(language === 'en' ? 'en-US' : 'ml-IN', {
+  const dateStr = today.toLocaleDateString(language === 'en', {
     weekday: 'long',
     month: 'short',
     day: 'numeric'
@@ -29,9 +29,9 @@ export default function Header({
         </div>
         <div className="header-title-wrap">
           <h1>
-            Dua 
+            مناجاة 
             <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary)' }}>
-              {language === 'en' ? 'Supplications' : 'ദുആ'}
+              {language === 'en' ? 'Supplications' : ''}
             </span>
           </h1>
           <div className="header-subtitle">{dateStr}</div>
@@ -39,14 +39,14 @@ export default function Header({
       </div>
 
       <div className="header-actions">
-        <button 
+        {/* <button 
           className="icon-btn" 
           onClick={onToggleWidth}
           title={isFullWidth ? (language === 'en' ? "Switch to mobile view" : "മൊബൈൽ വ്യൂവിലേക്ക് മാറ്റുക") : (language === 'en' ? "Switch to full view" : "ഫുൾ സ്ക്രീൻ വ്യൂവിലേക്ക് മാറ്റുക")}
           aria-label="Toggle mobile / full view"
         >
           {isFullWidth ? <Smartphone size={17} /> : <Maximize2 size={17} />}
-        </button>
+        </button> */}
 
         <button 
           className="icon-btn" 
