@@ -10,20 +10,21 @@ import {
   Users, 
   Compass, 
   ShieldCheck, 
-  HeartHandshake,
-  HeartPulse,
-  LifeBuoy,
-  Utensils,
-  BookOpen,
-  GraduationCap,
-  ChevronRight,
-  ChevronLeft,
-  Heart
+  HeartHandshake, 
+  HeartPulse, 
+  LifeBuoy, 
+  Utensils, 
+  BookOpen, 
+  GraduationCap, 
+  ChevronRight, 
+  ChevronLeft, 
+  Heart 
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { UI_TEXT } from '../../utils/translations';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
+import CategoryDuaReader from './CategoryDuaReader';
 
 // Icon mapping
 const ICON_MAP = {
@@ -50,9 +51,9 @@ export default function DuasScreen({
   playingDuaId, 
   onToggleFavorite, 
   onTogglePlay, 
-  onSelectDua,
-  settings,
-  onNavigateTab
+  onSelectDua, 
+  settings, 
+  onNavigateTab 
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAsmaulHusnaOpen, setIsAsmaulHusnaOpen] = useState(false);
@@ -81,8 +82,27 @@ export default function DuasScreen({
         (d.tags && d.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
       );
 
+  const handleSearchItemClick = (d) => {
+    const isSpecialCategoryDua = [
+      'prayer-34', 'prayer-35', 'prayer-36', 'prayer-37', 'prayer-39', 'prayer-1', 'prayer-2',
+      'prayer-40', 'prayer-41', 'prayer-42', 'prayer-43', 'prayer-44', 'prayer-3',
+      'prayer-45', 'prayer-46', 'prayer-47', 'prayer-4',
+      'prayer-48', 'prayer-49', 'prayer-50', 'prayer-51', 'prayer-52', 'prayer-53', 'prayer-54', 'prayer-5',
+      'prayer-55', 'prayer-56', 'prayer-6',
+      'prayer-57', 'prayer-58', 'prayer-7',
+      'prayer-59', 'prayer-60', 'prayer-8',
+      'prayer-61', 'prayer-62', 'prayer-9',
+      'prayer-63', 'prayer-64', 'prayer-65', 'prayer-66', 'prayer-67', 'prayer-68', 'prayer-69', 'prayer-70', 'prayer-71', 'prayer-72', 'prayer-73', 'prayer-10'
+    ].includes(d.id);
+    if (isSpecialCategoryDua) {
+      onSelectCategory('prayer');
+    } else {
+      onSelectDua(d);
+    }
+  };
+
   return (
-    <div className="reference-ui-screen">
+    <div className={`reference-ui-screen ${selectedCategoryId === 'prayer' ? 'category-reader-active' : ''}`}>
       {/* ========================================================
           CASE 0: ASMAUL HUSNA FULL PAGE (Quran Duas Slide Format)
           ======================================================== */}
@@ -90,6 +110,20 @@ export default function DuasScreen({
         <AsmaulHusnaScreen 
           onBack={() => setIsAsmaulHusnaOpen(false)}
           settings={settings}
+        />
+      ) : selectedCategoryId === 'prayer' ? (
+        /* ========================================================
+           CASE 0.5: CATEGORY 'നമസ്കാരം' (Category Hierarchy & Swiping Reader)
+           Exact component provided by user:
+           Screen 1: Category Selection with subcategories accordion
+           Screen 2: Multi-Page Dua Swiping Reader with real Audio, Word-by-Word,
+                     Malayalam Translation, Transliteration, Reference & Virtue
+           ======================================================== */
+        <CategoryDuaReader 
+          initialView="categories"
+          onBackToHome={() => onSelectCategory(null)}
+          favorites={favorites}
+          onToggleFavorite={onToggleFavorite}
         />
       ) : searchQuery.trim() !== '' ? (
         <div className="search-active-container">
@@ -127,27 +161,19 @@ export default function DuasScreen({
             </div>
           ) : (
             <div className="category-duas-list">
-              {searchResults.map((d, index) => {
+              {searchResults.map((d) => {
                 const cat = CATEGORIES.find(c => c.id === d.categoryId);
                 return (
                   <div 
                     key={d.id} 
                     className="dua-list-item-card"
-                    onClick={() => {
-                      onSelectDua(d);
-                      if (!selectedCategoryId) {
-                        onSelectCategory(d.categoryId);
-                      }
-                    }}
+                    onClick={() => handleSearchItemClick(d)}
                   >
-                    <div className="dua-item-num-badge">
-                      {index + 1}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="dua-item-content">
                       <div className="dua-item-title-text">
                         {isEnglish ? d.titleEn : d.titleMl}
                       </div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <div className="dua-item-meta-sub">
                         <span>{cat ? (isEnglish ? cat.titleEn : cat.titleMl) : ''}</span>
                         {d.authenticity && <span>• {d.authenticity}</span>}
                       </div>
@@ -161,7 +187,7 @@ export default function DuasScreen({
         </div>
       ) : activeCategory ? (
         /* ========================================================
-           CASE 2: CATEGORY SELECTED (Screen 2: Category Duas List)
+           CASE 2: OTHER CATEGORIES (Screen 2: Category Duas List)
            ======================================================== */
         <div className="category-view-container">
           {/* Header matching Screen 2 */}
@@ -217,15 +243,13 @@ export default function DuasScreen({
               );
             })}
           </div>
-
-
         </div>
       ) : (
         /* ========================================================
            CASE 3: HOME SCREEN (Screen 1: Mosque Hero & Categories)
            ======================================================== */
         <div className="home-screen-view">
-          {/* Dynamic Scenic Header & Auto/Manual Sliding Cards (Quran, Asmaul Husna, Daily Duas) */}
+          {/* Dynamic Scenic Header & Auto/Manual Sliding Cards */}
           <TopSlidingBanner 
             onSelectCategory={onSelectCategory}
             onNavigateTab={onNavigateTab}
@@ -241,7 +265,7 @@ export default function DuasScreen({
               {isEnglish ? "Main Categories" : "പ്രധാന വിഭാഗങ്ങൾ"}
             </h2>
 
-            {/* Vertical list of Category Cards matching Screen 1 */}
+            {/* Vertical list of Category Cards */}
             <div className="reference-categories-list">
               {CATEGORIES.map((category) => {
                 const Icon = ICON_MAP[category.icon] || Sparkles;
