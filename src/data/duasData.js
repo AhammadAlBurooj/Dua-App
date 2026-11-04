@@ -9,6 +9,7 @@
  * - Malayalam Meaning & English Translation
  * - Verified Quranic & Hadith References (Sahih al-Bukhari, Sahih Muslim, Quran, Sunan Sahih)
  * - Distinct Authenticity Grading Badges
+ * - Studio-recorded Audio Recitations hosted on Cloudflare Worker CDN
  */
 
 export const DUAS = [
@@ -31,7 +32,8 @@ export const DUAS = [
       "morning",
       "daily",
       "ദിക്ർ"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m95.mp3"
   },
   {
     "id": "daily-2",
@@ -52,7 +54,8 @@ export const DUAS = [
       "evening",
       "daily",
       "രാത്രി"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m96.mp3"
   },
   {
     "id": "daily-3",
@@ -73,7 +76,8 @@ export const DUAS = [
       "sleep",
       "night",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m134.mp3"
   },
   {
     "id": "daily-4",
@@ -94,7 +98,8 @@ export const DUAS = [
       "waking",
       "morning",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m1.mp3"
   },
   {
     "id": "daily-5",
@@ -114,7 +119,8 @@ export const DUAS = [
       "ഭക്ഷണം",
       "food",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m9.mp3"
   },
   {
     "id": "daily-6",
@@ -135,7 +141,8 @@ export const DUAS = [
       "food",
       "നന്ദി",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m222.mp3"
   },
   {
     "id": "daily-7",
@@ -156,7 +163,8 @@ export const DUAS = [
       "water",
       "drink",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m9.mp3"
   },
   {
     "id": "daily-8",
@@ -176,7 +184,8 @@ export const DUAS = [
       "വീട്",
       "home",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m9.mp3"
   },
   {
     "id": "daily-9",
@@ -197,7 +206,8 @@ export const DUAS = [
       "പുറത്ത്",
       "യാത്ര",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m17.mp3"
   },
   {
     "id": "daily-10",
@@ -218,7 +228,8 @@ export const DUAS = [
       "mirror",
       "സ്വഭാവം",
       "daily"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m484.mp3"
   },
   {
     "id": "prayer-1",
@@ -239,7 +250,8 @@ export const DUAS = [
       "prayer",
       "salah",
       "തുടക്കം"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m34.mp3"
   },
   {
     "id": "prayer-2",
@@ -259,7 +271,8 @@ export const DUAS = [
       "നമസ്കാരം",
       "prayer",
       "തുടക്കം"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m35.mp3"
   },
   {
     "id": "prayer-3",
@@ -279,7 +292,8 @@ export const DUAS = [
       "റുകൂഅ്",
       "ruku",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m40.mp3"
   },
   {
     "id": "prayer-4",
@@ -299,7 +313,8 @@ export const DUAS = [
       "റുകൂഅ്",
       "ഇഅ്തിദാൽ",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m46.mp3"
   },
   {
     "id": "prayer-5",
@@ -319,7 +334,8 @@ export const DUAS = [
       "സുജൂദ്",
       "sujood",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m48.mp3"
   },
   {
     "id": "prayer-6",
@@ -339,7 +355,8 @@ export const DUAS = [
       "സുജൂദ്",
       "ഇരുത്തം",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m55.mp3"
   },
   {
     "id": "prayer-7",
@@ -359,7 +376,8 @@ export const DUAS = [
       "തശഹ്ഹുദ്",
       "അത്തഹിയ്യാത്ത്",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m59.mp3"
   },
   {
     "id": "prayer-8",
@@ -379,7 +397,8 @@ export const DUAS = [
       "സ്വലാത്ത്",
       "ibrahimiyyah",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m61.mp3"
   },
   {
     "id": "prayer-9",
@@ -399,7 +418,8 @@ export const DUAS = [
       "സലാം",
       "കാവൽ",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m63.mp3"
   },
   {
     "id": "prayer-10",
@@ -419,7 +439,8 @@ export const DUAS = [
       "നമസ്കാരശേഷം",
       "istighfar",
       "prayer"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m75.mp3"
   },
   {
     "id": "forgiveness-1",
@@ -440,7 +461,8 @@ export const DUAS = [
       "പാപമോചനം",
       "സ്വർഗ്ഗം",
       "forgiveness"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m99.mp3"
   },
   {
     "id": "forgiveness-2",
@@ -460,7 +482,8 @@ export const DUAS = [
       "ഇസ്തിഗ്ഫാർ",
       "തൗബ",
       "forgiveness"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m74.mp3"
   },
   {
     "id": "forgiveness-3",
@@ -480,7 +503,8 @@ export const DUAS = [
       "തൗബ",
       "നൂറ് തവണ",
       "forgiveness"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m239.mp3"
   },
   {
     "id": "forgiveness-4",
@@ -501,7 +525,8 @@ export const DUAS = [
       "കടം",
       "കാവൽ",
       "forgiveness"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m64.mp3"
   },
   {
     "id": "forgiveness-5",
@@ -521,7 +546,8 @@ export const DUAS = [
       "കാരുണ്യം",
       "സിദ്ദീഖ്",
       "forgiveness"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m65.mp3"
   },
   {
     "id": "protection-1",
@@ -541,7 +567,8 @@ export const DUAS = [
       "സംരക്ഷണം",
       "തിന്മ",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m126.mp3"
   },
   {
     "id": "protection-2",
@@ -561,7 +588,8 @@ export const DUAS = [
       "പിശാച്",
       "ഇസ്തിആദത്ത്",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m165.mp3"
   },
   {
     "id": "protection-3",
@@ -582,7 +610,8 @@ export const DUAS = [
       "കുട്ടികൾ",
       "evil eye",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m182.mp3"
   },
   {
     "id": "protection-4",
@@ -602,7 +631,8 @@ export const DUAS = [
       "സംരക്ഷണം",
       "ആപത്ത്",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m110.mp3"
   },
   {
     "id": "protection-5",
@@ -623,7 +653,8 @@ export const DUAS = [
       "പേടി",
       "ധൈര്യം",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m146.mp3"
   },
   {
     "id": "protection-6",
@@ -644,7 +675,8 @@ export const DUAS = [
       "toilet",
       "ശുചിത്വം",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m11.mp3"
   },
   {
     "id": "protection-7",
@@ -665,7 +697,8 @@ export const DUAS = [
       "ഇറങ്ങുമ്പോൾ",
       "ഗുഫ്റാനക്",
       "protection"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m12.mp3"
   },
   {
     "id": "health-1",
@@ -686,7 +719,8 @@ export const DUAS = [
       "രോഗശമനം",
       "shifa",
       "health"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m188.mp3"
   },
   {
     "id": "health-2",
@@ -707,7 +741,8 @@ export const DUAS = [
       "സന്ദർശനം",
       "ശിഫാ",
       "health"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m185.mp3"
   },
   {
     "id": "health-3",
@@ -728,7 +763,8 @@ export const DUAS = [
       "മാരകരോഗങ്ങൾ",
       "കാവൽ",
       "health"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m434.mp3"
   },
   {
     "id": "health-4",
@@ -749,7 +785,8 @@ export const DUAS = [
       "കാഴ്ച",
       "കേൾവി",
       "health"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m103.mp3"
   },
   {
     "id": "health-5",
@@ -791,7 +828,8 @@ export const DUAS = [
       "വിഷമം",
       "കടം",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m153.mp3"
   },
   {
     "id": "distress-2",
@@ -812,7 +850,8 @@ export const DUAS = [
       "സങ്കടം",
       "കർബ്",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m154.mp3"
   },
   {
     "id": "distress-3",
@@ -833,7 +872,8 @@ export const DUAS = [
       "laziness",
       "ഉന്മേഷം",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m416.mp3"
   },
   {
     "id": "distress-4",
@@ -854,7 +894,8 @@ export const DUAS = [
       "debt",
       "ഐശ്വര്യം",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m168.mp3"
   },
   {
     "id": "distress-5",
@@ -875,7 +916,8 @@ export const DUAS = [
       "എളുപ്പം",
       "പരീക്ഷ",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m171.mp3"
   },
   {
     "id": "distress-6",
@@ -891,7 +933,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "കഠിനമായ പ്രതിസന്ധികളിലും പരീക്ഷണങ്ങളിലും മനക്കരുത്തും ക്ഷമയും ലഭിക്കാൻ വിശുദ്ധ ഖുർആനിലെ പ്രാർത്ഥന.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/002250.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m348.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "ക്ഷമ",
@@ -919,7 +961,8 @@ export const DUAS = [
       "ആശ്വാസം",
       "കാരുണ്യം",
       "distress"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m155.mp3"
   },
   {
     "id": "food-1",
@@ -939,7 +982,8 @@ export const DUAS = [
       "ഭക്ഷണം",
       "തുടക്കം",
       "food"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m9.mp3"
   },
   {
     "id": "food-2",
@@ -960,7 +1004,8 @@ export const DUAS = [
       "നന്ദി",
       "alhamdulillah",
       "food"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m222.mp3"
   },
   {
     "id": "food-3",
@@ -980,7 +1025,8 @@ export const DUAS = [
       "മറവി",
       "ബിസ്മില്ലാഹ്",
       "food"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m219.mp3"
   },
   {
     "id": "food-4",
@@ -1001,7 +1047,8 @@ export const DUAS = [
       "milk",
       "ബർക്കത്ത്",
       "food"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m221.mp3"
   },
   {
     "id": "food-5",
@@ -1021,7 +1068,8 @@ export const DUAS = [
       "നോമ്പ് തുറക്കൽ",
       "iftar",
       "food"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m215.mp3"
   },
   {
     "id": "travel-1",
@@ -1041,7 +1089,8 @@ export const DUAS = [
       "യാത്ര",
       "തുടക്കം",
       "travel"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m255.mp3"
   },
   {
     "id": "travel-2",
@@ -1057,7 +1106,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "വാഹനത്തിൽ കയറി ഇരുന്ന ശേഷം തക്ബീർ ചൊല്ലി ഈ ഖുർആനിക ദുആ ഓതുക.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/043013.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m253.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "വാഹനം",
@@ -1085,7 +1134,8 @@ export const DUAS = [
       "പട്ടണം",
       "നാട്",
       "travel"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m257.mp3"
   },
   {
     "id": "travel-4",
@@ -1106,7 +1156,8 @@ export const DUAS = [
       "യാത്ര",
       "നന്ദി",
       "travel"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m256.mp3"
   },
   {
     "id": "travel-5",
@@ -1127,7 +1178,8 @@ export const DUAS = [
       "കുടുംബം",
       "യാത്ര",
       "travel"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m255.mp3"
   },
   {
     "id": "family-1",
@@ -1143,7 +1195,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "മാതാപിതാക്കൾക്ക് വേണ്ടി നിരന്തരം പ്രാർത്ഥിക്കാൻ അല്ലാഹു വിശുദ്ധ ഖുർആനിലൂടെ കൽപ്പിച്ച ദുആ.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/017024.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m369.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "മാതാപിതാക്കൾ",
@@ -1167,7 +1219,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "സകരിയ്യാ നബി സദ്‌വൃത്തരായ മക്കളെ ലഭിക്കുന്നതിനായി പ്രാർത്ഥിച്ച ഖുർആനിക ദുആ.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/003038.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m353.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "മക്കൾ",
@@ -1190,7 +1242,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "കുടുംബത്തിൽ സമാധാനവും പരസ്പരസ്നേഹവും ധർമ്മനിഷ്ഠയും നിറയാൻ ഈ പ്രാർത്ഥന സഹായിക്കുന്നു.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/025074.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m379.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "ഇണ",
@@ -1218,7 +1270,8 @@ export const DUAS = [
       "കുടുംബ സംരക്ഷണം",
       "കാവൽ",
       "family"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m106.mp3"
   },
   {
     "id": "family-5",
@@ -1239,7 +1292,8 @@ export const DUAS = [
       "സൽസ്വഭാവം",
       "character",
       "family"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m435.mp3"
   },
   {
     "id": "quranic-1",
@@ -1255,7 +1309,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "ആദം നബിയും ഹവ്വാ (അ) യും പാപമോചനത്തിനായി പ്രാർത്ഥിക്കുകയും അല്ലാഹു അത് സ്വീകരിക്കുകയും ചെയ്തു.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/007023.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m359.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "ആദം നബി",
@@ -1278,7 +1332,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "തനിക്കും മക്കൾക്കും നമസ്കാരം ജീവിതചര്യയാക്കി നിലനിർത്താൻ ഇബ്രാഹീം നബി പ്രാർത്ഥിച്ച വചനങ്ങൾ.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/014040.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m368.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "ഇബ്രാഹീം നബി",
@@ -1301,7 +1355,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "പ്രസംഗങ്ങൾ, അധ്യാപനം, പരീക്ഷകൾ, വാദപ്രതിവാദങ്ങൾ എന്നിവക്ക് മുമ്പ് മനസ്സിന്റെ ഭയം മാറാനും കാര്യങ്ങൾ എളുപ്പമാകാനും ചൊല്ലുക.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/020025.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m371.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "മൂസാ നബി",
@@ -1324,7 +1378,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "അതിഭീകരമായ പ്രയാസങ്ങളിലും കാഠിന്യങ്ങളിലും നിന്ന് അല്ലാഹുവിന്റെ അത്ഭുതകരമായ രക്ഷ ലഭിക്കാൻ സഹായിക്കുന്ന ദുആ.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/021087.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m156.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "യൂനുസ് നബി",
@@ -1347,7 +1401,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "സന്താനങ്ങളില്ലാത്തവർക്ക് സദ്‌വൃത്തരായ അവകാശികളെ ലഭിക്കാൻ സകരിയ്യാ നബി പ്രാർത്ഥിച്ച വിശുദ്ധ വചനം.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/021089.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m374.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "സകരിയ്യാ നബി",
@@ -1370,7 +1424,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "നബി ﷺ ഏറ്റവും കൂടുതൽ പ്രാർത്ഥിച്ചിരുന്ന സർവ്വതോമുഖമായ അതിശ്രേഷ്ഠ പ്രാർത്ഥന.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/002201.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m282.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "റബ്ബനാ ആത്തിനാ",
@@ -1393,7 +1447,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "ഈമാനിലും ഇസ്‌ലാമിലും ജീവിതാവസാനം വരെ വ്യതിചലിക്കാതെ ഉറച്ചുനിൽക്കാൻ വിശുദ്ധ ഖുർആനിലെ പ്രാർത്ഥന.",
     "recommendedCount": 1,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/003008.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m351.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "ഈമാൻ",
@@ -1421,7 +1475,8 @@ export const DUAS = [
       "ചന്ദ്രക്കല",
       "റമദാൻ",
       "ramadan"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m214.mp3"
   },
   {
     "id": "ramadan-2",
@@ -1463,7 +1518,8 @@ export const DUAS = [
       "iftar",
       "റമദാൻ",
       "ramadan"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m215.mp3"
   },
   {
     "id": "ramadan-4",
@@ -1484,7 +1540,8 @@ export const DUAS = [
       "മാപ്പ്",
       "റമദാൻ",
       "ramadan"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m436.mp3"
   },
   {
     "id": "ramadan-5",
@@ -1521,7 +1578,7 @@ export const DUAS = [
     "sourceType": "quran",
     "benefitMl": "അറിവ് വർദ്ധിപ്പിക്കാൻ അല്ലാഹുവോട് തേടാൻ പ്രവാചകനോട് കൽപ്പിച്ച ഖുർആനിക വചനം. വിദ്യാർത്ഥികൾക്ക് നിത്യവും ചൊല്ലാൻ ഉത്തമം.",
     "recommendedCount": 3,
-    "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/020114.mp3",
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m372.mp3",
     "reciter": "മിശാരി അൽ-അഫാസി",
     "tags": [
       "അറിവ്",
@@ -1549,7 +1606,8 @@ export const DUAS = [
       "ഭക്തി",
       "ഐശ്വര്യം",
       "knowledge"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m419.mp3"
   },
   {
     "id": "knowledge-3",
@@ -1570,7 +1628,8 @@ export const DUAS = [
       "രിസ്ഖ്",
       "സൽകർമ്മം",
       "knowledge"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m87.mp3"
   },
   {
     "id": "knowledge-4",
@@ -1590,7 +1649,8 @@ export const DUAS = [
       "സൽസ്വഭാവം",
       "തിന്മകളിൽ നിന്നുള്ള കാവൽ",
       "knowledge"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m435.mp3"
   },
   {
     "id": "knowledge-5",
@@ -1611,7 +1671,8 @@ export const DUAS = [
       "ഈമാൻ",
       "ദീൻ",
       "knowledge"
-    ]
+    ],
+    "audioUrl": "https://crimson-cell-3d4c.mubarakar95.workers.dev/m430.mp3"
   }
 ];
 

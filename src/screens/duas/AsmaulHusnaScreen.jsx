@@ -9,15 +9,19 @@ import {
   Layers,
   ChevronLeft,
   ChevronRight,
-  Share2
+  Play,
+  Pause,
+  Volume2
 } from 'lucide-react';
 import { ASMAUL_HUSNA } from '../../data/asmaulHusna';
 import { UI_TEXT } from '../../utils/translations';
+import { audioService } from '../../utils/audioService';
 
 export default function AsmaulHusnaScreen({ onBack, settings }) {
   const [currentIndex, setCurrentIndex] = useState(0); // 0 to 98
   const [viewMode, setViewMode] = useState('slide'); // 'slide' | 'grid'
   const [searchQuery, setSearchQuery] = useState('');
+  const [audioState, setAudioState] = useState(audioService.getState());
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -30,16 +34,50 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < totalNames - 1;
 
+  // Listen to audio service state
+  useEffect(() => {
+    const unsub = audioService.subscribe((state) => {
+      setAudioState({ ...state });
+    });
+    return unsub;
+  }, []);
+
+  const isCurrentPlaying = audioState.isPlaying && audioState.currentDuaId === `asma-${currentName.id}`;
+
+  const handleTogglePlay = (name = currentName, e) => {
+    if (e) e.stopPropagation();
+    if (!name.audioUrl) return;
+    const nameId = `asma-${name.id}`;
+    if (audioState.isPlaying && audioState.currentDuaId === nameId) {
+      audioService.pause();
+    } else {
+      audioService.playDua({
+        id: nameId,
+        audioUrl: name.audioUrl,
+        titleMl: name.meaningMl,
+        titleEn: name.meaningEn,
+        reciter: 'യഥാർത്ഥ പാരായണം (Authentic Recitation)'
+      });
+    }
+  };
+
   const handlePrev = () => {
     if (hasPrev) {
+      audioService.stop();
       setCurrentIndex(prev => prev - 1);
     }
   };
 
   const handleNext = () => {
     if (hasNext) {
+      audioService.stop();
       setCurrentIndex(prev => prev + 1);
     }
+  };
+
+  const handleBack = () => {
+    audioService.stop();
+    onBack();
   };
 
   // Keyboard navigation for slide view
@@ -50,11 +88,14 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         handlePrev();
       } else if (e.key === 'ArrowRight') {
         handleNext();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        handleTogglePlay();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, currentIndex]);
+  }, [viewMode, currentIndex, isCurrentPlaying, hasPrev, hasNext]);
 
   // Touch Swipe Handlers for Slide View
   const handleTouchStart = (e) => {
@@ -81,9 +122,10 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
-      item.transliteration.toLowerCase().includes(q) ||
-      item.meaningMl.toLowerCase().includes(q) ||
-      item.meaningEn.toLowerCase().includes(q) ||
+      (item.transliteration && item.transliteration.toLowerCase().includes(q)) ||
+      (item.transliterationMl && item.transliterationMl.includes(searchQuery)) ||
+      (item.meaningMl && item.meaningMl.toLowerCase().includes(q)) ||
+      (item.meaningEn && item.meaningEn.toLowerCase().includes(q)) ||
       item.arabic.includes(searchQuery) ||
       String(item.id) === searchQuery.trim()
     );
@@ -97,7 +139,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
       <div className="ref-detail-top-bar">
         <button 
           className="icon-btn ref-back-btn"
-          onClick={onBack}
+          onClick={handleBack}
           title={isEnglish ? "Back to Home" : "തിരികെ ഹോമിലേക്ക്"}
           aria-label="Back to Home"
         >
@@ -121,7 +163,10 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         {/* View mode toggle button (Slide vs Grid) */}
         <button 
           className="icon-btn"
-          onClick={() => setViewMode(viewMode === 'slide' ? 'grid' : 'slide')}
+          onClick={() => {
+            audioService.stop();
+            setViewMode(viewMode === 'slide' ? 'grid' : 'slide');
+          }}
           title={viewMode === 'slide' ? (isEnglish ? "Switch to Grid View" : "എല്ലാ നാമങ്ങളും കാണുക") : (isEnglish ? "Switch to Slide View" : "സ്ലൈഡ് വ്യൂ")}
           aria-label="Toggle View Mode"
           style={{ 
@@ -140,7 +185,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           ======================================================== */}
       {viewMode === 'slide' ? (
         /* --------------------------------------------------------
-           SLIDE VIEW: Like Quran Duas Slides
+           SLIDE VIEW: Like Quran Duas Slides with Full Audio Bar
            -------------------------------------------------------- */
         <div 
           className="ref-detail-scroll-body asmaul-slide-body"
@@ -171,14 +216,15 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
 
           {/* Large Arabic Calligraphy Card (Matching Quran Duas ref-arabic-card) */}
           <div 
-            className="ref-arabic-card"
+            className={`ref-arabic-card ${isCurrentPlaying ? 'playing-glow' : ''}`}
             style={{ 
               textAlign: 'center', 
               padding: '28px 16px',
               background: 'linear-gradient(180deg, #EAF3EF 0%, #F5F9F7 100%)',
-              border: '1.5px solid rgba(23, 91, 70, 0.18)',
+              border: isCurrentPlaying ? '2px solid var(--primary)' : '1.5px solid rgba(23, 91, 70, 0.18)',
               borderRadius: '24px',
-              boxShadow: '0 4px 16px rgba(23, 91, 70, 0.08)'
+              boxShadow: isCurrentPlaying ? '0 6px 20px rgba(23, 91, 70, 0.18)' : '0 4px 16px rgba(23, 91, 70, 0.08)',
+              transition: 'all 0.3s ease'
             }}
           >
             <p 
@@ -196,8 +242,52 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
             </p>
           </div>
 
+          {/* Cloudflare Worker Authentic Audio Player Bar */}
+          <div 
+            className="ref-inline-audio-bar"
+            style={{ 
+              marginTop: '14px', 
+              marginBottom: '10px',
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              padding: '10px 14px',
+              backgroundColor: 'var(--bg-surface)',
+              borderRadius: '16px',
+              border: '1px solid var(--border-light)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button 
+                className="ref-audio-play-circle"
+                onClick={() => handleTogglePlay(currentName)}
+                aria-label={isCurrentPlaying ? "Pause Audio" : "Play Audio"}
+                title={isCurrentPlaying ? (isEnglish ? "Pause" : "നിർത്തുക") : (isEnglish ? "Play" : "ഓഡിയോ കേൾക്കുക")}
+              >
+                {isCurrentPlaying ? <Pause size={17} /> : <Play size={17} style={{ marginLeft: '1.5px' }} />}
+              </button>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
+                  {isCurrentPlaying ? (isEnglish ? "Playing Recitation..." : "പാരായണം കേൾക്കുന്നു...") : (isEnglish ? "Listen Recitation" : "പാരായണം കേൾക്കുക")}
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
+                  {currentName.transliterationEn || currentName.transliteration} • സ്റ്റുഡിയോ ഓഡിയോ
+                </div>
+              </div>
+            </div>
+
+            <button
+              className={`icon-btn ref-audio-opt-btn ${audioState.isLoop ? 'active' : ''}`}
+              onClick={() => audioService.toggleLoop()}
+              title={audioState.isLoop ? "Repeat: Active" : "Repeat"}
+              style={{ width: '34px', height: '34px' }}
+            >
+              <Volume2 size={16} color={isCurrentPlaying ? 'var(--primary)' : 'var(--text-tertiary)'} />
+            </button>
+          </div>
+
           {/* Pronunciation Section: ഉച്ചാരണം (മലയാളത്തിൽ) */}
-          <div className="ref-section-block" style={{ marginTop: '16px' }}>
+          <div className="ref-section-block" style={{ marginTop: '14px' }}>
             <h3 className="ref-section-title">
               {isEnglish ? "Pronunciation (Transliteration)" : "ഉച്ചാരണം (Transliteration)"}
             </h3>
@@ -242,10 +332,65 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
               </span>
             </div>
           </div>
+
+          {/* Prev / Next Bottom Navigation Bar */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '22px', marginBottom: '26px' }}>
+            <button 
+              className="icon-btn"
+              onClick={handlePrev}
+              disabled={!hasPrev}
+              style={{ 
+                opacity: hasPrev ? 1 : 0.35, 
+                backgroundColor: 'var(--bg-surface)', 
+                border: '1px solid var(--border-light)',
+                padding: '9px 16px',
+                width: 'auto',
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: 'var(--text-main)',
+                cursor: hasPrev ? 'pointer' : 'default'
+              }}
+            >
+              <ChevronLeft size={16} />
+              <span>{isEnglish ? "Previous" : "മുമ്പത്തേത്"}</span>
+            </button>
+
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--primary)' }}>
+              {currentIndex + 1} / {totalNames}
+            </span>
+
+            <button 
+              className="icon-btn"
+              onClick={handleNext}
+              disabled={!hasNext}
+              style={{ 
+                opacity: hasNext ? 1 : 0.35, 
+                backgroundColor: 'var(--bg-surface)', 
+                border: '1px solid var(--border-light)',
+                padding: '9px 16px',
+                width: 'auto',
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: 'var(--text-main)',
+                cursor: hasNext ? 'pointer' : 'default'
+              }}
+            >
+              <span>{isEnglish ? "Next" : "അടുത്തത്"}</span>
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       ) : (
         /* --------------------------------------------------------
-           GRID / LIST VIEW: Browse all 99 Names
+           GRID / LIST VIEW: Browse all 99 Names with Play Buttons
            -------------------------------------------------------- */
         <div className="ref-detail-scroll-body" style={{ padding: '14px 16px 80px' }}>
           {/* Search Box */}
@@ -269,6 +414,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
             {filteredNames.map((item, idx) => {
               const originalIndex = ASMAUL_HUSNA.findIndex(n => n.id === item.id);
+              const isItemPlaying = audioState.isPlaying && audioState.currentDuaId === `asma-${item.id}`;
               return (
                 <div
                   key={item.id}
@@ -276,14 +422,15 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                     setCurrentIndex(originalIndex !== -1 ? originalIndex : 0);
                     setViewMode('slide');
                   }}
-                  className="dua-card"
+                  className={`dua-card ${isItemPlaying ? 'playing-glow' : ''}`}
                   style={{
                     padding: '12px 10px',
                     textAlign: 'center',
                     marginBottom: 0,
                     cursor: 'pointer',
                     borderRadius: '16px',
-                    position: 'relative'
+                    position: 'relative',
+                    border: isItemPlaying ? '1.5px solid var(--primary)' : '1px solid var(--border-light)'
                   }}
                 >
                   <span 
@@ -302,12 +449,36 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                     #{item.id}
                   </span>
 
+                  {/* Play audio button on grid card */}
+                  <button
+                    onClick={(e) => handleTogglePlay(item, e)}
+                    style={{
+                      position: 'absolute',
+                      top: '6px',
+                      right: '8px',
+                      background: isItemPlaying ? 'var(--primary)' : 'var(--bg-surface-soft)',
+                      color: isItemPlaying ? '#fff' : 'var(--primary)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      padding: 0
+                    }}
+                    title={isItemPlaying ? "Pause" : "Play"}
+                  >
+                    {isItemPlaying ? <Pause size={12} /> : <Play size={12} style={{ marginLeft: '1px' }} />}
+                  </button>
+
                   <div 
                     className="arabic-text"
                     style={{ 
                       fontSize: '22px', 
                       color: 'var(--primary)', 
-                      marginTop: '10px', 
+                      marginTop: '12px', 
                       marginBottom: '4px',
                       lineHeight: 1.6
                     }}
@@ -335,8 +506,6 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           )}
         </div>
       )}
-
-
     </div>
   );
 }
