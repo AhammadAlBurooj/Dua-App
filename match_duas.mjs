@@ -2,7 +2,7 @@ import fs from 'fs';
 import { DUAS } from './src/data/duasData.js';
 import { ASMAUL_HUSNA } from './src/data/asmaulHusna.js';
 
-const outputData = JSON.parse(fs.readFileSync('C:/Users/mym/Downloads/output.json', 'utf8'));
+const outputData = JSON.parse(fs.readFileSync('./src/data/awraad.json', 'utf8'));
 
 console.log('Loaded existing duas:', DUAS.length);
 console.log('Loaded output duas:', outputData.duas.length);

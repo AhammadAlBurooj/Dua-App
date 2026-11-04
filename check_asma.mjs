@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { ASMAUL_HUSNA } from './src/data/asmaulHusna.js';
 
-const outputData = JSON.parse(fs.readFileSync('C:/Users/mym/Downloads/output.json', 'utf8'));
+const outputData = JSON.parse(fs.readFileSync('./src/data/awraad.json', 'utf8'));
 
 function cleanText(text) {
   if (!text) return '';

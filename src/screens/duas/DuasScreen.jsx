@@ -18,13 +18,18 @@ import {
   GraduationCap, 
   ChevronRight, 
   ChevronLeft, 
-  Heart 
+  Heart,
+  Folder,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
+import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { UI_TEXT } from '../../utils/translations';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
 import CategoryDuaReader from './CategoryDuaReader';
+import './CategoryDuaReader.css';
 
 // Icon mapping
 const ICON_MAP = {
@@ -57,6 +62,8 @@ export default function DuasScreen({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAsmaulHusnaOpen, setIsAsmaulHusnaOpen] = useState(false);
+  const [expandedCatId, setExpandedCatId] = useState(null);
+  const [activeReading, setActiveReading] = useState(null);
   const searchInputRef = useRef(null);
 
   const lang = settings?.language || 'ml';
@@ -102,11 +109,21 @@ export default function DuasScreen({
   };
 
   return (
-    <div className={`reference-ui-screen ${selectedCategoryId === 'prayer' ? 'category-reader-active' : ''}`}>
+    <div className={`reference-ui-screen ${selectedCategoryId === 'prayer' || activeReading ? 'category-reader-active' : ''}`}>
       {/* ========================================================
-          CASE 0: ASMAUL HUSNA FULL PAGE (Quran Duas Slide Format)
+          CASE 0: READING MODE (Full Dua Swiping Reader)
           ======================================================== */}
-      {isAsmaulHusnaOpen ? (
+      {activeReading ? (
+        <CategoryDuaReader 
+          initialView="reading"
+          initialCategory={activeReading.category}
+          initialSubcategory={activeReading.subcategory}
+          initialIndex={activeReading.index || 0}
+          onBackToHome={() => setActiveReading(null)}
+          favorites={favorites}
+          onToggleFavorite={onToggleFavorite}
+        />
+      ) : isAsmaulHusnaOpen ? (
         <AsmaulHusnaScreen 
           onBack={() => setIsAsmaulHusnaOpen(false)}
           settings={settings}
@@ -121,6 +138,7 @@ export default function DuasScreen({
            ======================================================== */
         <CategoryDuaReader 
           initialView="categories"
+          initialCategory={CATEGORIES_DATA.find(c => c.originalId === 2 || c.name.includes("നമസ്കാരം")) || CATEGORIES_DATA[0]}
           onBackToHome={() => onSelectCategory(null)}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
@@ -265,38 +283,110 @@ export default function DuasScreen({
               {isEnglish ? "Main Categories" : "പ്രധാന വിഭാഗങ്ങൾ"}
             </h2>
 
-            {/* Vertical list of Category Cards */}
-            <div className="reference-categories-list">
-              {CATEGORIES.map((category) => {
-                const Icon = ICON_MAP[category.icon] || Sparkles;
+            {/* Complete 20-Category Accordion List (Awraad Database) */}
+            <div className="cdr-cat-list" style={{ marginTop: '12px' }}>
+              {CATEGORIES_DATA.map((cat) => {
+                const isOpen = expandedCatId === cat.id;
+                const theme = CATEGORY_THEMES[cat.originalId] || { 
+                  bg: '#ECFDF5', 
+                  border: '#A7F3D0', 
+                  accent: '#059669', 
+                  nameEn: '' 
+                };
+                const totalDuas = cat.subcategories.reduce(
+                  (sum, sub) => sum + (sub.duas ? sub.duas.length : 0), 
+                  0
+                );
+
                 return (
                   <div 
-                    key={category.id} 
-                    className="reference-category-card"
-                    onClick={() => onSelectCategory(category.id)}
-                    role="button"
-                    tabIndex={0}
+                    key={cat.id} 
+                    className={`cdr-cat-card ${isOpen ? 'is-open' : ''}`}
                   >
-                    <div 
-                      className="category-icon-bubble"
-                      style={{ 
-                        backgroundColor: category.bgLight || '#EAF3EF', 
-                        color: category.color || 'var(--primary)' 
-                      }}
+                    {/* Category Header Button */}
+                    <button 
+                      onClick={() => setExpandedCatId(isOpen ? null : cat.id)}
+                      className="cdr-cat-toggle-btn"
+                      aria-expanded={isOpen}
                     >
-                      <Icon size={21} strokeWidth={2.2} />
-                    </div>
+                      <div className="cdr-cat-info">
+                        <div 
+                          className="cdr-cat-icon-wrap"
+                          style={{
+                            backgroundColor: theme.bg,
+                            border: `1px solid ${theme.border}`
+                          }}
+                        >
+                          <img 
+                            src={`/category-icons/${cat.icon}`} 
+                            alt={cat.name}
+                            className="cdr-cat-img"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.parentElement?.querySelector('.cdr-cat-fallback');
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          <div 
+                            className="cdr-cat-fallback" 
+                            style={{ display: 'none', color: theme.accent, alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Folder size={22} />
+                          </div>
+                        </div>
 
-                    <div className="category-meta-info">
-                      <span className="category-meta-title">
-                        {isEnglish ? category.titleEn : category.titleMl}
-                      </span>
-                      <span className="category-meta-count">
-                        ({category.count})
-                      </span>
-                    </div>
+                        <div className="cdr-cat-title-group">
+                          <div className="cdr-cat-name-row">
+                            <span className="cdr-cat-name">{cat.name}</span>
+                            {cat.nameArabic && (
+                              <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
+                            )}
+                          </div>
+                          <div className="cdr-cat-meta-sub">
+                            <span>{cat.subcategories.length} {isEnglish ? "sections" : "ഉപവിഭാഗങ്ങൾ"}</span>
+                            <span className="cdr-cat-meta-dot">•</span>
+                            <span>{totalDuas} {isEnglish ? "Duas" : "പ്രാർത്ഥനകൾ"}</span>
+                          </div>
+                        </div>
+                      </div>
 
-                    <ChevronRight size={18} className="category-meta-chevron" />
+                      <div className="cdr-chevron-pill">
+                        <ChevronDown size={18} />
+                      </div>
+                    </button>
+
+                    {/* Smooth CSS Grid Accordion */}
+                    <div className={`cdr-accordion-wrapper ${isOpen ? 'open' : ''}`}>
+                      <div className="cdr-accordion-inner">
+                        {cat.subcategories.length > 0 ? (
+                          <div className="cdr-cat-sublist">
+                            {cat.subcategories.map((sub, sIdx) => (
+                              <button 
+                                key={sub.id}
+                                onClick={() => setActiveReading({ category: cat, subcategory: sub, index: 0 })}
+                                className="cdr-subcat-btn"
+                              >
+                                <div className="cdr-subcat-left">
+                                  <span className="cdr-subcat-num">{sIdx + 1}</span>
+                                  <span className="cdr-subcat-name">{sub.name}</span>
+                                </div>
+                                <div className="cdr-subcat-meta">
+                                  <span className="cdr-subcat-badge">
+                                    {sub.duas.length} {isEnglish ? "Duas" : "ദുആകൾ"}
+                                  </span>
+                                  <ChevronRight size={16} className="cdr-subcat-chevron" />
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="cdr-empty-subcat">
+                            {isEnglish ? "No subcategories available." : "ഉപവിഭാഗങ്ങൾ ലഭ്യമല്ല."}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 );
               })}
