@@ -411,7 +411,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           </div>
 
           {/* 99 Names Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px' }}>
             {filteredNames.map((item, idx) => {
               const originalIndex = ASMAUL_HUSNA.findIndex(n => n.id === item.id);
               const isItemPlaying = audioState.isPlaying && audioState.currentDuaId === `asma-${item.id}`;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -203,7 +203,7 @@ const DuaCard = ({
 
   const handleBookmarkClick = () => {
     if (onToggleBookmark) {
-      onToggleBookmark(dua);
+      onToggleBookmark(dua.id !== undefined ? String(dua.id) : dua);
     } else {
       setLocalBookmarked(!localBookmarked);
     }
@@ -425,16 +425,24 @@ export default function CategoryDuaReader({
     }
   };
 
+  const handleBackToHomeOrCategories = useCallback(() => {
+    if (onBackToHome) {
+      onBackToHome();
+    } else {
+      setView('categories');
+    }
+  }, [onBackToHome]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (view !== 'reading') return;
       if (e.key === 'ArrowRight' && currentIndex < activeDuas.length - 1) setCurrentIndex(prev => prev + 1);
       if (e.key === 'ArrowLeft' && currentIndex > 0) setCurrentIndex(prev => prev - 1);
-      if (e.key === 'Escape') setView('categories');
+      if (e.key === 'Escape') handleBackToHomeOrCategories();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, view, activeDuas.length]);
+  }, [currentIndex, view, activeDuas.length, handleBackToHomeOrCategories]);
 
   return (
     <div className="cdr-container h-full w-full bg-slate-100 flex flex-col font-sans overflow-hidden">
@@ -595,10 +603,10 @@ export default function CategoryDuaReader({
             <div className="cdr-reader-header-inner max-w-4xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="cdr-reader-header-left flex items-center gap-3 min-w-0 flex-1">
                 <button 
-                  onClick={() => setView('categories')}
+                  onClick={handleBackToHomeOrCategories}
                   className="cdr-back-btn p-1.5 bg-emerald-700/50 hover:bg-emerald-700 rounded-full transition-colors flex-shrink-0"
-                  aria-label="Back to Categories"
-                  title="Back to Categories"
+                  aria-label={onBackToHome ? "Back to Home" : "Back to Categories"}
+                  title={onBackToHome ? "ഹോം പേജിലേക്ക് മടങ്ങുക" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
                 >
                   <ArrowLeft size={20} />
                 </button>
@@ -637,7 +645,12 @@ export default function CategoryDuaReader({
             >
               {activeDuas.map((dua, idx) => {
                 const targetId = `prayer-${dua.id}`;
-                const isFav = favorites.includes(targetId) || favorites.includes(String(dua.id));
+                const isFav = (favorites || []).some(f => {
+                  const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+                  return fId === String(dua.id) || 
+                         fId === targetId || 
+                         (dua.originalId && fId === String(dua.originalId));
+                });
                 return (
                   <div key={dua.id} className="cdr-slide-wrapper w-full h-full flex-shrink-0">
                     <DuaCard 

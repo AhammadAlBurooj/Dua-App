@@ -21,20 +21,34 @@ export default function FavoritesScreen({
   const t = UI_TEXT[lang] || UI_TEXT.ml;
   const isEnglish = lang === 'en';
 
-  // Duas that are in favorites
-  const favoriteDuas = duas.filter(d => favorites.includes(d.id));
+  // Duas that are in favorites (flexible matching for string, number, or object format)
+  const favoriteDuas = (duas || []).filter(d => {
+    const dId = String(d.id);
+    const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
+    return (favorites || []).some(f => {
+      const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+      return fId === dId || 
+             (dOrig && fId === dOrig) || 
+             fId === `prayer-${dId}` || 
+             (dOrig && fId === `prayer-${dOrig}`) ||
+             dId === `prayer-${fId}`;
+    });
+  });
 
   // Filtered by category and search
   const filteredFavorites = favoriteDuas.filter(d => {
-    const matchesCategory = selectedCategoryFilter === 'all' || d.categoryId === selectedCategoryFilter;
+    const matchesCategory = selectedCategoryFilter === 'all' || 
+                            d.categoryId === selectedCategoryFilter || 
+                            d.categoryId === `cat_${selectedCategoryFilter}` ||
+                            String(d.categoryOriginalId) === String(selectedCategoryFilter);
     if (!matchesCategory) return false;
     if (!searchQuery.trim()) return true;
 
     const q = searchQuery.toLowerCase();
-    return d.titleMl.toLowerCase().includes(q) ||
-           d.titleEn.toLowerCase().includes(q) ||
-           d.arabic.includes(q) ||
-           d.meaningMl.includes(q);
+    return (d.titleMl && d.titleMl.toLowerCase().includes(q)) ||
+           (d.titleEn && d.titleEn.toLowerCase().includes(q)) ||
+           (d.arabic && d.arabic.includes(q)) ||
+           (d.meaningMl && d.meaningMl.includes(q));
   });
 
   return (
@@ -85,7 +99,11 @@ export default function FavoritesScreen({
               {t.allFilter} ({favoriteDuas.length})
             </button>
             {CATEGORIES.map(cat => {
-              const count = favoriteDuas.filter(d => d.categoryId === cat.id).length;
+              const count = favoriteDuas.filter(d => 
+                d.categoryId === cat.id || 
+                d.categoryId === `cat_${cat.id}` || 
+                String(d.categoryOriginalId) === String(cat.id)
+              ).length;
               if (count === 0) return null;
               const catTitle = isEnglish ? cat.titleEn : cat.titleMl;
               return (

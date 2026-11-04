@@ -17,11 +17,9 @@ import {
   BookOpen, 
   GraduationCap, 
   ChevronRight, 
-  ChevronLeft, 
   Heart,
   Folder,
-  ChevronDown,
-  ChevronUp
+  ChevronDown
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
@@ -90,22 +88,7 @@ export default function DuasScreen({
       );
 
   const handleSearchItemClick = (d) => {
-    const isSpecialCategoryDua = [
-      'prayer-34', 'prayer-35', 'prayer-36', 'prayer-37', 'prayer-39', 'prayer-1', 'prayer-2',
-      'prayer-40', 'prayer-41', 'prayer-42', 'prayer-43', 'prayer-44', 'prayer-3',
-      'prayer-45', 'prayer-46', 'prayer-47', 'prayer-4',
-      'prayer-48', 'prayer-49', 'prayer-50', 'prayer-51', 'prayer-52', 'prayer-53', 'prayer-54', 'prayer-5',
-      'prayer-55', 'prayer-56', 'prayer-6',
-      'prayer-57', 'prayer-58', 'prayer-7',
-      'prayer-59', 'prayer-60', 'prayer-8',
-      'prayer-61', 'prayer-62', 'prayer-9',
-      'prayer-63', 'prayer-64', 'prayer-65', 'prayer-66', 'prayer-67', 'prayer-68', 'prayer-69', 'prayer-70', 'prayer-71', 'prayer-72', 'prayer-73', 'prayer-10'
-    ].includes(d.id);
-    if (isSpecialCategoryDua) {
-      onSelectCategory('prayer');
-    } else {
-      onSelectDua(d);
-    }
+    onSelectDua(d);
   };
 
   return (
