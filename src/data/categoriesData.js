@@ -11,6 +11,7 @@
  */
 
 import awraadData from './awraad.json';
+import { DUAS as LEGACY_DUAS } from './duasData';
 
 const ARABIC_CAT_NAMES = {
   1: "الحَيَاةُ اليَومِيَّةُ",
@@ -74,6 +75,67 @@ export const CATEGORIES_DATA = (awraadData?.categories || []).map(cat => ({
 export const ALL_DUAS = awraadData?.duas || [];
 export const ASMAUL_HUSNA_RAW = awraadData?.asmaul_husna || [];
 export const COLLECTIONS = awraadData?.collections || {};
+
+// Map each dua to its parent category and subcategory info
+const duaToCategoryMap = new Map();
+(awraadData?.categories || []).forEach(cat => {
+  (cat.sub_cats || []).forEach(subId => {
+    const sc = subCatsById.get(subId);
+    if (sc && Array.isArray(sc.duas)) {
+      sc.duas.forEach(dId => {
+        if (!duaToCategoryMap.has(dId)) {
+          duaToCategoryMap.set(dId, {
+            categoryId: `cat_${cat.id}`,
+            categoryOriginalId: cat.id,
+            categoryName: cat.title,
+            categoryArabic: ARABIC_CAT_NAMES[cat.id] || "",
+            subCategoryId: `sub_${sc.id}`,
+            subCategoryOriginalId: sc.id,
+            subCategoryName: sc.title,
+            subCategoryArabic: sc.title_arabic || ""
+          });
+        }
+      });
+    }
+  });
+});
+
+/**
+ * Normalized catalog of all 464 Awraad Duas with unified property names
+ * Compatible with both DuaCard and CategoryDuaReader
+ */
+export const NORMALIZED_AWRAAD_DUAS = (awraadData?.duas || []).map(d => {
+  const meta = duaToCategoryMap.get(d.id);
+  const audioFullUrl = d.audio_url 
+    ? (d.audio_url.startsWith('http') ? d.audio_url : `https://crimson-cell-3d4c.mubarakar95.workers.dev/${d.audio_url}.mp3`) 
+    : '';
+
+  return {
+    ...d,
+    id: String(d.id),
+    originalId: d.id,
+    categoryId: meta?.categoryId || 'daily',
+    categoryOriginalId: meta?.categoryOriginalId || 1,
+    categoryTitle: meta?.categoryName || 'ദുആ',
+    subCategoryId: meta?.subCategoryId || '',
+    subCategoryOriginalId: meta?.subCategoryOriginalId || null,
+    subCategoryTitle: meta?.subCategoryName || '',
+    titleMl: d.desc || d.hint || `ദുആ #${d.id}`,
+    titleEn: d.hint ? `Dua #${d.id} • ${d.hint}` : `Dua #${d.id}`,
+    arabic: d.dua || '',
+    meaningMl: d.trans || '',
+    meaningEn: '',
+    transliteration: d.transli || '',
+    reference: d.ref || '',
+    audioUrl: audioFullUrl,
+    recommendedCount: 1
+  };
+});
+
+export const ALL_UNIFIED_DUAS = [
+  ...LEGACY_DUAS,
+  ...NORMALIZED_AWRAAD_DUAS.filter(ad => !LEGACY_DUAS.some(ld => String(ld.id) === String(ad.id)))
+];
 
 export const CATEGORY_THEMES = {
   1: { bg: '#000000ff', border: '#000000ff', accent: '#059669', nameEn: 'Daily Life' },
