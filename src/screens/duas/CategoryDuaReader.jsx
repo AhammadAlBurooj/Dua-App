@@ -16,7 +16,7 @@ import {
   ArrowLeft,
   Folder
 } from 'lucide-react';
-import { CATEGORIES_DATA } from '../../data/categoriesData';
+import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
@@ -470,57 +470,117 @@ export default function CategoryDuaReader({
                 <ArrowLeft size={20} />
               </button>
             )}
-            <h1 className="text-xl sm:text-2xl font-bold">Islamic Adhkar & Duas</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">مناجاة</h1>
             <p className="text-emerald-200 text-sm mt-1">Select a category to begin reading</p>
           </header>
 
           <main className="cdr-cat-main flex-1 p-4 max-w-3xl mx-auto w-full">
             <div className="cdr-cat-list flex flex-col gap-4">
-              {CATEGORIES_DATA.map(cat => (
-                <div key={cat.id} className="cdr-cat-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                  
-                  {/* Category Header */}
-                  <button 
-                    onClick={() => handleCategoryClick(cat.id)}
-                    className="cdr-cat-toggle-btn w-full flex items-center justify-between p-4 sm:p-5 bg-white hover:bg-slate-50 transition-colors"
+              {CATEGORIES_DATA.map(cat => {
+                const isOpen = expandedCatId === cat.id;
+                const theme = CATEGORY_THEMES[cat.originalId] || { 
+                  bg: '#ECFDF5', 
+                  border: '#A7F3D0', 
+                  accent: '#059669', 
+                  nameEn: '' 
+                };
+                const totalDuas = cat.subcategories.reduce(
+                  (sum, sub) => sum + (sub.duas ? sub.duas.length : 0), 
+                  0
+                );
+
+                return (
+                  <div 
+                    key={cat.id} 
+                    className={`cdr-cat-card ${isOpen ? 'is-open' : ''}`}
                   >
-                    <div className="cdr-cat-info flex items-center gap-3">
-                      <div className="cdr-cat-icon-wrap bg-emerald-100 p-2 rounded-lg text-emerald-700">
-                        <Folder size={24} />
-                      </div>
-                      <span className="cdr-cat-name font-semibold text-slate-800 text-lg">{cat.name}</span>
-                    </div>
-                    {expandedCatId === cat.id ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}
-                  </button>
-
-                  {/* Subcategories (Expands if open) */}
-                  {expandedCatId === cat.id && cat.subcategories.length > 0 && (
-                    <div className="cdr-cat-sublist bg-slate-50 border-t border-slate-100 px-4 py-2">
-                      {cat.subcategories.map(sub => (
-                        <button 
-                          key={sub.id}
-                          onClick={() => openSubcategory(cat, sub)}
-                          className="cdr-subcat-btn w-full flex items-center justify-between py-3 px-4 my-1 bg-white border border-slate-100 rounded-lg hover:border-emerald-300 hover:shadow-sm transition-all group"
+                    {/* Category Header */}
+                    <button 
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className="cdr-cat-toggle-btn"
+                      aria-expanded={isOpen}
+                    >
+                      <div className="cdr-cat-info">
+                        <div 
+                          className="cdr-cat-icon-wrap"
+                          style={{
+                            backgroundColor: theme.bg,
+                            border: `1px solid ${theme.border}`
+                          }}
                         >
-                          <span className="cdr-subcat-name text-slate-700 font-medium group-hover:text-emerald-700">{sub.name}</span>
-                          <div className="cdr-subcat-meta flex items-center gap-2">
-                            <span className="cdr-subcat-badge text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">
-                              {sub.duas.length} Duas
-                            </span>
-                            <ChevronRight size={18} className="text-slate-300 group-hover:text-emerald-500" />
+                          <img 
+                            src={`/category-icons/${cat.icon}`} 
+                            alt={cat.name}
+                            className="cdr-cat-img"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.parentElement?.querySelector('.cdr-cat-fallback');
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          <div 
+                            className="cdr-cat-fallback" 
+                            style={{ display: 'none', color: theme.accent, alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Folder size={22} />
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                        </div>
 
-                  {expandedCatId === cat.id && cat.subcategories.length === 0 && (
-                    <div className="cdr-empty-subcat bg-slate-50 border-t border-slate-100 px-4 py-6 text-center text-slate-400 text-sm">
-                      No subcategories available yet.
+                        <div className="cdr-cat-title-group">
+                          <div className="cdr-cat-name-row">
+                            <span className="cdr-cat-name">{cat.name}</span>
+                            {cat.nameArabic && (
+                              <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
+                            )}
+                          </div>
+                          <div className="cdr-cat-meta-sub">
+                            <span>{cat.subcategories.length} ഉപവിഭാഗങ്ങൾ</span>
+                            <span className="cdr-cat-meta-dot">•</span>
+                            <span>{totalDuas} പ്രാർത്ഥനകൾ</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="cdr-chevron-pill">
+                        <ChevronDown size={18} />
+                      </div>
+                    </button>
+
+                    {/* Smooth CSS Grid Accordion */}
+                    <div className={`cdr-accordion-wrapper ${isOpen ? 'open' : ''}`}>
+                      <div className="cdr-accordion-inner">
+                        {cat.subcategories.length > 0 ? (
+                          <div className="cdr-cat-sublist">
+                            {cat.subcategories.map((sub, sIdx) => (
+                              <button 
+                                key={sub.id}
+                                onClick={() => openSubcategory(cat, sub)}
+                                className="cdr-subcat-btn"
+                              >
+                                <div className="cdr-subcat-left">
+                                  <span className="cdr-subcat-num">{sIdx + 1}</span>
+                                  <span className="cdr-subcat-name">{sub.name}</span>
+                                </div>
+                                <div className="cdr-subcat-meta">
+                                  <span className="cdr-subcat-badge">
+                                    {sub.duas.length} ദുആകൾ
+                                  </span>
+                                  <ChevronRight size={16} className="cdr-subcat-chevron" />
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="cdr-empty-subcat">
+                            ഉപവിഭാഗങ്ങൾ ലഭ്യമല്ല.
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </main>
         </>
