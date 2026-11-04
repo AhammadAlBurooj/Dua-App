@@ -3,10 +3,11 @@ import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Toast from './components/Toast';
 import SplashScreen from './components/SplashScreen';
-import { DuasScreen, DuaDetailModal } from './screens/duas';
+import { DuasScreen, DuaDetailModal, CategoryDuaReader } from './screens/duas';
 import { FavoritesScreen } from './screens/favorites';
 import { SettingsScreen } from './screens/settings';
 import { DUAS } from './data/duasData';
+import { CATEGORIES_DATA } from './data/categoriesData';
 import { 
   getStoredFavorites, 
   saveStoredFavorites, 
@@ -39,51 +40,55 @@ export default function App() {
     return unsub;
   }, []);
 
-  // Sync theme attribute to document element
+  // Sync theme attribute on document
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // Persist settings
+  // Toggle Theme (Light / Dark)
+  const handleToggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    const updatedSettings = { ...settings, theme: newTheme };
+    setSettings(updatedSettings);
+    saveStoredSettings(updatedSettings);
+    showToast(newTheme === 'dark' ? 'ഡാർക്ക് മോഡ് ഓണാക്കി 🌙' : 'ലൈറ്റ് മോഡ് ഓണാക്കി ☀️');
+  };
+
+  // Toggle Responsive Width (Mobile viewport 440px vs Full Desktop Width)
+  const handleToggleWidth = () => {
+    setIsFullWidth(prev => !prev);
+    showToast(isFullWidth ? 'മൊബൈൽ വ്യൂവിലേക്ക് മാറ്റി' : 'ഫുൾ വിഡ്ത് വ്യൂവിലേക്ക് മാറ്റി');
+  };
+
+  // Update Settings
   const handleUpdateSettings = (newSettings) => {
     setSettings(newSettings);
     saveStoredSettings(newSettings);
+    if (newSettings.theme && newSettings.theme !== theme) {
+      setTheme(newSettings.theme);
+    }
   };
 
-  // Toggle Theme
-  const handleToggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    handleUpdateSettings({ ...settings, theme: nextTheme });
-    showToast(nextTheme === 'dark' ? 'ഡാർക്ക് മോഡ് സജീവമാക്കി' : 'ലൈറ്റ് മോഡ് സജീവമാക്കി');
-  };
-
-  // Toggle Desktop view width
-  const handleToggleWidth = () => {
-    setIsFullWidth(!isFullWidth);
-  };
-
-  // Toggle Favorites
+  // Toggle Favorite
   const handleToggleFavorite = (duaId) => {
     let updated;
-    const isAlreadyFav = favorites.includes(duaId);
-    if (isAlreadyFav) {
+    if (favorites.includes(duaId)) {
       updated = favorites.filter(id => id !== duaId);
-      showToast('ഫേവറിറ്റ്സിൽ നിന്ന് നീക്കം ചെയ്തു');
+      showToast('പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കം ചെയ്തു');
     } else {
       updated = [duaId, ...favorites];
-      showToast('ഫേവറിറ്റ്സിൽ ചേർത്തു ❤️');
-      audioService.playChime(640, 0.04);
+      showToast('പ്രിയപ്പെട്ടവയിൽ ചേർത്തു ❤️');
+      audioService.playChime(520, 0.04);
     }
     setFavorites(updated);
     saveStoredFavorites(updated);
   };
 
-  // Toggle Bookmarks
+  // Toggle Bookmark
   const handleToggleBookmark = (duaId) => {
     let updated;
-    const isAlreadyBm = bookmarks.includes(duaId);
-    if (isAlreadyBm) {
+    if (bookmarks.includes(duaId)) {
       updated = bookmarks.filter(id => id !== duaId);
       showToast('ബുക്ക്മാർക്കിൽ നിന്ന് നീക്കം ചെയ്തു');
     } else {
@@ -123,11 +128,7 @@ export default function App() {
   };
 
   // Category duas for currently selected dua (used for pagination 1/10.. 10/10)
-  const currentCategoryDuas = selectedDua
-    ? (selectedCategoryId
-        ? DUAS.filter(d => d.categoryId === selectedCategoryId)
-        : DUAS.filter(d => d.categoryId === selectedDua.categoryId))
-    : [];
+  const currentCategoryDuas = selectedDua ? (selectedDua.subCategoryId ? DUAS.filter(d => d.subCategoryId === selectedDua.subCategoryId) : (selectedCategoryId ? DUAS.filter(d => d.categoryId === selectedCategoryId) : DUAS.filter(d => d.categoryId === selectedDua.categoryId))) : [];
 
   return (
     <div className={`device-viewport ${isFullWidth ? 'full-width' : ''}`}>
@@ -149,7 +150,14 @@ export default function App() {
       )}
 
       {/* Main Content Area based on Active Tab */}
-      <main className="app-content" id="main-content" style={{ padding: activeTab === 'duas' ? 0 : undefined }}>
+      <main 
+        className="app-content" 
+        id="main-content" 
+        style={{ 
+          padding: activeTab === 'duas' ? 0 : undefined,
+          overflow: (activeTab === 'duas' && selectedCategoryId === 'prayer') ? 'hidden' : undefined
+        }}
+      >
         {/* Tab 1: Duas (Home & Category List screens matching Screen 1 & 2) */}
         {activeTab === 'duas' && (
           <DuasScreen 
@@ -175,11 +183,7 @@ export default function App() {
             onToggleFavorite={handleToggleFavorite}
             onTogglePlay={handleTogglePlay}
             onSelectDua={handleSelectDua}
-            onExploreDuas={() => {
-              setSelectedCategoryId(null);
-              setActiveTab('duas');
-            }}
-            settings={settings}
+            language={settings.language}
           />
         )}
 
@@ -192,11 +196,8 @@ export default function App() {
             onToggleFavorite={handleToggleBookmark}
             onTogglePlay={handleTogglePlay}
             onSelectDua={handleSelectDua}
-            onExploreDuas={() => {
-              setSelectedCategoryId(null);
-              setActiveTab('duas');
-            }}
-            settings={settings}
+            language={settings.language}
+            isBookmarkView={true}
           />
         )}
 
@@ -229,16 +230,83 @@ export default function App() {
 
       {/* Full Dedicated Dua Detail Page (matching Screens 3, 4, 5, 6) */}
       {selectedDua && (
-        <DuaDetailModal 
-          dua={selectedDua}
-          categoryDuas={currentCategoryDuas}
-          isFavorite={favorites.includes(selectedDua.id)}
-          onToggleFavorite={handleToggleFavorite}
-          onClose={() => setSelectedDua(null)}
-          onSelectDua={handleSelectDua}
-          settings={settings}
-          onUpdateSettings={handleUpdateSettings}
-        />
+        ['prayer-34', 'prayer-35', 'prayer-36', 'prayer-37', 'prayer-39', 'prayer-1', 'prayer-2'].includes(selectedDua.id) || 
+        ['prayer-40', 'prayer-41', 'prayer-42', 'prayer-43', 'prayer-44', 'prayer-3'].includes(selectedDua.id) ||
+        ['prayer-45', 'prayer-46', 'prayer-47', 'prayer-4'].includes(selectedDua.id) ||
+        ['prayer-48', 'prayer-49', 'prayer-50', 'prayer-51', 'prayer-52', 'prayer-53', 'prayer-54', 'prayer-5'].includes(selectedDua.id) ||
+        ['prayer-55', 'prayer-56', 'prayer-6'].includes(selectedDua.id) ||
+        ['prayer-57', 'prayer-58', 'prayer-7'].includes(selectedDua.id) ||
+        ['prayer-59', 'prayer-60', 'prayer-8'].includes(selectedDua.id) ||
+        ['prayer-61', 'prayer-62', 'prayer-9'].includes(selectedDua.id) ||
+        ['prayer-63', 'prayer-64', 'prayer-65', 'prayer-66', 'prayer-67', 'prayer-68', 'prayer-69', 'prayer-70', 'prayer-71', 'prayer-72', 'prayer-73', 'prayer-10'].includes(selectedDua.id) ||
+        [34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73].includes(selectedDua.originalId) ? (
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100 }}>
+            <CategoryDuaReader 
+              initialView="reading"
+              initialCategory={CATEGORIES_DATA[0]}
+              initialSubcategory={
+                [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73].includes(selectedDua.originalId) || ['prayer-63', 'prayer-64', 'prayer-65', 'prayer-66', 'prayer-67', 'prayer-68', 'prayer-69', 'prayer-70', 'prayer-71', 'prayer-72', 'prayer-73', 'prayer-10'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[8] // sub_9: സലാം വീട്ടുന്നതിനു മുമ്പുള്ള പ്രാർത്ഥനകൾ
+                  : [61, 62].includes(selectedDua.originalId) || ['prayer-61', 'prayer-62', 'prayer-9'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[7] // sub_8: അത്തഹിയാത്തിനു ശേഷം സ്വലാത്ത്
+                  : [59, 60].includes(selectedDua.originalId) || ['prayer-59', 'prayer-60', 'prayer-8'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[6] // sub_7: അത്തഹിയാത്ത്
+                  : [57, 58].includes(selectedDua.originalId) || ['prayer-57', 'prayer-58', 'prayer-7'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[5] // sub_6: ഖുർആൻ പാരായണ സുജൂദിലെ പ്രാർത്ഥന
+                  : [55, 56].includes(selectedDua.originalId) || ['prayer-55', 'prayer-56', 'prayer-6'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[4] // sub_5: രണ്ട് സുജൂദുകൾക്കിടയിലെ പ്രാർത്ഥന
+                  : [48, 49, 50, 51, 52, 53, 54].includes(selectedDua.originalId) || ['prayer-48', 'prayer-49', 'prayer-50', 'prayer-51', 'prayer-52', 'prayer-53', 'prayer-54', 'prayer-5'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[3] // sub_4: സുജൂദിലെ പ്രാർത്ഥനകൾ
+                  : [45, 46, 47].includes(selectedDua.originalId) || ['prayer-45', 'prayer-46', 'prayer-47', 'prayer-4'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[2] // sub_3: റുകൂഹിൽ നിന്നും ഉയരുമ്പോൾ
+                  : [40, 41, 42, 43, 44].includes(selectedDua.originalId) || ['prayer-40', 'prayer-41', 'prayer-42', 'prayer-43', 'prayer-44', 'prayer-3'].includes(selectedDua.id)
+                  ? CATEGORIES_DATA[0].subcategories[1] // sub_2: റുകൂഹിലെ പ്രാർത്ഥന
+                  : CATEGORIES_DATA[0].subcategories[0] // sub_1: പ്രാരംഭ പ്രാർത്ഥന
+              }
+              initialIndex={(() => {
+                const map = { 
+                  'prayer-34': 0, 'prayer-1': 0, 'prayer-35': 1, 'prayer-2': 1, 'prayer-36': 2, 'prayer-37': 3, 'prayer-39': 4,
+                  'prayer-40': 0, 'prayer-3': 0, 'prayer-41': 1, 'prayer-42': 2, 'prayer-43': 3, 'prayer-44': 4,
+                  'prayer-45': 0, 'prayer-46': 1, 'prayer-4': 1, 'prayer-47': 2,
+                  'prayer-48': 0, 'prayer-5': 0, 'prayer-49': 1, 'prayer-50': 2, 'prayer-51': 3, 'prayer-52': 4, 'prayer-53': 5, 'prayer-54': 6,
+                  'prayer-55': 0, 'prayer-6': 0, 'prayer-56': 1,
+                  'prayer-57': 0, 'prayer-7': 0, 'prayer-58': 1,
+                  'prayer-59': 0, 'prayer-8': 0, 'prayer-60': 1,
+                  'prayer-61': 0, 'prayer-9': 0, 'prayer-62': 1,
+                  'prayer-63': 0, 'prayer-10': 0, 'prayer-64': 1, 'prayer-65': 2, 'prayer-66': 3, 'prayer-67': 4, 'prayer-68': 5, 'prayer-69': 6, 'prayer-70': 7, 'prayer-71': 8, 'prayer-72': 9, 'prayer-73': 10
+                };
+                if (selectedDua.originalId) {
+                  if ([34, 40, 45, 48, 55, 57, 59, 61, 63].includes(selectedDua.originalId)) return 0;
+                  if ([35, 41, 46, 49, 56, 58, 60, 62, 64].includes(selectedDua.originalId)) return 1;
+                  if ([36, 42, 47, 50, 65].includes(selectedDua.originalId)) return 2;
+                  if ([37, 43, 51, 66].includes(selectedDua.originalId)) return 3;
+                  if ([39, 44, 52, 67].includes(selectedDua.originalId)) return 4;
+                  if ([53, 68].includes(selectedDua.originalId)) return 5;
+                  if ([54, 69].includes(selectedDua.originalId)) return 6;
+                  if (selectedDua.originalId === 70) return 7;
+                  if (selectedDua.originalId === 71) return 8;
+                  if (selectedDua.originalId === 72) return 9;
+                  if (selectedDua.originalId === 73) return 10;
+                }
+                return map[selectedDua.id] ?? 0;
+              })()}
+              onBackToHome={() => setSelectedDua(null)}
+              favorites={favorites}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          </div>
+        ) : (
+          <DuaDetailModal 
+            dua={selectedDua}
+            categoryDuas={currentCategoryDuas}
+            isFavorite={favorites.includes(selectedDua.id)}
+            onToggleFavorite={handleToggleFavorite}
+            onClose={() => setSelectedDua(null)}
+            onSelectDua={handleSelectDua}
+            settings={settings}
+            onUpdateSettings={handleUpdateSettings}
+          />
+        )
       )}
 
       {/* Toast Notification */}
