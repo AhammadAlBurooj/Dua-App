@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const outputData = JSON.parse(fs.readFileSync('C:/Users/mym/Downloads/output.json', 'utf8'));
+const outputData = JSON.parse(fs.readFileSync('./src/data/awraad.json', 'utf8'));
 
 // English names dictionary for all 99 names
 const englishInfo = {

@@ -379,7 +379,7 @@ export default function CategoryDuaReader({
   }));
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
-  const [expandedCatId, setExpandedCatId] = useState(CATEGORIES_DATA[0]?.id || null);
+  const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
 
   // Sync if initial props change
   useEffect(() => {

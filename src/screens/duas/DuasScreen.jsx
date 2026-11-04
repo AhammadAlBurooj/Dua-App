@@ -21,6 +21,7 @@ import {
   Heart 
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
+import { CATEGORIES_DATA } from '../../data/categoriesData';
 import { UI_TEXT } from '../../utils/translations';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
@@ -121,6 +122,7 @@ export default function DuasScreen({
            ======================================================== */
         <CategoryDuaReader 
           initialView="categories"
+          initialCategory={CATEGORIES_DATA.find(c => c.originalId === 2 || c.name.includes("നമസ്കാരം")) || CATEGORIES_DATA[0]}
           onBackToHome={() => onSelectCategory(null)}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
