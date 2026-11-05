@@ -142,14 +142,23 @@
   min-width: 0;
   flex: 1;
   gap: 0.15rem;
+  width: 100%;
 }
 
 .cdr-cat-name-row {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.6rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.15rem;
+}
+
+@media (min-width: 640px) {
+  .cdr-cat-name-row {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
 }
 
 .cdr-cat-name {
@@ -162,6 +171,7 @@
   word-break: keep-all;
   overflow-wrap: break-word;
   white-space: normal;
+  text-align: left;
 }
 
 .cdr-cat-arabic-name {
@@ -170,9 +180,19 @@
   color: #059669;
   font-weight: 600;
   direction: rtl;
+  text-align: right;
+  width: 100%;
+  align-self: flex-end;
   opacity: 0.95;
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .cdr-cat-arabic-name {
+    width: auto;
+    margin-left: auto;
+  }
 }
 
 .cdr-cat-meta-sub {

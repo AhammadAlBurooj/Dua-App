@@ -197,7 +197,7 @@ export default function FavoritesScreen({
           {onExploreDuas && (
             <button className="fav-explore-btn" onClick={onExploreDuas}>
               <Sparkles size={16} />
-              <span>{isEnglish ? 'Explore Duas' : 'ദുആകൾ കാണുക'}</span>
+              <span>{isEnglish ? 'Explore Duas' : 'Explore and Add Duas'}</span>
             </button>
           )}
         </div>

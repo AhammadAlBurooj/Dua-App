@@ -3121,6 +3121,9 @@ button,
 
   .cdr-cat-arabic-name {
     font-size: 0.825rem;
+    text-align: right;
+    direction: rtl;
+    width: 100%;
   }
 
   .cdr-subcat-btn {

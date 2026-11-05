@@ -163,7 +163,7 @@ export default function SettingsScreen({
         <div className="settings-divider" />
 
         {/* Item 3: Arabic Text Size */}
-        <div className="settings-item-row" style={{ paddingBottom: '8px' }}>
+        {/* <div className="settings-item-row" style={{ paddingBottom: '8px' }}>
           <div className="settings-item-left">
             <div className="settings-icon-badge">
               <Type size={20} />
@@ -172,10 +172,10 @@ export default function SettingsScreen({
               <h3 className="settings-item-title">Arabic Text Size</h3>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Slider & Arabic Live Preview */}
-        <div className="settings-slider-wrapper">
+        {/* <div className="settings-slider-wrapper">
           <div className="settings-slider-row">
             <span className="settings-slider-label">A-</span>
             <input 
@@ -200,7 +200,7 @@ export default function SettingsScreen({
               بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* 3. NOTIFICATIONS Section */}
