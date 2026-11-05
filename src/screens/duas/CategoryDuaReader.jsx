@@ -482,6 +482,15 @@ export default function CategoryDuaReader({
     }
   }, [initialSubcategory, initialCategory, initialIndex]);
 
+  useEffect(() => {
+    if (initialCategory) {
+      setExpandedCatId(initialCategory.id);
+      if (initialView === 'categories') {
+        setView('categories');
+      }
+    }
+  }, [initialCategory, initialView]);
+
   // --- Handlers for Category View ---
   const handleCategoryClick = (catId) => {
     setExpandedCatId(expandedCatId === catId ? null : catId);
@@ -492,6 +501,18 @@ export default function CategoryDuaReader({
     
     setBreadcrumb({ category: category.name, subcategory: subcategory.name });
     setActiveDuas(subcategory.duas);
+    setCurrentIndex(0);
+    setView('reading');
+  };
+
+  const openAllDuas = (category) => {
+    const allDuas = (category.subcategories || []).flatMap(s => (s.duas || []).map(d => ({
+      ...d,
+      subcategoryName: s.name
+    })));
+    if (allDuas.length === 0) return;
+    setBreadcrumb({ category: category.name, subcategory: category.name });
+    setActiveDuas(allDuas);
     setCurrentIndex(0);
     setView('reading');
   };
@@ -579,12 +600,14 @@ export default function CategoryDuaReader({
   };
 
   const handleBackToHomeOrCategories = useCallback(() => {
-    if (onBackToHome) {
+    if (view === 'reading' && initialView === 'categories') {
+      setView('categories');
+    } else if (onBackToHome) {
       onBackToHome();
     } else {
       setView('categories');
     }
-  }, [onBackToHome]);
+  }, [view, initialView, onBackToHome]);
 
   // Handle mobile hardware / system back button (prevents closing the app)
   useEffect(() => {
@@ -615,7 +638,7 @@ export default function CategoryDuaReader({
       {/* ------------------------------- */}
       {view === 'categories' && (
         <>
-          <header className="cdr-cat-header bg-emerald-800 text-white shadow-md z-10 p-5 text-center">
+          <header className="cdr-cat-header bg-emerald-800 text-white shadow-md z-10 p-5 text-center relative">
             {onBackToHome && (
               <button 
                 onClick={onBackToHome}
@@ -640,13 +663,19 @@ export default function CategoryDuaReader({
                 <ArrowLeft size={20} />
               </button>
             )}
-            <h1 className="text-xl sm:text-2xl font-bold">مناجاة</h1>
-            <p className="text-emerald-200 text-sm mt-1">Select a category to begin reading</p>
+            <h1 className="text-xl sm:text-2xl font-bold">
+              {initialCategory ? initialCategory.name : "مناجاة"}
+            </h1>
+            <p className="text-emerald-200 text-sm mt-1">
+              {initialCategory 
+                ? (initialCategory.nameArabic || "വിഭാഗത്തിലെ പ്രാർത്ഥനകൾ") 
+                : "Select a category to begin reading"}
+            </p>
           </header>
 
           <main className="cdr-cat-main flex-1 p-4 max-w-3xl mx-auto w-full">
             <div className="cdr-cat-list flex flex-col gap-4">
-              {CATEGORIES_DATA.map(cat => {
+              {(initialCategory ? [initialCategory] : CATEGORIES_DATA).map(cat => {
                 const isOpen = expandedCatId === cat.id;
                 const theme = CATEGORY_THEMES[cat.originalId] || { 
                   bg: '#ECFDF5', 
@@ -720,6 +749,22 @@ export default function CategoryDuaReader({
                     {/* Smooth CSS Grid Accordion */}
                     <div className={`cdr-accordion-wrapper ${isOpen ? 'open' : ''}`}>
                       <div className="cdr-accordion-inner">
+                        {totalDuas > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => openAllDuas(cat)}
+                            className="cdr-read-all-btn"
+                          >
+                            <div className="cdr-read-all-icon-wrap">
+                              <Sparkles size={18} />
+                            </div>
+                            <div className="cdr-read-all-text">
+                              <span className="cdr-read-all-title">എല്ലാ പ്രാർത്ഥനകളും വായിക്കുക</span>
+                              <span className="cdr-read-all-sub">{totalDuas} പ്രാർത്ഥനകൾ ഒരുമിച്ച് വായിക്കാം</span>
+                            </div>
+                            <ChevronRight size={18} className="cdr-read-all-arrow" />
+                          </button>
+                        )}
                         {cat.subcategories.length > 0 ? (
                           <div className="cdr-cat-sublist">
                             {cat.subcategories.map((sub, sIdx) => (

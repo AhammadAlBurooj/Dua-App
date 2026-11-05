@@ -94,6 +94,17 @@ export default function DuasScreen({
   const t = UI_TEXT[lang] || UI_TEXT.ml;
   const isEnglish = lang === 'en';
 
+  // Awraad comprehensive category match (daily life, prayer, etc.)
+  const selectedAwraadCategory = selectedCategoryId
+    ? CATEGORIES_DATA.find(c => 
+        c.id === selectedCategoryId || 
+        String(c.originalId) === String(selectedCategoryId) ||
+        (selectedCategoryId === 'prayer' && (c.originalId === 2 || c.name.includes("നമസ്കാരം"))) ||
+        ((selectedCategoryId === 'daily' || selectedCategoryId === 'daily_life' || selectedCategoryId === 'cat_1') && 
+          (c.originalId === 1 || c.name.includes("നിത്യജീവിതം")))
+      )
+    : null;
+
   const activeCategory = CATEGORIES.find(c => c.id === selectedCategoryId);
 
   // Duas belonging to the selected category
@@ -118,7 +129,7 @@ export default function DuasScreen({
   };
 
   return (
-    <div className={`reference-ui-screen ${selectedCategoryId === 'prayer' || activeReading ? 'category-reader-active' : ''}`}>
+    <div className={`reference-ui-screen ${selectedAwraadCategory || activeReading ? 'category-reader-active' : ''}`}>
       {/* ========================================================
           CASE 0: READING MODE (Full Dua Swiping Reader)
           ======================================================== */}
@@ -137,17 +148,16 @@ export default function DuasScreen({
           onBack={() => setIsAsmaulHusnaOpen(false)}
           settings={settings}
         />
-      ) : selectedCategoryId === 'prayer' ? (
+      ) : selectedAwraadCategory ? (
         /* ========================================================
-           CASE 0.5: CATEGORY 'നമസ്കാരം' (Category Hierarchy & Swiping Reader)
-           Exact component provided by user:
+           CASE 0.5: CATEGORY HIERARCHY & SWIPING READER
            Screen 1: Category Selection with subcategories accordion
            Screen 2: Multi-Page Dua Swiping Reader with real Audio, Word-by-Word,
                      Malayalam Translation, Transliteration, Reference & Virtue
            ======================================================== */
         <CategoryDuaReader 
           initialView="categories"
-          initialCategory={CATEGORIES_DATA.find(c => c.originalId === 2 || c.name.includes("നമസ്കാരം")) || CATEGORIES_DATA[0]}
+          initialCategory={selectedAwraadCategory}
           onBackToHome={() => onSelectCategory(null)}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}

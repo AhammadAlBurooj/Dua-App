@@ -64,13 +64,13 @@ export default function TopSlidingBanner({
       tag: isEnglish ? 'Daily Adhkar' : 'Daily Adhkar',
       title: isEnglish ? 'Daily Supplications' : 'നിത്യജീവിത ദുആകൾ',
       subtitle: isEnglish ? 'Morning & Evening Supplications' : 'പ്രഭാത & സായാഹ്ന പ്രാർത്ഥനകൾ',
-      buttonText: isEnglish ? 'Read' : 'വായിക്കുക',
+      buttonText: isEnglish ? 'Explore' : 'കാണുക',
       buttonTheme: 'white',
       cardBg: 'linear-gradient(135deg, #083427 0%, #114F3B 50%, #1A6B52 100%)',
       cardTheme: 'dark',
       image: '/daily_duas.jpg',
       imagePosition: 'left',
-      action: () => (onSelectCategory ? onSelectCategory('prayer') : null)
+      action: () => (onSelectCategory ? onSelectCategory('cat_1') : null)
     }
   ];
 
