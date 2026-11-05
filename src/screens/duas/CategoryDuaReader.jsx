@@ -14,9 +14,11 @@ import {
   Share2, 
   Info,
   ArrowLeft,
-  Folder
+  Folder,
+  Sparkles
 } from 'lucide-react';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
+import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
@@ -269,62 +271,88 @@ const DuaCard = ({
       <div className="cdr-dua-card max-w-3xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
         
         {/* Card Header */}
-        <div className="cdr-card-header flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 bg-slate-50/50">
-          <div className="flex flex-col gap-1 min-w-0 flex-1 pr-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="cdr-dua-badge text-xs font-semibold text-emerald-600 uppercase tracking-wider flex-shrink-0">
+        <div className="cdr-card-header">
+          {/* Row 1: Badges & Action Buttons */}
+          <div className="cdr-card-top-bar">
+            <div className="cdr-top-badge-wrap">
+              <span className="cdr-dua-badge">
                 Dua #{dua.id}
               </span>
-              {dua.hint && (
-                <span style={{ fontSize: '11px', color: '#065F46', background: '#D1FAE5', padding: '2px 8px', borderRadius: '999px', fontWeight: 600, border: '1px solid #A7F3D0', maxWidth: '100%', wordBreak: 'break-word' }}>
-                  ✨ {dua.hint}
+              {/* Short hint / repetition badge (<= 40 chars, e.g. "✨ ഇത് മൂന്ന് പ്രാവശ്യം പറയുക") */}
+              {dua.hint && dua.hint.trim().length <= 40 && (
+                <span className="cdr-short-hint-pill">
+                  ✨ {dua.hint.trim()}
                 </span>
               )}
             </div>
-            <div className="cdr-page-badge text-xs sm:text-sm text-slate-500 font-medium bg-slate-200/50 px-2 py-0.5 sm:py-1 rounded-md inline-block w-fit">
-              Page {currentPage} of {totalPages}
+
+            <div 
+              className="cdr-card-actions"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={handleCopy} 
+                className="cdr-action-btn"
+                title="Copy Dua"
+                aria-label="Copy Dua"
+              >
+                <Copy size={18} />
+                {copied && (
+                  <span className="cdr-copied-pill">
+                    Copied!
+                  </span>
+                )}
+              </button>
+              <button 
+                onClick={handleBookmarkClick} 
+                className={`cdr-action-btn ${bookmarkedStatus ? 'bookmarked' : ''}`}
+                title={bookmarkedStatus ? "Remove Bookmark" : "Bookmark Dua"}
+                aria-label="Bookmark"
+              >
+                {bookmarkedStatus ? <BookmarkCheck size={18} fill="currentColor" /> : <Bookmark size={18} />}
+              </button>
+              <button 
+                onClick={handleShare}
+                className="cdr-action-btn"
+                title="Share"
+                aria-label="Share"
+              >
+                <Share2 size={18} />
+              </button>
             </div>
           </div>
-          <div 
-            className="cdr-card-actions flex gap-2 flex-shrink-0"
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
-            onTouchEnd={(e) => e.stopPropagation()}
-          >
-            <button 
-              onClick={handleCopy} 
-              className="cdr-action-btn p-2 text-slate-400 hover:text-emerald-600 rounded-full relative group"
-              title="Copy Dua"
-              aria-label="Copy Dua"
-            >
-              <Copy size={20} />
-              {copied && (
-                <span className="cdr-copied-pill absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-800 text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap">
-                  Copied!
-                </span>
-              )}
-            </button>
-            <button 
-              onClick={handleBookmarkClick} 
-              className={`cdr-action-btn p-2 rounded-full ${bookmarkedStatus ? 'bookmarked text-emerald-600' : 'text-slate-400 hover:text-emerald-600'}`}
-              title={bookmarkedStatus ? "Remove Bookmark" : "Bookmark Dua"}
-              aria-label="Bookmark"
-            >
-              {bookmarkedStatus ? <BookmarkCheck size={20} fill="currentColor" /> : <Bookmark size={20} />}
-            </button>
-            <button 
-              onClick={handleShare}
-              className="cdr-action-btn p-2 text-slate-400 hover:text-emerald-600 rounded-full"
-              title="Share"
-              aria-label="Share"
-            >
-              <Share2 size={20} />
-            </button>
-          </div>
+
+          {/* Row 2: Full-width Dua Occasion / Context Title (spans 100% of the card) */}
+          {dua.desc && (
+            <div className="cdr-dua-desc-row">
+              <p className="cdr-dua-desc-text">
+                {dua.desc.trim()}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Main Content */}
         <div className="cdr-card-body p-4 sm:p-6 md:p-8">
+          {/* Full-width Context & Timing Callout (for detailed notes > 40 chars) */}
+          {dua.hint && dua.hint.trim().length > 40 && (
+            <div className="cdr-instruction-callout">
+              <div className="cdr-instruction-icon-wrap">
+                <Sparkles size={16} />
+              </div>
+              <div className="cdr-instruction-body">
+                <span className="cdr-instruction-label">
+                  സമയം & നിർദ്ദേശം
+                </span>
+                <p className="cdr-instruction-text">
+                  {dua.hint.trim()}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="cdr-arabic-wrap mb-6 sm:mb-8">
             <p 
               className="cdr-arabic-text text-2xl sm:text-4xl md:text-5xl font-arabic text-slate-800 leading-[2.3] sm:leading-[2.5] text-right break-words" 
@@ -558,6 +586,15 @@ export default function CategoryDuaReader({
     }
   }, [onBackToHome]);
 
+  // Handle mobile hardware / system back button (prevents closing the app)
+  useEffect(() => {
+    const unregister = registerBackButtonHandler(() => {
+      handleBackToHomeOrCategories();
+      return true;
+    }, 100);
+    return unregister;
+  }, [handleBackToHomeOrCategories]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (view !== 'reading') return;
@@ -725,8 +762,8 @@ export default function CategoryDuaReader({
       {view === 'reading' && (
         <>
           <header className="cdr-reader-header bg-emerald-800 text-white shadow-md z-10 relative flex-shrink-0">
-            <div className="cdr-reader-header-inner max-w-4xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="cdr-reader-header-left flex items-center gap-3 min-w-0 flex-1">
+            <div className="cdr-reader-header-inner max-w-4xl mx-auto px-4 py-2.5 sm:py-3.5 flex items-center justify-between">
+              <div className="cdr-reader-header-left flex items-center gap-3 min-w-0 flex-1 pr-2">
                 <button 
                   onClick={handleBackToHomeOrCategories}
                   className="cdr-back-btn p-1.5 bg-emerald-700/50 hover:bg-emerald-700 rounded-full transition-colors flex-shrink-0"
@@ -736,15 +773,15 @@ export default function CategoryDuaReader({
                   <ArrowLeft size={20} />
                 </button>
                 <div className="min-w-0 flex-1">
-                  <h1 className="cdr-reader-title text-base sm:text-lg font-bold break-words line-clamp-1">{breadcrumb.subcategory}</h1>
-                  <div className="cdr-reader-subtitle text-emerald-200 text-xs mt-0.5 font-medium break-words">
+                  <h1 className="cdr-reader-title text-base sm:text-lg font-bold truncate">{breadcrumb.subcategory}</h1>
+                  <div className="cdr-reader-subtitle text-emerald-200 text-xs font-medium truncate">
                     {breadcrumb.category}
                   </div>
                 </div>
               </div>
               
               {/* Pagination Desktop */}
-              <div className="cdr-desktop-page-pill hidden sm:flex items-center gap-1.5 bg-emerald-900/60 py-1 px-3 rounded-full text-emerald-100 text-xs font-semibold border border-emerald-700/40">
+              <div className="cdr-desktop-page-pill hidden sm:flex items-center gap-1.5 bg-emerald-900/60 py-1 px-3 rounded-full text-emerald-100 text-xs font-semibold border border-emerald-700/40 flex-shrink-0">
                 <span>Page {currentIndex + 1} of {activeDuas.length}</span>
               </div>
             </div>

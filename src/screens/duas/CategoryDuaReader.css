@@ -465,18 +465,27 @@
 .cdr-reader-header-inner {
   max-width: 56rem; /* max-w-4xl */
   margin: 0 auto;
-  padding: max(0.75rem, env(safe-area-inset-top, 0px)) 1rem 0.75rem;
+  padding: max(0.625rem, env(safe-area-inset-top, 0px)) 1rem 0.625rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
 }
 
 @media (min-width: 640px) {
   .cdr-reader-header-inner {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+.cdr-desktop-page-pill {
+  display: none !important;
+}
+
+@media (min-width: 640px) {
+  .cdr-desktop-page-pill {
+    display: flex !important;
   }
 }
 
@@ -718,21 +727,135 @@
 }
 
 .cdr-card-header {
+  padding: 0.875rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #F1F5F9;
+  background-color: rgba(248, 250, 252, 0.75);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cdr-card-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #F1F5F9;
-  background-color: rgba(248, 250, 252, 0.5);
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.cdr-top-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .cdr-dua-badge {
   font-size: 0.75rem;
-  font-weight: 600;
-  color: #059669;
+  font-weight: 700;
+  color: #047857;
+  background-color: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(4, 120, 87, 0.06);
+}
+
+.cdr-short-hint-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #065F46;
+  background-color: #D1FAE5;
+  border: 1px solid #A7F3D0;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-family: var(--font-malayalam, sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1.25;
+}
+
+/* Full-width Dua Occasion / Context Title */
+.cdr-dua-desc-row {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(226, 232, 240, 0.9);
+}
+
+.cdr-dua-desc-text {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1E293B;
+  font-family: var(--font-malayalam, sans-serif);
+  line-height: 1.55;
+  margin: 0;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Beautiful Full-Width Instruction / Timing Callout */
+.cdr-instruction-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-left: 4px solid #059669;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.cdr-instruction-icon-wrap {
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  border-radius: 50%;
+  background-color: #DCFCE7;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.125rem;
+}
+
+.cdr-instruction-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cdr-instruction-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #047857;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-malayalam, sans-serif);
+}
+
+.cdr-instruction-text {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #14532D;
+  font-family: var(--font-malayalam, sans-serif);
+  font-weight: 500;
+  margin: 0;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .cdr-page-badge {
@@ -1197,6 +1320,50 @@
 [data-theme='dark'] .cdr-card-header {
   background-color: #142820;
   border-bottom-color: #1E382D;
+}
+
+[data-theme='dark'] .cdr-dua-badge {
+  color: #34D399;
+  background-color: rgba(6, 78, 59, 0.35);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+[data-theme='dark'] .cdr-dua-header-title {
+  color: #E2E8F0;
+}
+
+[data-theme='dark'] .cdr-dua-desc-row {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .cdr-dua-desc-text {
+  color: #E2E8F0;
+}
+
+[data-theme='dark'] .cdr-short-hint-pill {
+  color: #6EE7B7;
+  background-color: rgba(6, 78, 59, 0.35);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+[data-theme='dark'] .cdr-instruction-callout {
+  background: rgba(6, 78, 59, 0.22);
+  border-color: rgba(52, 211, 153, 0.25);
+  border-left-color: #34D399;
+  box-shadow: none;
+}
+
+[data-theme='dark'] .cdr-instruction-icon-wrap {
+  background-color: rgba(52, 211, 153, 0.2);
+  color: #34D399;
+}
+
+[data-theme='dark'] .cdr-instruction-label {
+  color: #6EE7B7;
+}
+
+[data-theme='dark'] .cdr-instruction-text {
+  color: #D1FAE5;
 }
 
 [data-theme='dark'] .cdr-page-badge {

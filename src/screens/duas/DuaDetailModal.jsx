@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { audioService } from '../../utils/audioService';
+import { registerBackButtonHandler } from '../../utils/backButtonManager';
 
 /**
  * Format seconds into mm:ss
@@ -51,6 +52,15 @@ export default function DuaDetailModal({
     });
     return unsubscribe;
   }, []);
+
+  // Handle mobile hardware back button
+  useEffect(() => {
+    const unregister = registerBackButtonHandler(() => {
+      onClose();
+      return true;
+    }, 90);
+    return unregister;
+  }, [onClose]);
 
   // Find index in category list for swiping
   const currentList = categoryDuas.length > 0 ? categoryDuas : (dua ? [dua] : []);

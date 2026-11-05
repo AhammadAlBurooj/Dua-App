@@ -44,7 +44,7 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  --nav-height: 68px;
+  --nav-height: 60px;
   --app-max-width: 440px;
 }
 
@@ -384,70 +384,120 @@ html, body {
   background-color: var(--bg-surface);
   border-top: 1px solid var(--border-light);
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 16px;
   padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
   z-index: 40;
   flex-shrink: 0;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
 }
 
-.nav-item {
-  flex: 1;
-  min-height: 48px;
-  min-width: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 6px 4px;
-  border-radius: var(--radius-md);
-  transition: all 0.18s ease;
-  touch-action: manipulation;
+[data-theme="dark"] .bottom-nav {
+  background-color: rgba(18, 33, 27, 0.95);
+  border-top-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
 }
 
-.nav-item:active {
-  transform: scale(0.94);
+.bottom-nav-inner {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
+  min-height: 44px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .nav-item:hover {
   color: var(--primary);
 }
 
+.nav-item:active {
+  transform: scale(0.92);
+}
+
 .nav-item.active {
   color: var(--primary);
 }
 
-.nav-item.active .nav-icon-wrap {
-  background-color: var(--bg-sage);
-  color: var(--primary);
-  transform: translateY(-1px);
-}
-
 .nav-icon-wrap {
-  width: 38px;
-  height: 28px;
+  width: 58px;
+  height: 38px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  position: relative;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-item.active .nav-icon-wrap {
+  background-color: rgba(23, 91, 70, 0.12);
+  color: #175B46;
+  box-shadow: 0 2px 8px rgba(23, 91, 70, 0.08);
+}
+
+[data-theme="dark"] .nav-item {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .nav-item.active .nav-icon-wrap {
+  background-color: rgba(52, 211, 153, 0.16);
+  color: #34D399;
+  box-shadow: 0 2px 10px rgba(52, 211, 153, 0.15);
+}
+
+.nav-icon-svg {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-item.active .nav-icon-svg {
+  transform: scale(1.08);
+}
+
+.nav-badge-count {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  border: 2px solid var(--bg-surface);
 }
 
 .nav-label {
-  font-size: 11px;
-  font-weight: 600;
-  font-family: var(--font-malayalam);
-  letter-spacing: 0.1px;
+  display: none !important;
 }
 
 /* Dua Cards */
@@ -2960,7 +3010,7 @@ button,
    ---------------------------------------------------- */
 @media (max-width: 375px) {
   :root {
-    --nav-height: 62px;
+    --nav-height: 56px;
   }
 
   .app-header {
