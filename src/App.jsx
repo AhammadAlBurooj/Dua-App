@@ -206,7 +206,7 @@ export default function App() {
         id="main-content" 
         style={{ 
           padding: 0,
-          overflow: (activeTab === 'duas' && selectedCategoryId === 'prayer') ? 'hidden' : undefined
+          overflow: (activeTab === 'duas' && Boolean(selectedCategoryId)) ? 'hidden' : undefined
         }}
       >
         {/* Tab 1: Duas (Home & Category List screens matching Screen 1 & 2) */}

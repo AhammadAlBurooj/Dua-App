@@ -244,6 +244,84 @@
   overflow: hidden;
 }
 
+/* Read All Duas Hero Banner in Accordion */
+.cdr-read-all-btn {
+  width: calc(100% - 1.5rem);
+  margin: 0.75rem 0.75rem 0.35rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(135deg, #064E3B 0%, #047857 60%, #059669 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cdr-read-all-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(4, 120, 87, 0.3);
+  background: linear-gradient(135deg, #053D2E 0%, #065F46 60%, #047857 100%);
+}
+
+.cdr-read-all-btn:active {
+  transform: scale(0.99);
+}
+
+.cdr-read-all-icon-wrap {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FCD34D;
+  flex-shrink: 0;
+}
+
+.cdr-read-all-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cdr-read-all-title {
+  font-size: 0.925rem;
+  font-weight: 700;
+  font-family: var(--font-malayalam, sans-serif);
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+.cdr-read-all-sub {
+  font-size: 0.75rem;
+  font-family: var(--font-malayalam, sans-serif);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cdr-read-all-arrow {
+  color: rgba(255, 255, 255, 0.8);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cdr-read-all-btn:hover .cdr-read-all-arrow {
+  transform: translateX(3px);
+  color: #FFFFFF;
+}
+
+[data-theme='dark'] .cdr-read-all-btn {
+  background: linear-gradient(135deg, #064E3B 0%, #047857 60%, #059669 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .cdr-cat-sublist {
   background-color: #F8FAFC;
   border-top: 1px solid #F1F5F9;
