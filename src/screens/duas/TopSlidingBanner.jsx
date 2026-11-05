@@ -50,7 +50,7 @@ export default function TopSlidingBanner({
       id: 'asmaul_husna',
       tag: isEnglish ? '99 Names' : '99 Names',
       title: isEnglish ? 'Asmaul Husna' : 'Asmaul Husna',
-      subtitle: isEnglish ? '99 Beautiful Divine Names' : 'അസ്മാഉൽ ഹുസ്ന• 99 നാമങ്ങൾ',
+      subtitle: isEnglish ? '99 Beautiful Divine Names' : 'അല്ലാഹുവിന്റെ 99 വിശുദ്ധ നാമങ്ങൾ',
       buttonText: isEnglish ? 'Explore' : 'കാണുക',
       buttonTheme: 'gold',
       cardBg: 'linear-gradient(135deg, #093327 0%, #144937 45%, #563E14 100%)',
