@@ -352,11 +352,11 @@ export default function DuasScreen({
                               <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
                             )}
                           </div>
-                          <div className="cdr-cat-meta-sub">
+                          {/* <div className="cdr-cat-meta-sub">
                             <span>{cat.subcategories.length} {isEnglish ? "sections" : "ഉപവിഭാഗങ്ങൾ"}</span>
                             <span className="cdr-cat-meta-dot">•</span>
                             <span>{totalDuas} {isEnglish ? "Duas" : "പ്രാർത്ഥനകൾ"}</span>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 

@@ -200,24 +200,12 @@ export default function App() {
         <SplashScreen onFinish={() => setShowSplash(false)} />
       )}
 
-      {/* Main App Header (rendered on Favorites, Bookmarks, and Settings tabs) */}
-      {activeTab !== 'duas' && (
-        <Header 
-          theme={theme}
-          onToggleTheme={handleToggleTheme}
-          isFullWidth={isFullWidth}
-          onToggleWidth={handleToggleWidth}
-          activeTab={activeTab}
-          language={settings.language}
-        />
-      )}
-
       {/* Main Content Area based on Active Tab */}
       <main 
         className="app-content" 
         id="main-content" 
         style={{ 
-          padding: activeTab === 'duas' ? 0 : undefined,
+          padding: 0,
           overflow: (activeTab === 'duas' && selectedCategoryId === 'prayer') ? 'hidden' : undefined
         }}
       >
@@ -247,6 +235,8 @@ export default function App() {
             onTogglePlay={handleTogglePlay}
             onSelectDua={handleSelectDua}
             language={settings.language}
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
             onExploreDuas={() => {
               setSelectedCategoryId(null);
               setActiveTab('duas');

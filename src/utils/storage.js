@@ -22,9 +22,9 @@ const DEFAULT_SETTINGS = {
 export const getStoredFavorites = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.FAVORITES);
-    return data ? JSON.parse(data) : ['daily-1', 'daily-3', 'quranic-6'];
+    return data ? JSON.parse(data) : [];
   } catch {
-    return ['daily-1', 'daily-3', 'quranic-6'];
+    return [];
   }
 };
 
@@ -39,9 +39,9 @@ export const saveStoredFavorites = (favs) => {
 export const getStoredBookmarks = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
-    return data ? JSON.parse(data) : ['prayer-2', 'forgiveness-1'];
+    return data ? JSON.parse(data) : [];
   } catch {
-    return ['prayer-2', 'forgiveness-1'];
+    return [];
   }
 };
 

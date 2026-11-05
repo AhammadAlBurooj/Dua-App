@@ -1,0 +1,382 @@
+/* ==========================================================================
+   SETTINGS SCREEN STYLES (MATCHING USER REFERENCE DESIGN)
+   ========================================================================== */
+
+.settings-screen-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 18px 96px 18px;
+  box-sizing: border-box;
+}
+
+/* Header Section */
+.settings-header-wrap {
+  margin-bottom: 24px;
+}
+
+.settings-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.02em;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-theme="dark"] .settings-title {
+  color: #F8FAFC;
+}
+
+.settings-subtitle {
+  font-size: 14px;
+  color: #64748B;
+  margin: 4px 0 0 0;
+  font-weight: 400;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-theme="dark"] .settings-subtitle {
+  color: #94A3B8;
+}
+
+/* Section Header */
+.settings-group-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 10px 4px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Card Container */
+.settings-card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #F1F5F9;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .settings-card {
+  background-color: #142820;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Item Rows */
+.settings-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  gap: 12px;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.settings-item-row.is-clickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.settings-item-row.is-clickable:hover {
+  background-color: #F8FAFC;
+}
+
+[data-theme="dark"] .settings-item-row.is-clickable:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.settings-item-row.is-clickable:active {
+  background-color: #F1F5F9;
+}
+
+[data-theme="dark"] .settings-item-row.is-clickable:active {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.settings-divider {
+  height: 1px;
+  background-color: #F1F5F9;
+  margin: 0 18px;
+}
+
+[data-theme="dark"] .settings-divider {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Left Icon & Text */
+.settings-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.settings-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background-color: #ECFDF5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .settings-icon-badge {
+  background-color: rgba(6, 78, 59, 0.35);
+  color: #34D399;
+}
+
+.settings-item-text {
+  min-width: 0;
+}
+
+.settings-item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-theme="dark"] .settings-item-title {
+  color: #F8FAFC;
+}
+
+.settings-item-sub {
+  font-size: 12px;
+  color: #64748B;
+  margin: 3px 0 0 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-theme="dark"] .settings-item-sub {
+  color: #94A3B8;
+}
+
+/* Language Dropdown Button */
+.settings-lang-select-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  outline: none;
+}
+
+.settings-lang-select-btn:hover {
+  border-color: #CBD5E1;
+  background-color: #F8FAFC;
+}
+
+[data-theme="dark"] .settings-lang-select-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .settings-lang-select-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* iOS-Style Toggle Switch */
+.settings-switch {
+  width: 50px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #E2E8F0;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.settings-switch.is-active {
+  background-color: #059669;
+}
+
+.settings-switch-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settings-switch.is-active .settings-switch-thumb {
+  transform: translateX(22px);
+}
+
+[data-theme="dark"] .settings-switch {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .settings-switch.is-active {
+  background-color: #059669;
+}
+
+/* Slider Section */
+.settings-slider-wrapper {
+  padding: 0 18px 18px 18px;
+}
+
+.settings-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 16px 0;
+}
+
+.settings-slider-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94A3B8;
+  user-select: none;
+}
+
+.settings-range-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 9999px;
+  background: #E2E8F0;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  accent-color: #059669;
+}
+
+[data-theme="dark"] .settings-range-slider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.settings-range-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #059669;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(5, 150, 105, 0.4);
+  border: 2px solid #FFFFFF;
+}
+
+[data-theme="dark"] .settings-range-slider::-webkit-slider-thumb {
+  border-color: #142820;
+}
+
+/* Arabic Preview Box */
+.settings-preview-box {
+  background-color: #F8FAFC;
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid #F1F5F9;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .settings-preview-box {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.settings-preview-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  text-align: left;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+}
+
+.settings-preview-arabic {
+  font-family: 'Amiri', 'Traditional Arabic', serif;
+  color: #0F172A;
+  line-height: 2;
+  margin: 0;
+  direction: rtl;
+  word-break: normal;
+  transition: font-size 0.12s ease;
+}
+
+[data-theme="dark"] .settings-preview-arabic {
+  color: #F8FAFC;
+}
+
+/* Chevron Right */
+.settings-chevron {
+  color: #CBD5E1;
+  flex-shrink: 0;
+}
+
+/* Footer Version */
+.settings-version-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94A3B8;
+  text-align: center;
+  margin: 20px 0 32px 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* About Modal Dialog */
+.settings-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.settings-modal-content {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  max-width: 400px;
+  width: 100%;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  position: relative;
+  text-align: center;
+}
+
+[data-theme="dark"] .settings-modal-content {
+  background-color: #142820;
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
