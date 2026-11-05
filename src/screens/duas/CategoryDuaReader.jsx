@@ -21,21 +21,24 @@ import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
 
+// Active audio tracker so only one audio plays at any time,
+// while allowing audio to continue normally across page navigation/swiping.
+let globalActiveAudioStop = null;
+
 // --- REAL AUDIO PLAYER COMPONENT ---
-const AudioPlayer = ({ url, isCurrentSlide }) => {
+const AudioPlayer = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const audioRef = useRef(null);
 
   const fullUrl = url ? (url.startsWith('http') ? url : `${AUDIO_BASE}${url}.mp3`) : null;
 
-  // Stop playback when moving to a different slide
-  useEffect(() => {
-    if (!isCurrentSlide && isPlaying && audioRef.current) {
+  const stopPlayback = useCallback(() => {
+    if (audioRef.current) {
       audioRef.current.pause();
-      setIsPlaying(false);
     }
-  }, [isCurrentSlide, isPlaying]);
+    setIsPlaying(false);
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -44,45 +47,73 @@ const AudioPlayer = ({ url, isCurrentSlide }) => {
         audioRef.current.pause();
         audioRef.current.src = '';
       }
+      if (globalActiveAudioStop === stopPlayback) {
+        globalActiveAudioStop = null;
+      }
     };
-  }, []);
+  }, [stopPlayback]);
 
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
     if (!fullUrl) return;
 
-    if (!audioRef.current) {
-      audioRef.current = new Audio(fullUrl);
-
-      audioRef.current.addEventListener('timeupdate', () => {
-        if (audioRef.current && audioRef.current.duration) {
-          const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-          setProgress(pct);
-        }
-      });
-
-      audioRef.current.addEventListener('ended', () => {
-        setIsPlaying(false);
-        setProgress(0);
-      });
-
-      audioRef.current.addEventListener('error', () => {
-        setIsPlaying(false);
-      });
-    }
-
     if (isPlaying) {
-      audioRef.current.pause();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
       setIsPlaying(false);
+      if (globalActiveAudioStop === stopPlayback) {
+        globalActiveAudioStop = null;
+      }
     } else {
+      // Pause any previously playing audio in other cards
+      if (globalActiveAudioStop && globalActiveAudioStop !== stopPlayback) {
+        globalActiveAudioStop();
+      }
+      globalActiveAudioStop = stopPlayback;
+
+      if (!audioRef.current) {
+        audioRef.current = new Audio(fullUrl);
+
+        audioRef.current.addEventListener('timeupdate', () => {
+          if (audioRef.current && audioRef.current.duration) {
+            const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
+            setProgress(pct);
+          }
+        });
+
+        audioRef.current.addEventListener('ended', () => {
+          setIsPlaying(false);
+          setProgress(0);
+          if (globalActiveAudioStop === stopPlayback) {
+            globalActiveAudioStop = null;
+          }
+        });
+
+        audioRef.current.addEventListener('error', () => {
+          setIsPlaying(false);
+          if (globalActiveAudioStop === stopPlayback) {
+            globalActiveAudioStop = null;
+          }
+        });
+      }
+
       audioRef.current.play().then(() => {
         setIsPlaying(true);
       }).catch(() => {
         setIsPlaying(false);
+        if (globalActiveAudioStop === stopPlayback) {
+          globalActiveAudioStop = null;
+        }
       });
     }
   };
 
   const handleSeek = (e) => {
+    e.stopPropagation();
     if (!audioRef.current || !audioRef.current.duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -92,16 +123,32 @@ const AudioPlayer = ({ url, isCurrentSlide }) => {
   };
 
   return (
-    <div className="cdr-audio-player flex items-center gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm mt-6">
+    <div 
+      className="cdr-audio-player flex items-center gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm mt-6"
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       <button 
+        type="button"
         onClick={togglePlay}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
         className="cdr-audio-play-btn w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-700 transition-colors shadow-md flex-shrink-0"
         aria-label={isPlaying ? "Pause" : "Play"}
         title={isPlaying ? "Pause" : "Play"}
       >
         {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" style={{ marginLeft: '2px' }} />}
       </button>
-      <div className="cdr-audio-track-wrap flex-1" onClick={handleSeek} role="progressbar">
+      <div 
+        className="cdr-audio-track-wrap flex-1 cursor-pointer" 
+        onClick={handleSeek}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        role="progressbar"
+      >
         <div className="cdr-audio-track h-1.5 w-full bg-emerald-200 rounded-full overflow-hidden">
           <div 
             className="cdr-audio-fill h-full bg-emerald-600 rounded-full transition-all duration-150 ease-linear"
@@ -110,8 +157,12 @@ const AudioPlayer = ({ url, isCurrentSlide }) => {
         </div>
       </div>
       <button 
+        type="button"
         className="cdr-audio-vol-btn text-emerald-600 hover:text-emerald-800 p-1"
-        onClick={() => {
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
           if (audioRef.current) {
             audioRef.current.currentTime = 0;
             setProgress(0);
@@ -135,7 +186,11 @@ const WordByWordAccordion = ({ words }) => {
   return (
     <div className="cdr-wbw-box mt-6 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm max-w-full">
       <button 
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
         className="cdr-wbw-btn w-full px-3.5 py-3 flex items-center justify-between gap-2 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
         aria-expanded={isOpen}
       >
@@ -230,7 +285,12 @@ const DuaCard = ({
               Page {currentPage} of {totalPages}
             </div>
           </div>
-          <div className="cdr-card-actions flex gap-2 flex-shrink-0">
+          <div 
+            className="cdr-card-actions flex gap-2 flex-shrink-0"
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+          >
             <button 
               onClick={handleCopy} 
               className="cdr-action-btn p-2 text-slate-400 hover:text-emerald-600 rounded-full relative group"
@@ -408,20 +468,85 @@ export default function CategoryDuaReader({
     setView('reading');
   };
 
-  // --- Swipe Logic for Reading View ---
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
-  const minSwipeDistance = 50;
+  // --- Bulletproof Swipe Gesture Detection for Reading View ---
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
+  const touchMoveRef = useRef({ x: 0, y: 0, moved: false });
+  const isSwipeIgnoredRef = useRef(false);
 
-  const onTouchStart = (e) => setTouchStart({ x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY });
-  const onTouchMove = (e) => setTouchEnd({ x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY });
+  // Exclude interactive elements so taps/drags on controls never trigger page navigation
+  const isInteractiveElement = (target) => {
+    if (!target) return false;
+    return !!target.closest(
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-player, audio, .cdr-action-btn, .cdr-wbw-toggle, .cdr-wbw-card, a, select, textarea, .no-swipe'
+    );
+  };
+
+  const onTouchStart = (e) => {
+    // If touch begins on audio player, controls, buttons, or inputs, completely disable swipe
+    if (isInteractiveElement(e.target)) {
+      isSwipeIgnoredRef.current = true;
+      return;
+    }
+
+    isSwipeIgnoredRef.current = false;
+    const touch = e.touches[0] || e.targetTouches[0];
+    if (!touch) return;
+
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    };
+    touchMoveRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      moved: false
+    };
+  };
+
+  const onTouchMove = (e) => {
+    if (isSwipeIgnoredRef.current) return;
+    const touch = e.touches[0] || e.targetTouches[0];
+    if (!touch) return;
+
+    touchMoveRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      moved: true
+    };
+  };
+
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distanceX = touchStart.x - touchEnd.x;
-    const distanceY = touchStart.y - touchEnd.y;
-    if (Math.abs(distanceX) > Math.abs(distanceY)) {
-      if (distanceX > minSwipeDistance && currentIndex < activeDuas.length - 1) setCurrentIndex(prev => prev + 1);
-      if (distanceX < -minSwipeDistance && currentIndex > 0) setCurrentIndex(prev => prev - 1);
+    if (isSwipeIgnoredRef.current) {
+      isSwipeIgnoredRef.current = false;
+      return;
+    }
+
+    // A tap without intentional dragging should NEVER flip the page
+    if (!touchMoveRef.current.moved) return;
+
+    const diffX = touchStartRef.current.x - touchMoveRef.current.x;
+    const diffY = touchStartRef.current.y - touchMoveRef.current.y;
+    const duration = Date.now() - touchStartRef.current.time;
+
+    // Reset moved flag
+    touchMoveRef.current.moved = false;
+
+    // Minimum distance threshold to confirm intentional swipe (60px)
+    const minSwipeDistance = 60;
+
+    // Horizontal movement must dominate vertical movement by at least 1.5x (prevents vertical scrolling conflict)
+    const isHorizontalSwipe = Math.abs(diffX) >= minSwipeDistance && Math.abs(diffX) > Math.abs(diffY) * 1.5;
+
+    // Must be completed within a reasonable gesture duration (< 800ms)
+    if (isHorizontalSwipe && duration < 800) {
+      if (diffX > 0 && currentIndex < activeDuas.length - 1) {
+        // Swiped Left -> Go to Next Dua
+        setCurrentIndex(prev => prev + 1);
+      } else if (diffX < 0 && currentIndex > 0) {
+        // Swiped Right -> Go to Previous Dua
+        setCurrentIndex(prev => prev - 1);
+      }
     }
   };
 
@@ -618,17 +743,9 @@ export default function CategoryDuaReader({
                 </div>
               </div>
               
-              {/* Pagination Dots Desktop */}
-              <div className="cdr-desktop-dots hidden sm:flex items-center gap-2 bg-emerald-900/50 py-1.5 px-3 rounded-full">
-                {activeDuas.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentIndex(idx)}
-                    className={`cdr-dot-pill h-2.5 rounded-full transition-all duration-300 ${currentIndex === idx ? 'active w-6 bg-white' : 'inactive w-2.5 bg-emerald-500 hover:bg-emerald-300'}`}
-                    aria-label={`Go to page ${idx + 1}`}
-                    title={`Page ${idx + 1}`}
-                  />
-                ))}
+              {/* Pagination Desktop */}
+              <div className="cdr-desktop-page-pill hidden sm:flex items-center gap-1.5 bg-emerald-900/60 py-1 px-3 rounded-full text-emerald-100 text-xs font-semibold border border-emerald-700/40">
+                <span>Page {currentIndex + 1} of {activeDuas.length}</span>
               </div>
             </div>
           </header>
@@ -685,35 +802,12 @@ export default function CategoryDuaReader({
             </button>
           </main>
 
-          {/* Mobile Bottom Navigation Bar */}
-          <div className="cdr-mobile-bottom-bar sm:hidden flex-shrink-0 bg-white border-t border-slate-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-20 pb-safe">
-            <div className="cdr-mobile-bottom-inner flex items-center justify-between px-6 py-4">
-              <button 
-                onClick={() => setCurrentIndex(prev => prev - 1)}
-                disabled={currentIndex === 0}
-                className={`cdr-mobile-arrow-btn p-2 rounded-full transition-colors ${currentIndex === 0 ? 'text-slate-300' : 'text-emerald-600 active:bg-emerald-50'}`}
-                aria-label="Previous Dua"
-              >
-                <ChevronLeft size={28} />
-              </button>
-              
-              <div className="cdr-mobile-dots-track flex gap-1.5 overflow-x-auto max-w-[150px] px-2 no-scrollbar justify-center">
-                {activeDuas.map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`cdr-mobile-dot h-2 flex-shrink-0 rounded-full transition-all duration-300 ${currentIndex === idx ? 'active w-5 bg-emerald-600' : 'inactive w-2 bg-slate-300'}`}
-                  />
-                ))}
+          {/* Mobile Bottom Navigation Bar - Clean Page Number Pill (Replaces arrows & dots) */}
+          <div className="cdr-mobile-bottom-bar sm:hidden flex-shrink-0 bg-white border-t border-slate-200/80 shadow-[0_-2px_8px_rgba(0,0,0,0.04)] z-20 pb-safe">
+            <div className="cdr-mobile-bottom-inner flex items-center justify-center px-4 py-2.5">
+              <div className="cdr-page-number-pill">
+                <span>Page {currentIndex + 1} of {activeDuas.length}</span>
               </div>
-
-              <button 
-                onClick={() => setCurrentIndex(prev => prev + 1)}
-                disabled={currentIndex === activeDuas.length - 1}
-                className={`cdr-mobile-arrow-btn p-2 rounded-full transition-colors ${currentIndex === activeDuas.length - 1 ? 'text-slate-300' : 'text-emerald-600 active:bg-emerald-50'}`}
-                aria-label="Next Dua"
-              >
-                <ChevronRight size={28} />
-              </button>
             </div>
           </div>
         </>

@@ -651,9 +651,9 @@
   flex-shrink: 0;
   background-color: #FFFFFF;
   border-top: 1px solid #E2E8F0;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
   z-index: 20;
-  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  padding-bottom: max(0.4rem, env(safe-area-inset-bottom, 0px));
 }
 
 @media (min-width: 640px) {
@@ -665,61 +665,26 @@
 .cdr-mobile-bottom-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.5rem;
+  justify-content: center;
+  padding: 0.5rem 1rem;
 }
 
-.cdr-mobile-arrow-btn {
-  padding: 0.5rem;
-  border-radius: 9999px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #059669;
-  display: flex;
+.cdr-page-number-pill {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
-}
-
-.cdr-mobile-arrow-btn:active {
-  background-color: #ECFDF5;
-}
-
-.cdr-mobile-arrow-btn:disabled {
-  color: #CBD5E1;
-  pointer-events: none;
-}
-
-.cdr-mobile-dots-track {
-  display: flex;
-  gap: 0.375rem;
-  overflow-x: auto;
-  max-width: 150px;
-  padding: 0 0.5rem;
-  justify-content: center;
-  scrollbar-width: none;
-}
-
-.cdr-mobile-dots-track::-webkit-scrollbar {
-  display: none;
-}
-
-.cdr-mobile-dot {
-  height: 0.5rem;
-  flex-shrink: 0;
+  gap: 0.35rem;
+  padding: 0.35rem 1.15rem;
   border-radius: 9999px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cdr-mobile-dot.active {
-  width: 1.25rem;
-  background-color: #059669;
-}
-
-.cdr-mobile-dot.inactive {
-  width: 0.5rem;
-  background-color: #CBD5E1;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
 /* ----------------------------------------------------
@@ -1339,6 +1304,12 @@
 [data-theme='dark'] .cdr-mobile-bottom-bar {
   background-color: #12221B;
   border-top-color: #1E382D;
+}
+
+[data-theme='dark'] .cdr-page-number-pill {
+  background-color: #182C24;
+  border-color: #274237;
+  color: #EDF4EE;
 }
 
 [data-theme='dark'] .cdr-arrow-btn {

@@ -35,6 +35,9 @@ export default function DuaDetailModal({
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+  const touchMoved = useRef(false);
+  const isTouchIgnored = useRef(false);
+  const touchStartTime = useRef(0);
   const mouseStartX = useRef(0);
   const isMouseDown = useRef(false);
 
@@ -88,18 +91,43 @@ export default function DuaDetailModal({
 
   // Touch Swipe Handlers for mobile screen swiping
   const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
+    if (e.target.closest('button, [role="button"], input, [role="progressbar"], .ref-scrubber-track, .ref-inline-audio-bar, audio, a')) {
+      isTouchIgnored.current = true;
+      return;
+    }
+    isTouchIgnored.current = false;
+    const touch = e.touches[0];
+    if (!touch) return;
+    touchStartX.current = touch.clientX;
+    touchStartY.current = touch.clientY;
+    touchStartTime.current = Date.now();
+    touchMoved.current = false;
+  };
+
+  const handleTouchMove = (e) => {
+    if (isTouchIgnored.current) return;
+    touchMoved.current = true;
   };
 
   const handleTouchEnd = (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
+    if (isTouchIgnored.current) {
+      isTouchIgnored.current = false;
+      return;
+    }
+
+    if (!touchMoved.current) return;
+    touchMoved.current = false;
+
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+    const touchEndX = touch.clientX;
+    const touchEndY = touch.clientY;
     const diffX = touchStartX.current - touchEndX;
     const diffY = touchStartY.current - touchEndY;
+    const duration = Date.now() - touchStartTime.current;
 
     // Detect horizontal swipe across screen
-    if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+    if (Math.abs(diffX) >= 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5 && duration < 800) {
       if (diffX > 0 && hasNext) {
         handleNext();
       } else if (diffX < 0 && hasPrev) {
@@ -185,6 +213,7 @@ export default function DuaDetailModal({
     <div 
       className="reference-dua-detail-screen"
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
