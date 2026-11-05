@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/core": "^8.6.0",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.64.0",

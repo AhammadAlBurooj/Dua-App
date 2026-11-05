@@ -18,6 +18,11 @@ import {
   addStoredRecent
 } from './utils/storage';
 import { audioService } from './utils/audioService';
+import { 
+  initBackButtonManager, 
+  registerBackButtonHandler, 
+  registerBackToastCallback 
+} from './utils/backButtonManager';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -44,6 +49,36 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Initialize mobile system back button manager
+  useEffect(() => {
+    initBackButtonManager();
+  }, []);
+
+  // Register exit confirmation toast on root Home screen
+  useEffect(() => {
+    registerBackToastCallback(() => {
+      showToast(settings.language === 'en' ? 'Press back again to exit' : 'ആപ്പിൽ നിന്ന് പുറത്തുകടക്കാൻ വീണ്ടും അമർത്തുക');
+    });
+  }, [settings.language]);
+
+  // Handle back button for selectedDua reader / modal (priority 80)
+  useEffect(() => {
+    if (!selectedDua) return;
+    return registerBackButtonHandler(() => {
+      setSelectedDua(null);
+      return true;
+    }, 80);
+  }, [selectedDua]);
+
+  // Handle back button for non-home active tabs (priority 10)
+  useEffect(() => {
+    if (activeTab === 'duas') return;
+    return registerBackButtonHandler(() => {
+      setActiveTab('duas');
+      return true;
+    }, 10);
+  }, [activeTab]);
 
   // Toggle Theme (Light / Dark)
   const handleToggleTheme = () => {

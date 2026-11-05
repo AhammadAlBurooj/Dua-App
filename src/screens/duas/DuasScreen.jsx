@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Search, 
   X, 
@@ -24,6 +24,7 @@ import {
 import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { UI_TEXT } from '../../utils/translations';
+import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
 import CategoryDuaReader from './CategoryDuaReader';
@@ -63,6 +64,31 @@ export default function DuasScreen({
   const [expandedCatId, setExpandedCatId] = useState(null);
   const [activeReading, setActiveReading] = useState(null);
   const searchInputRef = useRef(null);
+
+  // Handle mobile hardware back button for DuasScreen subviews
+  useEffect(() => {
+    if (!isAsmaulHusnaOpen) return;
+    return registerBackButtonHandler(() => {
+      setIsAsmaulHusnaOpen(false);
+      return true;
+    }, 70);
+  }, [isAsmaulHusnaOpen]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) return;
+    return registerBackButtonHandler(() => {
+      setSearchQuery('');
+      return true;
+    }, 60);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!selectedCategoryId) return;
+    return registerBackButtonHandler(() => {
+      onSelectCategory(null);
+      return true;
+    }, 40);
+  }, [selectedCategoryId, onSelectCategory]);
 
   const lang = settings?.language || 'ml';
   const t = UI_TEXT[lang] || UI_TEXT.ml;

@@ -44,7 +44,7 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  --nav-height: 68px;
+  --nav-height: 60px;
   --app-max-width: 440px;
 }
 
@@ -295,7 +295,7 @@ html, body {
 .app-content {
   flex: 1 1 0%;
   min-height: 0;
-  padding: 0 18px 24px;
+  padding: 0 18px 88px;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
@@ -372,82 +372,162 @@ html, body {
   background-color: var(--border-light);
 }
 
-/* Bottom Navigation Bar */
+/* Bottom Navigation Bar (Floating Pill Capsule Design) */
 .bottom-nav {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: absolute;
+  bottom: max(14px, env(safe-area-inset-bottom, 12px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 380px;
+  height: 60px;
+  background-color: rgba(246, 249, 247, 0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 45;
+  box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.08), 0 4px 10px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-theme="dark"] .bottom-nav {
+  background-color: rgba(18, 33, 27, 0.88);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.bottom-nav-inner {
   width: 100%;
-  min-height: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
-  height: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
-  background-color: var(--bg-surface);
-  border-top: 1px solid var(--border-light);
+  height: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0 10px;
-  padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
-  z-index: 40;
-  flex-shrink: 0;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
+  position: relative;
 }
 
 .nav-item {
+  position: relative;
+  height: 100%;
   flex: 1;
-  min-height: 48px;
-  min-width: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: #64748B;
   cursor: pointer;
-  padding: 6px 4px;
-  border-radius: var(--radius-md);
-  transition: all 0.18s ease;
+  padding: 4px 0 2px;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.16s ease;
 }
 
 .nav-item:active {
-  transform: scale(0.94);
-}
-
-.nav-item:hover {
-  color: var(--primary);
+  transform: scale(0.92);
 }
 
 .nav-item.active {
-  color: var(--primary);
+  color: #059669;
 }
 
-.nav-item.active .nav-icon-wrap {
-  background-color: var(--bg-sage);
-  color: var(--primary);
-  transform: translateY(-1px);
+[data-theme="dark"] .nav-item {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .nav-item.active {
+  color: #34D399;
 }
 
 .nav-icon-wrap {
-  width: 38px;
-  height: 28px;
-  border-radius: var(--radius-full);
+  width: 62px;
+  height: 38px;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  position: relative;
+  background-color: transparent;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Active pill style matching reference design */
+.nav-item.active .nav-icon-wrap {
+  background-color: rgba(5, 150, 105, 0.16);
+  color: #059669;
+}
+
+[data-theme="dark"] .nav-item.active .nav-icon-wrap {
+  background-color: rgba(5, 150, 105, 0.26);
+  color: #34D399;
+}
+
+.nav-active-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #059669;
+  margin-top: 3px;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-item.active .nav-active-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-theme="dark"] .nav-item.active .nav-active-dot {
+  background-color: #34D399;
+}
+
+.nav-icon-svg {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-item.active .nav-icon-svg {
+  transform: scale(1.04);
+  color: #059669;
+}
+
+[data-theme="dark"] .nav-item.active .nav-icon-svg {
+  color: #34D399;
+}
+
+.nav-badge-count {
+  position: absolute;
+  top: 2px;
+  right: 12px;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  border: 2px solid #FFFFFF;
+}
+
+[data-theme="dark"] .nav-badge-count {
+  border-color: #12211B;
 }
 
 .nav-label {
-  font-size: 11px;
-  font-weight: 600;
-  font-family: var(--font-malayalam);
-  letter-spacing: 0.1px;
+  display: none !important;
 }
 
 /* Dua Cards */
@@ -1656,7 +1736,7 @@ input:checked + .slider:before {
 
 /* Home Categories Section */
 .home-categories-section {
-  padding: 16px 16px 24px 16px;
+  padding: 16px 16px 88px 16px;
 }
 
 .home-section-title {
@@ -2960,7 +3040,7 @@ button,
    ---------------------------------------------------- */
 @media (max-width: 375px) {
   :root {
-    --nav-height: 62px;
+    --nav-height: 56px;
   }
 
   .app-header {
@@ -3016,7 +3096,7 @@ button,
   }
 
   .home-categories-section {
-    padding: 0 12px;
+    padding: 0 12px 88px 12px;
   }
 
   .cdr-cat-card {
