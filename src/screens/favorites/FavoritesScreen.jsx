@@ -1,163 +1,276 @@
-import React, { useState } from 'react';
-import { Search, X, Heart, Sparkles, WifiOff } from 'lucide-react';
-import DuaCard from '../duas/DuaCard';
-import { CATEGORIES } from '../../data/categories';
-import { UI_TEXT } from '../../utils/translations';
+import React, { useState, useMemo } from 'react';
+import { Bookmark, Play, Pause, Heart, Sparkles, Moon, Sun } from 'lucide-react';
+import './FavoritesScreen.css';
+
+/**
+ * Categorize a Dua into Morning, Evening, Before Sleep, Prayer, or custom tag.
+ */
+function getDuaCategoryInfo(dua, isEnglish = true) {
+  const cat = (dua.categoryTitle || dua.category || '').toLowerCase();
+  const sub = (dua.subCategoryTitle || dua.subcategory || '').toLowerCase();
+  const title = (dua.titleMl || dua.titleEn || '').toLowerCase();
+  const desc = (dua.desc || '').toLowerCase();
+  const hint = (dua.hint || '').toLowerCase();
+
+  // Morning check
+  if (
+    sub.includes('രാവിലെ') || cat.includes('രാവിലെ') || title.includes('രാവിലെ') || 
+    desc.includes('രാവിലെ') || hint.includes('രാവിലെ') || sub.includes('morning') || cat.includes('morning')
+  ) {
+    return { key: 'morning', badge: isEnglish ? 'MORNING' : 'പ്രഭാതം' };
+  }
+
+  // Evening check
+  if (
+    sub.includes('വൈകുന്നേരം') || cat.includes('വൈകുന്നേരം') || title.includes('വൈകുന്നേരം') || 
+    desc.includes('വൈകുന്നേരം') || hint.includes('വൈകുന്നേരം') || sub.includes('evening') || 
+    cat.includes('പ്രദോഷം') || sub.includes('പ്രദോഷം') || cat.includes('evening')
+  ) {
+    return { key: 'evening', badge: isEnglish ? 'EVENING' : 'പ്രദോഷം' };
+  }
+
+  // Sleep check
+  if (
+    sub.includes('ഉറങ്ങ') || sub.includes('ഉറക്കം') || cat.includes('ഉറക്കം') || 
+    title.includes('ഉറങ്ങ') || sub.includes('sleep') || cat.includes('sleep')
+  ) {
+    return { key: 'sleep', badge: isEnglish ? 'BEFORE SLEEP' : 'ഉറക്കം' };
+  }
+
+  // Prayer check
+  if (cat.includes('നമസ്കാരം') || sub.includes('നമസ്കാരം') || sub.includes('prayer') || cat.includes('prayer')) {
+    return { key: 'prayer', badge: isEnglish ? 'PRAYER' : 'നമസ്കാരം' };
+  }
+
+  // Mosque check
+  if (cat.includes('പള്ളി') || sub.includes('പള്ളി') || sub.includes('mosque')) {
+    return { key: 'mosque', badge: isEnglish ? 'MOSQUE' : 'പള്ളി' };
+  }
+
+  // Food check
+  if (cat.includes('ഭക്ഷണം') || sub.includes('ഭക്ഷണം') || sub.includes('food')) {
+    return { key: 'food', badge: isEnglish ? 'FOOD' : 'ഭക്ഷണം' };
+  }
+
+  // Travel check
+  if (cat.includes('യാത്ര') || sub.includes('യാത്ര') || sub.includes('travel')) {
+    return { key: 'travel', badge: isEnglish ? 'TRAVEL' : 'യാത്ര' };
+  }
+
+  // Forgiveness check
+  if (cat.includes('പാപമോചനം') || sub.includes('ഇസ്തിഗ്ഫാർ') || sub.includes('forgiveness')) {
+    return { key: 'forgiveness', badge: isEnglish ? 'FORGIVENESS' : 'പാപമോചനം' };
+  }
+
+  // Default fallback
+  const raw = dua.subCategoryTitle || dua.categoryTitle || 'DUA';
+  return { key: 'general', badge: raw.toUpperCase() };
+}
 
 export default function FavoritesScreen({ 
-  duas, 
-  favorites, 
-  playingDuaId, 
+  duas = [], 
+  favorites = [], 
+  playingDuaId = null, 
   onToggleFavorite, 
   onTogglePlay, 
   onSelectDua, 
   onExploreDuas,
-  settings 
+  language = 'ml',
+  theme = 'light',
+  onToggleTheme
 }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState('all');
+  const isEnglish = language === 'en';
 
-  const lang = settings?.language || 'ml';
-  const t = UI_TEXT[lang] || UI_TEXT.ml;
-  const isEnglish = lang === 'en';
+  // Find user's favorite duas (strictly based on actual saved favorites, never hardcoded)
+  const favoriteDuas = useMemo(() => {
+    if (!Array.isArray(favorites) || favorites.length === 0) return [];
 
-  // Duas that are in favorites (flexible matching for string, number, or object format)
-  const favoriteDuas = (duas || []).filter(d => {
-    const dId = String(d.id);
-    const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
-    return (favorites || []).some(f => {
-      const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-      return fId === dId || 
-             (dOrig && fId === dOrig) || 
-             fId === `prayer-${dId}` || 
-             (dOrig && fId === `prayer-${dOrig}`) ||
-             dId === `prayer-${fId}`;
+    return (duas || []).filter(d => {
+      const dId = String(d.id);
+      const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
+      return favorites.some(f => {
+        const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+        return fId === dId || 
+               (dOrig && fId === dOrig) || 
+               fId === `prayer-${dId}` || 
+               (dOrig && fId === `prayer-${dOrig}`) ||
+               dId === `prayer-${fId}`;
+      });
     });
-  });
+  }, [duas, favorites]);
 
-  // Filtered by category and search
-  const filteredFavorites = favoriteDuas.filter(d => {
-    const matchesCategory = selectedCategoryFilter === 'all' || 
-                            d.categoryId === selectedCategoryFilter || 
-                            d.categoryId === `cat_${selectedCategoryFilter}` ||
-                            String(d.categoryOriginalId) === String(selectedCategoryFilter);
-    if (!matchesCategory) return false;
-    if (!searchQuery.trim()) return true;
+  // Standard category filter pills matching the reference design
+  const filterPills = useMemo(() => {
+    const defaultPills = [
+      { id: 'all', label: isEnglish ? 'All' : 'All' },
+      { id: 'morning', label: isEnglish ? 'Morning' : 'Morning' },
+      { id: 'evening', label: isEnglish ? 'Evening' : 'Evening' },
+      { id: 'sleep', label: isEnglish ? 'Before Sleep' : 'Before Sleep' }
+    ];
 
-    const q = searchQuery.toLowerCase();
-    return (d.titleMl && d.titleMl.toLowerCase().includes(q)) ||
-           (d.titleEn && d.titleEn.toLowerCase().includes(q)) ||
-           (d.arabic && d.arabic.includes(q)) ||
-           (d.meaningMl && d.meaningMl.includes(q));
-  });
+    // If favorites contain other categories (e.g. Prayer), append them dynamically
+    const otherKeys = new Set();
+    favoriteDuas.forEach(d => {
+      const info = getDuaCategoryInfo(d, isEnglish);
+      if (!['morning', 'evening', 'sleep', 'general'].includes(info.key)) {
+        otherKeys.add(JSON.stringify({ id: info.key, label: info.badge }));
+      }
+    });
+
+    otherKeys.forEach(str => {
+      try {
+        defaultPills.push(JSON.parse(str));
+      } catch {
+        // ignore
+      }
+    });
+
+    return defaultPills;
+  }, [favoriteDuas, isEnglish]);
+
+  // Filtered duas according to active pill
+  const filteredDuas = useMemo(() => {
+    if (selectedFilter === 'all') return favoriteDuas;
+    return favoriteDuas.filter(d => {
+      const info = getDuaCategoryInfo(d, isEnglish);
+      return info.key === selectedFilter;
+    });
+  }, [favoriteDuas, selectedFilter, isEnglish]);
 
   return (
-    <div className="favorites-screen">
-      <div style={{ marginBottom: '14px', paddingTop: '4px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
-            {t.favoritesTitle} ({favoriteDuas.length})
-          </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--primary)', fontWeight: 600, background: 'var(--bg-sage)', padding: '3px 8px', borderRadius: '12px' }}>
-            <WifiOff size={11} />
-            <span>{t.offlineAvailable}</span>
-          </div>
+    <div className="fav-screen-container">
+      {/* 1. Header Section Matching Reference */}
+      <div className="fav-header-wrap">
+        <div>
+          <h1 className="fav-title">Favorites</h1>
+          <p className="fav-subtitle">Your saved Duas and Adhkar</p>
         </div>
-        <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginTop: '2px' }}>
-          {t.favoritesSubtitle}
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {favoriteDuas.length > 0 && (
+            <span className="fav-header-badge">
+              {favoriteDuas.length} {isEnglish ? 'saved' : 'സേവ് ചെയ്തു'}
+            </span>
+          )}
+          {onToggleTheme && (
+            <button 
+              className="fav-action-btn"
+              onClick={onToggleTheme}
+              title={theme === 'dark' ? "Light mode" : "Dark mode"}
+              aria-label="Toggle Theme"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+            </button>
+          )}
+        </div>
       </div>
 
-      {favoriteDuas.length > 0 && (
-        <>
-          {/* Search inside favorites */}
-          <div className="search-bar-wrap">
-            <Search size={18} className="search-icon-left" />
-            <input 
-              type="text" 
-              className="search-input"
-              placeholder={isEnglish ? "Search" : "Search"}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            {searchQuery && (
-              <button 
-                className="search-clear-btn" 
-                onClick={() => setSearchQuery('')}
-              >
-                <X size={16} />
-              </button>
-            )}
-          </div>
-
-          {/* Category Filter Chips */}
-          <div className="chips-scroll">
+      {/* 2. Category Filter Pills */}
+      <div className="fav-pills-scroll" role="tablist" aria-label="Favorites Categories">
+        {filterPills.map(pill => {
+          const isActive = selectedFilter === pill.id;
+          return (
             <button
-              className={`chip-btn ${selectedCategoryFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedCategoryFilter('all')}
+              key={pill.id}
+              role="tab"
+              aria-selected={isActive}
+              className={`fav-pill ${isActive ? 'active' : ''}`}
+              onClick={() => setSelectedFilter(pill.id)}
             >
-              {t.allFilter} ({favoriteDuas.length})
+              {pill.label}
             </button>
-            {CATEGORIES.map(cat => {
-              const count = favoriteDuas.filter(d => 
-                d.categoryId === cat.id || 
-                d.categoryId === `cat_${cat.id}` || 
-                String(d.categoryOriginalId) === String(cat.id)
-              ).length;
-              if (count === 0) return null;
-              const catTitle = isEnglish ? cat.titleEn : cat.titleMl;
-              return (
-                <button
-                  key={cat.id}
-                  className={`chip-btn ${selectedCategoryFilter === cat.id ? 'active' : ''}`}
-                  onClick={() => setSelectedCategoryFilter(cat.id)}
-                >
-                  {catTitle} ({count})
-                </button>
-              );
-            })}
-          </div>
-        </>
-      )}
+          );
+        })}
+      </div>
 
-      {/* List or Empty State */}
-      {favoriteDuas.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon-box">
-            <Heart size={30} />
+      {/* 3. Empty State or Dua Cards List */}
+      {filteredDuas.length === 0 ? (
+        <div className="fav-empty-container">
+          <div className="fav-empty-icon-circle">
+            <Bookmark size={38} className="fav-empty-bookmark-icon" />
           </div>
-          <p className="empty-title">{t.noFavoritesTitle}</p>
-          <p className="empty-desc">
-            {t.noFavoritesDesc}
-              <button 
-            className="hero-play-btn"
-            style={{ backgroundColor: 'var(--primary)', color: 'white', marginTop: '8px' }}
-            onClick={onExploreDuas}
-          >
-            <Sparkles size={16} />
-            <span>{t.exploreDuasBtn}</span>
-          </button>
+          <h3 className="fav-empty-title">No Favorites Yet</h3>
+          <p className="fav-empty-desc">
+            Save your favorite Duas and Adhkar to find them here easily.
           </p>
-        
-        </div>
-      ) : filteredFavorites.length === 0 ? (
-        <div className="empty-state">
-          <p className="empty-title">{t.noDuasFound}</p>
-          <p className="empty-desc">{t.noDuasFoundDesc}</p>
+          {onExploreDuas && (
+            <button className="fav-explore-btn" onClick={onExploreDuas}>
+              <Sparkles size={16} />
+              <span>{isEnglish ? 'Explore Duas' : 'ദുആകൾ കാണുക'}</span>
+            </button>
+          )}
         </div>
       ) : (
-        filteredFavorites.map(d => (
-          <DuaCard 
-            key={d.id} 
-            dua={d} 
-            isFavorite={true}
-            isPlaying={playingDuaId === d.id}
-            onToggleFavorite={onToggleFavorite}
-            onTogglePlay={onTogglePlay}
-            onSelectDua={onSelectDua}
-            settings={settings}
-          />
-        ))
+        <div className="fav-list">
+          {filteredDuas.map(dua => {
+            const isPlaying = playingDuaId === dua.id || (dua.originalId && playingDuaId === dua.originalId);
+            const { badge } = getDuaCategoryInfo(dua, isEnglish);
+
+            return (
+              <div 
+                key={dua.id} 
+                className="fav-card"
+                onClick={() => onSelectDua && onSelectDua(dua)}
+                role="article"
+                aria-label={`Dua #${dua.id}`}
+              >
+                {/* Arabic Text */}
+                {dua.arabic && (
+                  <div className="fav-arabic-wrap">
+                    <p className="fav-arabic-text" dir="rtl">
+                      {dua.arabic}
+                    </p>
+                  </div>
+                )}
+
+                {/* Malayalam Translation / Meaning */}
+                <p className="fav-meaning-text">
+                  {dua.meaningMl || dua.meaningEn || dua.titleMl || ''}
+                </p>
+
+                {/* Card Footer Divider & Actions */}
+                <div className="fav-card-footer">
+                  <span className="fav-category-pill">
+                    {badge}
+                  </span>
+
+                  <div className="fav-card-actions" onClick={(e) => e.stopPropagation()}>
+                    {/* Audio Play/Pause Button */}
+                    <button
+                      className={`fav-action-btn fav-play-btn ${isPlaying ? 'is-playing' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTogglePlay && onTogglePlay(dua);
+                      }}
+                      title={isPlaying ? "Pause Audio" : "Play Audio"}
+                      aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
+                    >
+                      {isPlaying ? (
+                        <Pause size={18} fill="#059669" color="#059669" />
+                      ) : (
+                        <Play size={18} fill="currentColor" />
+                      )}
+                    </button>
+
+                    {/* Favorite Heart Button (Green filled heart matching reference) */}
+                    <button
+                      className="fav-action-btn fav-heart-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleFavorite && onToggleFavorite(dua);
+                      }}
+                      title="Remove from favorites"
+                      aria-label="Remove from favorites"
+                    >
+                      <Heart size={18} fill="#059669" color="#059669" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

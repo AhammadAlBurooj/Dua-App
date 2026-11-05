@@ -1,346 +1,350 @@
 import React, { useState } from 'react';
 import { 
-  Sliders, 
-  Volume2, 
+  Languages, 
   Moon, 
-  Sun, 
-  Globe, 
+  Type, 
   Bell, 
-  ShieldCheck, 
-  CheckCircle2, 
-  Languages,
-  BookOpen,
-  Sparkles
+  Share2, 
+  Star, 
+  Info, 
+  ChevronDown, 
+  ChevronRight, 
+  X,
+  Sparkles,
+  ShieldCheck
 } from 'lucide-react';
-import { UI_TEXT } from '../../utils/translations';
+import './SettingsScreen.css';
 
 export default function SettingsScreen({ 
-  settings, 
+  settings = {}, 
   onUpdateSettings, 
-  theme, 
+  theme = 'light', 
   onToggleTheme, 
   onShowToast, 
-  totalDuasCount = 30,
-  onShowSplash
+  onShowSplash 
 }) {
-  const [testNotificationShown, setTestNotificationShown] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const lang = settings.language || 'ml';
-  const t = UI_TEXT[lang] || UI_TEXT.ml;
+  const isEnglish = lang === 'en';
 
-  const handleToggle = (key) => {
+  // Toggle Language between Malayalam & English
+  const handleToggleLanguage = () => {
+    const nextLang = lang === 'ml' ? 'en' : 'ml';
     onUpdateSettings({
       ...settings,
-      [key]: !settings[key]
+      language: nextLang
     });
+    if (onShowToast) {
+      onShowToast(nextLang === 'ml' ? 'ഭാഷ മലയാളമാക്കി മാറ്റി' : 'Language set to English');
+    }
   };
 
+  // Font size slider change
   const handleFontSizeChange = (e) => {
+    const newSize = Number(e.target.value);
     onUpdateSettings({
       ...settings,
-      arabicFontSize: Number(e.target.value)
+      arabicFontSize: newSize
     });
   };
 
-  const handleLanguageChange = (selectedLang) => {
+  // Daily reminder toggle
+  const handleToggleReminder = () => {
+    const nextState = settings.dailyReminder === false ? true : false;
     onUpdateSettings({
       ...settings,
-      language: selectedLang
+      dailyReminder: nextState
     });
-    onShowToast(selectedLang === 'ml' ? 'ആപ്പ് ഭാഷ മലയാളമാക്കി' : 'App language set to English');
+    if (onShowToast) {
+      onShowToast(nextState ? 'ദൈനംദിന അറിയിപ്പുകൾ ഓണാക്കി 🔔' : 'അറിയിപ്പുകൾ ഓഫാക്കി');
+    }
   };
 
-  const triggerTestNotification = () => {
-    setTestNotificationShown(true);
-    onShowToast(lang === 'en' 
-      ? '🔔 Dua of the Day: Time to recite Sayyidul Istighfar!'
-      : '🔔 ഇന്നത്തെ ദുആ: സയ്യിദുൽ ഇസ്തിഗ്ഫാർ ചൊല്ലാൻ സമയമായി!'
-    );
-    setTimeout(() => setTestNotificationShown(false), 4000);
+  // Share app handler
+  const handleShareApp = async () => {
+    const shareData = {
+      title: 'مناجاة - Munajat Islamic Dua App',
+      text: 'Download Munajat Islamic Dua & Adhkar App - 464 Authentic Duas with Malayalam translation and audio.',
+      url: window.location.origin || 'https://play.google.com/store/apps/details?id=com.burooj.munajat'
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // User cancelled or share failed
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        if (onShowToast) onShowToast('ആപ്പ് ലിങ്ക് കോപ്പി ചെയ്തു! 📋');
+      } catch {
+        if (onShowToast) onShowToast('Munajat Dua App v2.0.1');
+      }
+    }
   };
+
+  // Rate on Play Store handler
+  const handleRateApp = () => {
+    try {
+      window.open('market://details?id=com.burooj.munajat', '_blank');
+    } catch {
+      window.open('https://play.google.com/store/apps/details?id=com.burooj.munajat', '_blank');
+    }
+    if (onShowToast) {
+      onShowToast('പ്ലേസ്റ്റോറിലേക്ക് സ്വാഗതം ⭐');
+    }
+  };
+
+  const isDarkMode = theme === 'dark';
+  const fontSize = settings.arabicFontSize || 28;
 
   return (
-    <div className="settings-screen">
-      <div style={{ marginBottom: '16px', paddingTop: '4px' }}>
-        <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
-          {t.settingsTitle}
-        </h2>
-        <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginTop: '2px' }}>
-          {t.settingsSubtitle}
-        </p>
+    <div className="settings-screen-container">
+      {/* 1. Header Section Matching Reference */}
+      <div className="settings-header-wrap">
+        <h1 className="settings-title">Settings</h1>
+        <p className="settings-subtitle">Manage your app preferences</p>
       </div>
 
-      {/* 1. ഭാഷ & വിവർത്തന ക്രമീകരണങ്ങൾ (Language & Translation Settings) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Languages size={15} color="var(--primary)" />
-          <span>{t.languageSection}</span>
-        </h3>
-
-        {/* App Interface Language Switcher */}
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.appLanguageLabel}</span>
-            <span className="settings-label-sub">{t.appLanguageSub}</span>
-          </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
-            <button
-              className={`chip-btn ${lang === 'ml' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12px' }}
-              onClick={() => handleLanguageChange('ml')}
-            >
-              മലയാളം
-            </button>
-            <button
-              className={`chip-btn ${lang === 'en' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12px' }}
-              onClick={() => handleLanguageChange('en')}
-            >
-              English
-            </button>
-          </div>
-        </div>
-
-        {/* English Translation Toggle */}
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title" style={{ color: 'var(--primary)', fontWeight: 700 }}>
-              {t.englishTranslationLabel}
-            </span>
-            <span className="settings-label-sub">{t.englishTranslationSub}</span>
-          </div>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.showMeaningEn !== false} 
-              onChange={() => handleToggle('showMeaningEn')}
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-
-        {/* English Transliteration Toggle */}
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.transliterationSettingLabel}</span>
-            <span className="settings-label-sub">{t.transliterationSettingSub}</span>
-          </div>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.showTransliteration !== false} 
-              onChange={() => handleToggle('showTransliteration')}
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-
-        {/* Malayalam Translation Toggle */}
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.malayalamTranslationLabel}</span>
-            <span className="settings-label-sub">{t.malayalamTranslationSub}</span>
-          </div>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.showMeaningMl !== false} 
-              onChange={() => handleToggle('showMeaningMl')}
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      {/* 2. വായനയും ടൈപ്പോഗ്രാഫിയും (Reading & Typography) */}
-      {/* <div className="settings-section">
-        <h3 className="settings-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Sliders size={15} color="var(--primary)" />
-          <span>{t.readingSection}</span>
-        </h3> */}
-
-        {/* Arabic Font Size Slider with Live Preview */}
-        {/* <div style={{ padding: '8px 0 14px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span className="settings-label-title">{t.arabicFontSizeLabel}</span>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--primary)', background: 'var(--bg-sage)', padding: '2px 8px', borderRadius: '10px' }}>
-              {settings.arabicFontSize}px
-            </span>
-          </div> */}
-
-          {/* <input 
-            type="range"
-            min="20"
-            max="42"
-            value={settings.arabicFontSize}
-            onChange={handleFontSizeChange}
-            className="font-slider"
-            aria-label="Arabic font size"
-          /> */}
-
-          {/* Live Arabic Font Preview Card */}
-          {/* <div style={{
-            marginTop: '12px',
-            padding: '14px',
-            backgroundColor: 'var(--bg-surface-soft)',
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border-light)',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '4px', letterSpacing: '0.5px' }}>
-              {t.livePreview}
+      {/* 2. PREFERENCES Section */}
+      <div className="settings-group-label">Preferences</div>
+      <div className="settings-card">
+        {/* Item 1: Translation Language */}
+        <div className="settings-item-row">
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Languages size={20} />
             </div>
-            <div 
-              className="arabic-text" 
-              style={{ fontSize: `${settings.arabicFontSize}px`, color: 'var(--primary)', lineHeight: 2.1 }}
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Translation Language</h3>
+              <p className="settings-item-sub">
+                Currently selected: {isEnglish ? 'English' : 'Malayalam'}
+              </p>
+            </div>
+          </div>
+
+          <button 
+            className="settings-lang-select-btn" 
+            onClick={handleToggleLanguage}
+            title="Change translation language"
+            aria-label="Change translation language"
+          >
+            <span>{isEnglish ? 'English' : 'Malayalam'}</span>
+            <ChevronDown size={15} />
+          </button>
+        </div>
+
+        <div className="settings-divider" />
+
+        {/* Item 2: Dark Mode */}
+        <div className="settings-item-row">
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Moon size={20} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Dark Mode</h3>
+              <p className="settings-item-sub">Switch to dark theme</p>
+            </div>
+          </div>
+
+          <button
+            role="switch"
+            aria-checked={isDarkMode}
+            className={`settings-switch ${isDarkMode ? 'is-active' : ''}`}
+            onClick={onToggleTheme}
+            aria-label="Toggle Dark Mode"
+          >
+            <span className="settings-switch-thumb" />
+          </button>
+        </div>
+
+        <div className="settings-divider" />
+
+        {/* Item 3: Arabic Text Size */}
+        <div className="settings-item-row" style={{ paddingBottom: '8px' }}>
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Type size={20} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Arabic Text Size</h3>
+            </div>
+          </div>
+        </div>
+
+        {/* Slider & Arabic Live Preview */}
+        <div className="settings-slider-wrapper">
+          <div className="settings-slider-row">
+            <span className="settings-slider-label">A-</span>
+            <input 
+              type="range"
+              min="20"
+              max="40"
+              step="1"
+              value={fontSize}
+              onChange={handleFontSizeChange}
+              className="settings-range-slider"
+              aria-label="Arabic Text Size Slider"
+            />
+            <span className="settings-slider-label">A+</span>
+          </div>
+
+          <div className="settings-preview-box">
+            <div className="settings-preview-label">Preview</div>
+            <p 
+              className="settings-preview-arabic"
+              style={{ fontSize: `${fontSize}px` }}
             >
               بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-            </div>
+            </p>
           </div>
         </div>
-      </div> */}
+      </div>
 
-      {/* 3. രൂപകൽപ്പന & തീം (Theme & Appearance) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title">{t.themeSection}</h3>
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">
-              {theme === 'dark' ? t.darkMode : t.lightMode}
-            </span>
-            <span className="settings-label-sub">
-              {theme === 'dark' ? t.darkModeSub : t.lightModeSub}
-            </span>
+      {/* 3. NOTIFICATIONS Section */}
+      <div className="settings-group-label">Notifications</div>
+      <div className="settings-card">
+        <div className="settings-item-row">
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Bell size={20} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Daily Reminder</h3>
+              <p className="settings-item-sub">Get notified for morning & evening Adhkar</p>
+            </div>
           </div>
-          <button 
-            className="icon-btn" 
-            onClick={onToggleTheme}
-            style={{ backgroundColor: 'var(--bg-sage)', color: 'var(--primary)' }}
-            aria-label="Toggle light / dark mode"
+
+          <button
+            role="switch"
+            aria-checked={settings.dailyReminder !== false}
+            className={`settings-switch ${settings.dailyReminder !== false ? 'is-active' : ''}`}
+            onClick={handleToggleReminder}
+            aria-label="Toggle Daily Reminder"
           >
-            {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
+            <span className="settings-switch-thumb" />
           </button>
         </div>
       </div>
 
-      {/* 4. ഓഡിയോ ക്രമീകരണങ്ങൾ (Audio Settings) */}
-      {/* <div className="settings-section">
-        <h3 className="settings-section-title">{t.audioSection}</h3> */}
-        {/* <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.audioSpeedLabel}</span>
-            <span className="settings-label-sub">{t.audioSpeedSub}</span>
+      {/* 4. GENERAL Section */}
+      <div className="settings-group-label">General</div>
+      <div className="settings-card">
+        {/* Share App */}
+        <div 
+          className="settings-item-row is-clickable"
+          onClick={handleShareApp}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Share2 size={19} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Share App</h3>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
-            {[0.8, 1.0, 1.25].map(speed => (
-              <button
-                key={speed}
-                className={`chip-btn ${settings.audioSpeed === speed ? 'active' : ''}`}
-                style={{ padding: '4px 10px', fontSize: '12px' }}
-                onClick={() => onUpdateSettings({ ...settings, audioSpeed: speed })}
+          <ChevronRight size={18} className="settings-chevron" />
+        </div>
+
+        <div className="settings-divider" />
+
+        {/* Rate Us on Play Store */}
+        <div 
+          className="settings-item-row is-clickable"
+          onClick={handleRateApp}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Star size={19} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">Rate Us on Play Store</h3>
+            </div>
+          </div>
+          <ChevronRight size={18} className="settings-chevron" />
+        </div>
+
+        <div className="settings-divider" />
+
+        {/* About App */}
+        <div 
+          className="settings-item-row is-clickable"
+          onClick={() => setShowAboutModal(true)}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="settings-item-left">
+            <div className="settings-icon-badge">
+              <Info size={19} />
+            </div>
+            <div className="settings-item-text">
+              <h3 className="settings-item-title">About App</h3>
+            </div>
+          </div>
+          <ChevronRight size={18} className="settings-chevron" />
+        </div>
+      </div>
+
+      {/* 5. Version Info */}
+      <p className="settings-version-text">Version 2.0.1</p>
+
+      {/* About App Dialog Modal */}
+      {showAboutModal && (
+        <div 
+          className="settings-modal-backdrop" 
+          onClick={() => setShowAboutModal(false)}
+        >
+          <div 
+            className="settings-modal-content" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
+              <button 
+                onClick={() => setShowAboutModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B' }}
+                aria-label="Close"
               >
-                {speed}x
+                <X size={20} />
               </button>
-            ))}
-          </div>
-        </div> */}
-
-        {/* <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.autoReplayLabel}</span>
-            <span className="settings-label-sub">{t.autoReplaySub}</span>
-          </div>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.autoReplay === true} 
-              onChange={() => handleToggle('autoReplay')}
-            />
-            <span className="slider"></span>
-          </label>
-        </div> */}
-      {/* </div> */}
-
-      {/* 5. ഓഫ്ലൈൻ & സംഭരണം (Offline Storage Status) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title">{t.offlineSection}</h3>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '6px 0' }}>
-          <CheckCircle2 size={22} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
-              {t.offlineStatusTitle}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginTop: '3px', lineHeight: 1.5 }}>
-              {t.offlineStatusDesc}
+
+            <div style={{ width: '64px', height: '64px', borderRadius: '16px', backgroundColor: '#ECFDF5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>
+              <ShieldCheck size={36} />
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* 6. ദൈനംദിന റിമൈൻഡറുകൾ (Daily Reminders) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title">{t.reminderSection}</h3>
-        <div className="settings-row">
-          <div className="settings-label">
-            <span className="settings-label-title">{t.reminderLabel}</span>
-            <span className="settings-label-sub">{t.reminderSub}</span>
-          </div>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.dailyReminder !== false} 
-              onChange={() => handleToggle('dailyReminder')}
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-
-        {settings.dailyReminder !== false && (
-          <div style={{ marginTop: '10px' }}>
-            <button 
-              className="chip-btn"
-              onClick={triggerTestNotification}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              <Bell size={13} />
-              <span>{t.testNotificationBtn}</span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* 7. വിശ്വാസ്യത & വിവരങ്ങൾ (Authenticity & About) */}
-      <div className="settings-section">
-        <h3 className="settings-section-title">{t.aboutSection}</h3>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-          <ShieldCheck size={24} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-malayalam)' }}>
-              {t.authenticityTitle}
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'var(--font-malayalam)', marginTop: '4px', lineHeight: 1.6 }}>
-              {t.authenticityDesc}
+            <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 6px 0' }}>مناجاة (Munajat)</h3>
+            <p style={{ fontSize: '13px', color: '#059669', fontWeight: 600, margin: '0 0 14px 0' }}>Version 2.0.1</p>
+            
+            <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #64748B)', lineHeight: 1.6, margin: '0 0 20px 0' }}>
+              Authentic Islamic Duas & Adhkar from Quran & Sunnah with full Malayalam translations, transliterations, word-by-word meanings, and audio recitation.
             </p>
+
+            <div style={{ fontSize: '12px', color: '#94A3B8', borderTop: '1px solid #F1F5F9', paddingTop: '14px', marginBottom: '16px' }}>
+              Developed with devotion by <strong>Burooj 4 Tech</strong>
+            </div>
+
+            {onShowSplash && (
+              <button 
+                className="fav-explore-btn"
+                style={{ width: '100%', justifyContent: 'center' }}
+                onClick={() => {
+                  setShowAboutModal(false);
+                  onShowSplash();
+                }}
+              >
+                <Sparkles size={16} />
+                <span>View Splash Screen</span>
+              </button>
+            )}
           </div>
         </div>
-
-        {onShowSplash && (
-          <div style={{ marginTop: '14px' }}>
-            <button 
-              className="chip-btn"
-              onClick={onShowSplash}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
-            >
-              <Sparkles size={13} color="var(--primary)" />
-              <span>{lang === 'en' ? 'View Splash Screen' : 'View Splash Screen'}</span>
-            </button>
-          </div>
-        )}
-
-        <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-tertiary)' }}>
-          <span>Created by Burooj 4 Tech v1.0.0</span>
-          {/* <span>{lang === 'en' ? 'Simple • Serene • Authentic' : 'Simple • Serene • Authentic'}</span> */}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
