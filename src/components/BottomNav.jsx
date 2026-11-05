@@ -40,9 +40,8 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
             >
               <div className="nav-icon-wrap">
                 <Icon 
-                  size={27} 
-                  strokeWidth={isActive ? 2.3 : 1.85} 
-                  fill={isActive && tab.id === 'favorites' ? 'currentColor' : 'none'} 
+                  size={24} 
+                  strokeWidth={isActive ? 2.25 : 1.85} 
                   className="nav-icon-svg"
                 />
                 {tab.badge > 0 && tab.id === 'favorites' && (
@@ -51,6 +50,7 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
                   </span>
                 )}
               </div>
+              <span className="nav-active-dot" />
             </button>
           );
         })}

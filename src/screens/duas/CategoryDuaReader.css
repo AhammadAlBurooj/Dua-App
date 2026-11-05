@@ -704,7 +704,7 @@
   height: 100%;
   padding: 1rem;
   overflow-y: auto;
-  padding-bottom: 1.5rem;
+  padding-bottom: 5.5rem;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
@@ -712,7 +712,7 @@
 @media (min-width: 640px) {
   .cdr-card-scroll {
     padding: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: 5.5rem;
   }
 }
 
