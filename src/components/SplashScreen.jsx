@@ -1,38 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight } from 'lucide-react';
 
 export default function SplashScreen({ onFinish }) {
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [progress, setProgress] = useState(15);
 
   useEffect(() => {
-    // Animate progress bar from 15% to 100%
-    const progressTimer = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 95) {
-          clearInterval(progressTimer);
-          return 100;
-        }
-        return prev + 12;
-      });
-    }, 80);
-
-    // Auto dismiss after 2.8 seconds
+    // Show splash screen for 2.2s, then trigger smooth fade out
     const dismissTimer = setTimeout(() => {
       handleDismiss();
-    }, 1000);
+    }, 2200);
 
     return () => {
-      clearInterval(progressTimer);
       clearTimeout(dismissTimer);
     };
   }, []);
 
   const handleDismiss = () => {
+    if (isFadingOut) return;
     setIsFadingOut(true);
+    // 700ms allows the silky cubic-bezier fade-out and scale transition to complete
     setTimeout(() => {
       if (onFinish) onFinish();
-    }, 450); // wait for fade out transition
+    }, 700);
   };
 
   return (
@@ -40,46 +28,20 @@ export default function SplashScreen({ onFinish }) {
       className={`splash-screen-overlay ${isFadingOut ? 'fade-out' : ''}`}
       onClick={handleDismiss}
       role="banner"
-      aria-label="App Splash Screen"
+      aria-label="Munajat App Splash Screen"
     >
-      {/* Background Poster Image */}
       <div className="splash-image-wrapper">
         <img 
-          src="/splash2.png" 
-          // alt="Adhkar by Burooj 4 Tech" 
+          src="/splash.jpg" 
+          alt="Munajat by Burooj 4 Tech" 
           className="splash-hero-image"
           onError={(e) => {
-            // Fallback in case of path issue
-            e.currentTarget.src = '/banner.png';
+            // Fallback in case of path resolution
+            e.currentTarget.src = '/splash2.png';
           }}
         />
-        {/* Soft Vignette Overlay */}
-        <div className="splash-vignette-overlay" />
-      </div>
-
-      {/* Bottom Loading Progress & Skip Action */}
-      <div className="splash-bottom-controls" onClick={e => e.stopPropagation()}>
-        {/* <div className="splash-progress-track">
-          <div 
-            className="splash-progress-fill" 
-            style={{ width: `${progress}%` }}
-          />
-        </div> */}
-
-        <div className="splash-footer-row">
-          <span className="splash-status-text">
-            {/* بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ */}
-          </span>
-
-          {/* <button 
-            className="splash-skip-btn"
-            onClick={handleDismiss}
-            aria-label="Enter App"
-          >
-            <span>തുടങ്ങുക</span>
-            <ArrowRight size={14} strokeWidth={2.4} />
-          </button> */}
-        </div>
+        {/* Subtle luminous ambient edge glow */}
+        <div className="splash-soft-glow-overlay" />
       </div>
     </div>
   );
