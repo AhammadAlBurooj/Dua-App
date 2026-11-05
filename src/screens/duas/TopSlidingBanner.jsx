@@ -35,42 +35,42 @@ export default function TopSlidingBanner({
   const slides = [
     {
       id: 'quran',
-      tag: 'Quran',
-      title: isEnglish ? 'Read & Listen' : 'ഖുർആൻ ദുആകൾ',
-      subtitle: isEnglish ? 'Explore the Holy Quran' : 'ഖുർആനിക പ്രാർത്ഥനകൾ',
+      tag: isEnglish ? 'Holy Quran' : 'QURAN',
+      title: isEnglish ? 'Quranic Duas' : 'ഖുർആൻ ദുആകൾ',
+      subtitle: isEnglish ? 'Supplications from the Quran' : 'ഖുർആനിക പ്രാർത്ഥനകൾ',
       buttonText: isEnglish ? 'Explore' : 'തുറക്കുക',
-      buttonTheme: 'white', // white button with dark green text
-      cardBg: 'linear-gradient(135deg, #124838 0%, #175B46 60%, #1D6B53 100%)',
+      buttonTheme: 'white',
+      cardBg: 'linear-gradient(135deg, #073325 0%, #0F4936 50%, #175F47 100%)',
       cardTheme: 'dark',
       image: '/quran_card.jpg',
       imagePosition: 'left',
-      action: () => onSelectCategory('quranic')
+      action: () => (onSelectCategory ? onSelectCategory('prayer') : null)
     },
     {
       id: 'asmaul_husna',
-      tag: '99 Names',
-      title: 'Asmaul Husna',
-      subtitle: isEnglish ? '99 Beautiful Names' : 'അസ്മാഉൽ ഹുസ്നാ • 99 നാമങ്ങൾ',
+      tag: isEnglish ? '99 Names' : '99 Names',
+      title: isEnglish ? 'Asmaul Husna' : 'Asmaul Husna',
+      subtitle: isEnglish ? '99 Beautiful Divine Names' : 'അല്ലാഹുവിന്റെ 99 വിശുദ്ധ നാമങ്ങൾ',
       buttonText: isEnglish ? 'Explore' : 'കാണുക',
-      buttonTheme: 'dark-green', // dark green button with white text
-      cardBg: '#FDFBF7',
-      cardTheme: 'light',
+      buttonTheme: 'gold',
+      cardBg: 'linear-gradient(135deg, #093327 0%, #144937 45%, #563E14 100%)',
+      cardTheme: 'dark',
       image: '/asmaul_husna.jpg',
-      imagePosition: 'center',
-      action: () => onOpenAsmaulHusna()
+      imagePosition: 'left',
+      action: () => (onOpenAsmaulHusna ? onOpenAsmaulHusna() : null)
     },
     {
       id: 'daily_duas',
-      tag: isEnglish ? 'Daily Supplications' : 'ദൈനംദിന പ്രാർത്ഥനകൾ',
-      title: isEnglish ? 'Daily Duas' : 'നിത്യജീവിത ദുആകൾ',
-      subtitle: isEnglish ? 'Morning & Evening Supplications' : 'പ്രഭാത & സായാഹ്ന ദിക്റുകൾ',
-      buttonText: isEnglish ? 'Explore' : 'വായിക്കുക',
-      buttonTheme: 'gold', // warm golden button
-      cardBg: 'linear-gradient(135deg, #1B4D3E 0%, #2A6F55 60%, #8A6D3B 100%)',
+      tag: isEnglish ? 'Daily Adhkar' : 'Daily Adhkar',
+      title: isEnglish ? 'Daily Supplications' : 'നിത്യജീവിത ദുആകൾ',
+      subtitle: isEnglish ? 'Morning & Evening Supplications' : 'പ്രഭാത & സായാഹ്ന പ്രാർത്ഥനകൾ',
+      buttonText: isEnglish ? 'Read' : 'വായിക്കുക',
+      buttonTheme: 'white',
+      cardBg: 'linear-gradient(135deg, #083427 0%, #114F3B 50%, #1A6B52 100%)',
       cardTheme: 'dark',
       image: '/daily_duas.jpg',
       imagePosition: 'left',
-      action: () => onSelectCategory('daily')
+      action: () => (onSelectCategory ? onSelectCategory('prayer') : null)
     }
   ];
 
@@ -215,20 +215,40 @@ export default function TopSlidingBanner({
                 style={{ background: slide.cardBg }}
                 onClick={slide.action}
               >
+                {/* Decorative background radial glow & Islamic 8-point star watermark */}
+                <div className="slide-card-glow" aria-hidden="true" />
+                <div className="slide-card-watermark" aria-hidden="true">
+                  <svg width="130" height="130" viewBox="0 0 100 100" fill="none">
+                    <path 
+                      d="M50 2 L63.6 15.6 L84.4 15.6 L84.4 36.4 L98 50 L84.4 63.6 L84.4 84.4 L63.6 84.4 L50 98 L36.4 84.4 L15.6 84.4 L15.6 63.6 L2 50 L15.6 36.4 L15.6 15.6 L36.4 15.6 Z" 
+                      stroke="rgba(255, 255, 255, 0.13)" 
+                      strokeWidth="1.5" 
+                      fill="rgba(255, 255, 255, 0.02)" 
+                    />
+                    <circle cx="50" cy="50" r="28" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1" strokeDasharray="3 3" />
+                    <circle cx="50" cy="50" r="14" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" />
+                  </svg>
+                </div>
+
                 {/* Left/Graphic section */}
                 <div className={`slide-artwork-col position-${slide.imagePosition}`}>
-                  <img 
-                    src={slide.image} 
-                    alt={slide.title} 
-                    className="slide-artwork-img" 
-                  />
+                  <div className="slide-artwork-frame">
+                    <img 
+                      src={slide.image} 
+                      alt={slide.title} 
+                      className="slide-artwork-img" 
+                      loading="eager"
+                    />
+                    <div className="slide-artwork-shine" aria-hidden="true" />
+                  </div>
                 </div>
 
                 {/* Content section */}
                 <div className="slide-content-col">
-                  <span className="slide-tag-pill">
-                    {slide.tag}
-                  </span>
+                  <div className="slide-tag-pill">
+                    <span className="slide-tag-dot" />
+                    <span>{slide.tag}</span>
+                  </div>
 
                   <h3 className="slide-heading-text">
                     {slide.title}
@@ -239,6 +259,7 @@ export default function TopSlidingBanner({
                   </p>
 
                   <button 
+                    type="button"
                     className={`slide-explore-btn btn-${slide.buttonTheme}`}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -246,7 +267,7 @@ export default function TopSlidingBanner({
                     }}
                   >
                     <span>{slide.buttonText}</span>
-                    <ArrowRight size={14} strokeWidth={2.4} />
+                    <ArrowRight size={13} className="slide-btn-arrow" strokeWidth={2.4} />
                   </button>
                 </div>
               </div>
