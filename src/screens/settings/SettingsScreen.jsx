@@ -319,7 +319,7 @@ export default function SettingsScreen({
             </div>
 
             <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 6px 0' }}>مناجاة (Munajat)</h3>
-            <p style={{ fontSize: '13px', color: '#059669', fontWeight: 600, margin: '0 0 14px 0' }}>Burooj 4 Tech Version 2.0.1</p>
+            <p style={{ fontSize: '13px', color: '#059669', fontWeight: 600, margin: '0 0 14px 0' }}>Version 2.0.1</p>
             
             <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #64748B)', lineHeight: 1.6, margin: '0 0 20px 0' }}>
               Authentic Islamic Duas & Adhkar from Quran & Sunnah with full Malayalam translations, transliterations, word-by-word meanings, and audio recitation.
@@ -327,7 +327,11 @@ export default function SettingsScreen({
 
             <div style={{ fontSize: '12px', color: '#94A3B8', borderTop: '1px solid #F1F5F9', paddingTop: '14px', marginBottom: '16px' }}>
               Developed with devotion by <strong>Burooj 4 Tech</strong>
+                <div style={{ fontSize: '12px', color: '#94A3B8', borderTop: '1px solid #F1F5F9', paddingTop: '14px', marginBottom: '16px' }}>
+              App logo designed by <strong>Swalih</strong>
+              
             </div>
+             </div>
 
             {onShowSplash && (
               <button 
