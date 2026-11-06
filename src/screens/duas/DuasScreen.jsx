@@ -19,7 +19,8 @@ import {
   ChevronRight, 
   Heart,
   Folder,
-  ChevronDown
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
@@ -371,7 +372,7 @@ export default function DuasScreen({
                       </div>
 
                       <div className="cdr-chevron-pill">
-                        <ChevronDown size={18} />
+                        {isOpen ? <ChevronUp size={16} strokeWidth={2.4} /> : <ChevronDown size={16} strokeWidth={2.4} />}
                       </div>
                     </button>
 
