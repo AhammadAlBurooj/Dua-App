@@ -843,12 +843,10 @@ export default function CategoryDuaReader({
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {activeDuas.map((dua, idx) => {
-                const targetId = `prayer-${dua.id}`;
                 const isFav = (favorites || []).some(f => {
                   const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
                   return fId === String(dua.id) || 
-                         fId === targetId || 
-                         (dua.originalId && fId === String(dua.originalId));
+                         (dua.originalId !== undefined && fId === String(dua.originalId));
                 });
                 return (
                   <div key={dua.id} className="cdr-slide-wrapper w-full h-full flex-shrink-0">

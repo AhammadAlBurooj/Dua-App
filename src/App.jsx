@@ -112,20 +112,20 @@ export default function App() {
 
     const exists = favorites.some(f => {
       const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-      return fId === targetId || (origId && fId === origId) || fId === `prayer-${targetId}` || `prayer-${fId}` === targetId;
+      return fId === targetId || (origId && fId === origId);
     });
 
     let updated;
     if (exists) {
       updated = favorites.filter(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-        return fId !== targetId && (origId ? fId !== origId : true) && fId !== `prayer-${targetId}` && `prayer-${fId}` !== targetId;
+        return fId !== targetId && (origId ? fId !== origId : true);
       });
       showToast('പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കം ചെയ്തു');
     } else {
       updated = [targetId, ...favorites.filter(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-        return fId !== targetId;
+        return fId !== targetId && (origId ? fId !== origId : true);
       })];
       showToast('പ്രിയപ്പെട്ടവയിൽ ചേർത്തു ❤️');
       audioService.playChime(520, 0.04);
@@ -141,20 +141,20 @@ export default function App() {
 
     const exists = bookmarks.some(b => {
       const bId = typeof b === 'object' && b !== null ? String(b.id) : String(b);
-      return bId === targetId || (origId && bId === origId) || bId === `prayer-${targetId}` || `prayer-${bId}` === targetId;
+      return bId === targetId || (origId && bId === origId);
     });
 
     let updated;
     if (exists) {
       updated = bookmarks.filter(b => {
         const bId = typeof b === 'object' && b !== null ? String(b.id) : String(b);
-        return bId !== targetId && (origId ? bId !== origId : true) && bId !== `prayer-${targetId}` && `prayer-${bId}` !== targetId;
+        return bId !== targetId && (origId ? bId !== origId : true);
       });
       showToast('ബുക്ക്മാർക്കിൽ നിന്ന് നീക്കം ചെയ്തു');
     } else {
       updated = [targetId, ...bookmarks.filter(b => {
         const bId = typeof b === 'object' && b !== null ? String(b.id) : String(b);
-        return bId !== targetId;
+        return bId !== targetId && (origId ? bId !== origId : true);
       })];
       showToast('ബുക്ക്മാർക്കിൽ ചേർത്തു 🔖');
       audioService.playChime(640, 0.04);
@@ -303,7 +303,7 @@ export default function App() {
           for (const sc of cat.subcategories) {
             const idx = sc.duas.findIndex(d => {
               const curId = String(d.id);
-              return curId === dIdStr || (dOrigStr && curId === dOrigStr) || `prayer-${curId}` === dIdStr;
+              return curId === dIdStr || (dOrigStr && curId === dOrigStr);
             });
             if (idx !== -1) {
               foundCat = cat;
@@ -333,7 +333,7 @@ export default function App() {
 
         const isFav = favorites.some(f => {
           const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-          return fId === dIdStr || (dOrigStr && fId === dOrigStr) || fId === `prayer-${dIdStr}` || `prayer-${fId}` === dIdStr;
+          return fId === dIdStr || (dOrigStr && fId === dOrigStr);
         });
 
         return (

@@ -11,7 +11,7 @@
  */
 
 import awraadData from './awraad.json';
-import { DUAS as LEGACY_DUAS } from './duasData';
+import { DUAS as LEGACY_DUAS } from './duasData.js';
 
 const ARABIC_CAT_NAMES = {
   1: "الحَيَاةُ اليَومِيَّةُ",
