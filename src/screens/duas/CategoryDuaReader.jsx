@@ -9,6 +9,8 @@ import {
   BookOpen, 
   ChevronDown, 
   ChevronUp, 
+  ChevronLeft,
+  ChevronRight,
   Share2, 
   Info,
   ArrowLeft,
@@ -190,24 +192,22 @@ const DuaMultiCard = ({
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
 
+  if (!dua) return null;
+
   const bookmarkedStatus = isBookmarked !== undefined ? isBookmarked : localBookmarked;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${dua.dua}
-
-${dua.trans}
-
-${dua.ref}`);
+    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(textParts.join('\n\n'));
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
-    const text = `${dua.dua}
-
-${dua.trans}
-
-${dua.ref}`;
+    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    const text = textParts.join('\n\n');
     if (navigator.share) {
       try {
         await navigator.share({
@@ -240,7 +240,7 @@ ${dua.ref}`;
           {/* Header: Badge & Icons */}
           <div className="cdr-card-top-row">
             <div className="cdr-card-dua-badge">
-              {duaNumber || dua.id}
+              {duaNumber ? `${duaNumber}` : (dua.id ? `DUA #${dua.id}` : 'DUA')}
             </div>
             <div 
               className="cdr-card-action-group"
@@ -281,14 +281,14 @@ ${dua.ref}`;
           </div>
 
           {/* Malayalam Instruction / Occasion Text */}
-          {dua.desc && (
+          {dua.desc && dua.desc.trim().length > 0 && (
             <div className="cdr-card-desc-text">
               {dua.desc.trim()}
             </div>
           )}
 
           {/* Short hint badge if exists */}
-          {dua.hint && dua.hint.trim().length <= 40 && (
+          {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
             <div className="cdr-card-hint-pill">
               <Sparkles size={14} className="cdr-hint-sparkle" />
               <span>{dua.hint.trim()}</span>
@@ -313,34 +313,41 @@ ${dua.ref}`;
           )}
 
           {/* Arabic Dua */}
-          <div className="cdr-card-arabic" dir="rtl">
-            {dua.dua}
-          </div>
+          {dua.dua && (
+            <div className="cdr-card-arabic" dir="rtl">
+              {dua.dua}
+            </div>
+          )}
 
           {/* Audio Player */}
-          <AudioPlayer url={dua.audio_url} isCurrentSlide={isCurrentSlide} />
+          {dua.audio_url && (
+            <AudioPlayer url={dua.audio_url} isCurrentSlide={isCurrentSlide} />
+          )}
         </div>
       </div>
 
-      {/* ═══════ CARD 2: Translation & Transliteration ═══════ */}
-      <div className="cdr-card-trans-glass">
-        <h3 className="cdr-trans-heading">Translation</h3>
-        <p className="cdr-trans-body">
-          {dua.trans}
-        </p>
-        
-        {dua.transli && (
-          <div className="cdr-transli-inner-box">
-            <h3 className="cdr-transli-heading">Transliteration</h3>
-            <p className="cdr-transli-body">
-              "{dua.transli}"
-            </p>
-          </div>
-        )}
-      </div>
+      {/* ═══════ CARD 2: Translation ═══════ */}
+      {dua.trans && dua.trans.trim().length > 0 && (
+        <div className="cdr-card-trans-glass">
+          <h3 className="cdr-trans-heading">TRANSLATION</h3>
+          <p className="cdr-trans-body">
+            {dua.trans}
+          </p>
+        </div>
+      )}
 
-      {/* ═══════ CARD 3: Word by Word Meaning (Accordion) ═══════ */}
-      {dua.word_by_word && dua.word_by_word.length > 0 && (
+      {/* ═══════ CARD 3: Transliteration (Separate Glass Card) ═══════ */}
+      {dua.transli && dua.transli.trim().length > 0 && (
+        <div className="cdr-card-transli-glass">
+          <h3 className="cdr-transli-heading">TRANSLITERATION</h3>
+          <p className="cdr-transli-body">
+            "{dua.transli}"
+          </p>
+        </div>
+      )}
+
+      {/* ═══════ CARD 4: Word by Word Meaning (Accordion) ═══════ */}
+      {Array.isArray(dua.word_by_word) && dua.word_by_word.length > 0 && (
         <div className="cdr-card-wbw-glass">
           <div 
             onClick={() => setWbwOpen(!wbwOpen)}
@@ -374,8 +381,8 @@ ${dua.ref}`;
             <div className="cdr-wbw-grid-box">
               {dua.word_by_word.map((word, idx) => (
                 <div key={idx} className="cdr-wbw-word-tile">
-                  <span className="cdr-wbw-ar-text" dir="rtl">{word.ar}</span>
-                  <span className="cdr-wbw-ml-text">{word.ml}</span>
+                  <span className="cdr-wbw-ar-text" dir="rtl">{word?.ar || ''}</span>
+                  <span className="cdr-wbw-ml-text">{word?.ml || ''}</span>
                 </div>
               ))}
             </div>
@@ -383,8 +390,8 @@ ${dua.ref}`;
         </div>
       )}
 
-      {/* ═══════ CARD 4: Reference ═══════ */}
-      {dua.ref && (
+      {/* ═══════ CARD 5: Reference ═══════ */}
+      {dua.ref && dua.ref.trim().length > 0 && (
         <div className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
             <BookOpen size={20} />
@@ -396,8 +403,8 @@ ${dua.ref}`;
         </div>
       )}
 
-      {/* ═══════ CARD 5: Virtue / Info ═══════ */}
-      {dua.desc && (
+      {/* ═══════ CARD 6: Virtue / Info ═══════ */}
+      {dua.desc && dua.desc.trim().length > 0 && (
         <div className="cdr-card-virtue-glass">
           <div className="cdr-virtue-header-row">
             <Info size={20} />
@@ -409,8 +416,8 @@ ${dua.ref}`;
         </div>
       )}
 
-      {/* ═══════ CARD 6: Hadith Commentary (if available) ═══════ */}
-      {dua.dua_hadith && dua.dua_hadith.filter(h => h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
+      {/* ═══════ CARD 7: Hadith Commentary (if available) ═══════ */}
+      {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
             <BookOpen size={20} />
@@ -442,14 +449,36 @@ export default function CategoryDuaReader({
     if (initialSubcategory && initialSubcategory.duas && initialSubcategory.duas.length > 0) {
       return initialSubcategory.duas;
     }
+    if (initialCategory) {
+      if (initialCategory.subcategories?.length === 1 && initialCategory.subcategories[0]?.duas?.length > 0) {
+        return initialCategory.subcategories[0].duas;
+      }
+      const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
+      if (allDuas.length > 0) return allDuas;
+    }
     const defaultSub = CATEGORIES_DATA[0]?.subcategories?.[0];
     return defaultSub ? defaultSub.duas : [];
   });
 
-  const [breadcrumb, setBreadcrumb] = useState(() => ({
-    category: initialCategory?.name || CATEGORIES_DATA[0]?.name || "നമസ്കാരം",
-    subcategory: initialSubcategory?.name || CATEGORIES_DATA[0]?.subcategories?.[0]?.name || "നമസ്കാരത്തിലെ പ്രാരംഭ പ്രാർത്ഥന"
-  }));
+  const [breadcrumb, setBreadcrumb] = useState(() => {
+    if (initialSubcategory) {
+      return {
+        category: initialCategory?.name || "നമസ്കാരം",
+        subcategory: initialSubcategory.name
+      };
+    }
+    if (initialCategory) {
+      const firstSub = initialCategory.subcategories?.[0];
+      return {
+        category: initialCategory.name,
+        subcategory: firstSub ? firstSub.name : initialCategory.name
+      };
+    }
+    return {
+      category: CATEGORIES_DATA[0]?.name || "നമസ്കാരം",
+      subcategory: CATEGORIES_DATA[0]?.subcategories?.[0]?.name || "നമസ്കാരത്തിലെ പ്രാരംഭ പ്രാർത്ഥന"
+    };
+  });
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
@@ -470,11 +499,22 @@ export default function CategoryDuaReader({
   useEffect(() => {
     if (initialCategory) {
       setExpandedCatId(initialCategory.id);
+      if (!initialSubcategory) {
+        const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
+        if (allDuas.length > 0) {
+          setActiveDuas(allDuas);
+          const firstSub = initialCategory.subcategories?.[0];
+          setBreadcrumb({
+            category: initialCategory.name,
+            subcategory: initialCategory.subcategories?.length === 1 && firstSub ? firstSub.name : initialCategory.name
+          });
+        }
+      }
       if (initialView === 'categories') {
         setView('categories');
       }
     }
-  }, [initialCategory, initialView]);
+  }, [initialCategory, initialView, initialSubcategory]);
 
   // --- Handlers for Category View ---
   const handleCategoryClick = (catId) => {
@@ -826,7 +866,7 @@ export default function CategoryDuaReader({
             <div ref={pillBarRef} className="cdr-number-capsule-bar cdr-no-scrollbar">
               {activeDuas.map((_, i) => (
                 <button
-                  key={i}
+                  key={i} 
                   onClick={() => setCurrentIndex(i)}
                   className={`cdr-number-pill ${currentIndex === i ? 'active' : ''}`}
                 >
