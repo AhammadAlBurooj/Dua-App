@@ -1,0 +1,408 @@
+/* Top Sliding Banner & Glassmorphism Carousel Styling */
+
+@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap');
+
+.font-sans { font-family: 'Outfit', sans-serif; }
+.font-malayalam { font-family: 'Manjari', sans-serif; }
+.font-arabic { font-family: 'Amiri', serif; }
+
+.top-sliding-banner-container {
+  position: relative;
+  width: 100%;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px 14px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Scenic Background Image with Mask & Overlay */
+.top-banner-scenic-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 520px;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/scenic_mosque_bg.jpg');
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.top-banner-green-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(15, 65, 40, 0.72), rgba(20, 85, 55, 0.52));
+  mix-blend-mode: multiply;
+}
+
+/* Banner Content Wrapper */
+.top-banner-content-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Glassmorphic Top Brand Bar */
+.top-banner-glass-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 24px;
+  margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.top-banner-logo-svg {
+  width: 32px;
+  height: 32px;
+  color: #0f4128;
+  flex-shrink: 0;
+}
+
+.top-banner-brand-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #0f4128;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.35);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+/* Glass Shine Animation */
+.glass-shine {
+  position: relative;
+}
+
+.glass-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  animation: shine 4s infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+@keyframes shine {
+  0% { left: -150%; }
+  30% { left: 200%; }
+  100% { left: 200%; }
+}
+
+/* Carousel Container */
+.top-banner-carousel-wrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.45);
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.top-banner-carousel-track {
+  display: flex;
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.top-banner-carousel-slide {
+  min-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 2px;
+}
+
+/* Glassmorphic Curved Card */
+.top-banner-card {
+  position: relative;
+  aspect-ratio: 1.12;
+  width: 100%;
+  border-radius: 28px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  background: rgba(16, 75, 45, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 16px 36px -8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.22s ease;
+}
+
+.top-banner-card:active {
+  transform: scale(0.985);
+}
+
+/* Tag Pill */
+.top-banner-tag-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 10;
+}
+
+.top-banner-tag {
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 10px;
+  font-weight: 700;
+  color: #D1FAE5;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(6px);
+}
+
+.top-banner-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: bannerPulse 2s infinite;
+}
+
+.dot-emerald {
+  background-color: #34D399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.8);
+}
+
+.dot-blue {
+  background-color: #60A5FA;
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.8);
+}
+
+@keyframes bannerPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* Card Content Area */
+.top-banner-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  z-index: 10;
+}
+
+.top-banner-art-wrap {
+  width: 92px;
+  height: 92px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.top-banner-art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.top-banner-title {
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.25;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.top-banner-title.font-sans {
+  font-family: 'Outfit', sans-serif;
+  font-size: 26px;
+}
+
+.top-banner-title.font-malayalam {
+  font-family: 'Manjari', sans-serif;
+  font-size: 23px;
+}
+
+.top-banner-subtitle {
+  font-family: 'Manjari', sans-serif;
+  font-size: 13.5px;
+  color: rgba(209, 250, 229, 0.95);
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.35;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Action Button */
+.top-banner-action-btn {
+  margin-top: 10px;
+  padding: 8px 24px;
+  z-index: 10;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 9999px;
+  font-family: 'Manjari', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.top-banner-action-btn:hover {
+  transform: scale(1.04);
+}
+
+.top-banner-action-btn:active {
+  transform: scale(0.96);
+}
+
+.top-banner-btn-white {
+  background: #FFFFFF;
+  color: #064E3B;
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.top-banner-btn-gold {
+  background: linear-gradient(to right, #F3D37F, #E3A335);
+  color: #4A3200;
+  box-shadow: 0 0 18px rgba(227, 163, 53, 0.65), 0 8px 16px -2px rgba(0, 0, 0, 0.3);
+  border: 1px solid #FFE8A1;
+}
+
+/* Pagination Dots */
+.top-banner-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 10;
+}
+
+.top-banner-dot {
+  height: 6px;
+  border-radius: 9999px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.top-banner-dot.active {
+  width: 24px;
+  background-color: #34D399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
+}
+
+.top-banner-dot.inactive {
+  width: 6px;
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.top-banner-dot.inactive:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Floating Search Bar */
+.top-banner-search-bar {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 0 16px;
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+.top-banner-search-icon {
+  color: #10B981;
+  flex-shrink: 0;
+}
+
+.top-banner-search-input {
+  width: 100%;
+  height: 46px;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1E293B;
+  padding-left: 10px;
+}
+
+.top-banner-search-input::placeholder {
+  color: #94A3B8;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .top-banner-scenic-backdrop {
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+
+[data-theme="dark"] .top-banner-green-overlay {
+  background: linear-gradient(to bottom right, rgba(5, 28, 17, 0.88), rgba(8, 42, 26, 0.75));
+}
+
+[data-theme="dark"] .top-banner-glass-bar {
+  background: rgba(15, 23, 42, 0.45);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .top-banner-logo-svg {
+  color: #34D399;
+}
+
+[data-theme="dark"] .top-banner-brand-arabic {
+  color: #34D399;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .top-banner-card {
+  background: rgba(6, 46, 28, 0.58);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="dark"] .top-banner-search-bar {
+  background: rgba(30, 41, 59, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .top-banner-search-input {
+  color: #F8FAFC;
+}
+

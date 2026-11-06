@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Bookmark, Play, Pause, Heart, Sparkles, Moon, Sun } from 'lucide-react';
 import './FavoritesScreen.css';
 
@@ -86,56 +86,91 @@ export default function FavoritesScreen({
   const favoriteDuas = useMemo(() => {
     if (!Array.isArray(favorites) || favorites.length === 0) return [];
 
-    return (duas || []).filter(d => {
+    const matched = (duas || []).filter(d => {
       const dId = String(d.id);
       const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
       return favorites.some(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-        return fId === dId || 
-               (dOrig && fId === dOrig) || 
-               fId === `prayer-${dId}` || 
-               (dOrig && fId === `prayer-${dOrig}`) ||
-               dId === `prayer-${fId}`;
+        return fId === dId || (dOrig && fId === dOrig);
       });
+    });
+
+    // Deduplicate strictly by unique dua identity
+    const seen = new Set();
+    return matched.filter(d => {
+      const key = d.originalId !== undefined ? `orig-${d.originalId}` : `id-${d.id}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
   }, [duas, favorites]);
 
-  // Standard category filter pills matching the reference design
+  // Dynamic category filter pills: only include categories that actually have bookmarked items
   const filterPills = useMemo(() => {
-    const defaultPills = [
-      { id: 'all', label: isEnglish ? 'All' : 'All' },
-      { id: 'morning', label: isEnglish ? 'Morning' : 'Morning' },
-      { id: 'evening', label: isEnglish ? 'Evening' : 'Evening' },
-      { id: 'sleep', label: isEnglish ? 'Before Sleep' : 'Before Sleep' }
-    ];
+    if (!favoriteDuas || favoriteDuas.length === 0) return [];
 
-    // If favorites contain other categories (e.g. Prayer), append them dynamically
-    const otherKeys = new Set();
+    const categoryMap = {
+      morning: 'Morning',
+      evening: 'Evening',
+      sleep: 'Before Sleep',
+      prayer: 'Prayer',
+      mosque: 'Mosque',
+      food: 'Food',
+      travel: 'Travel',
+      forgiveness: 'Forgiveness',
+      general: 'General'
+    };
+
+    const counts = {};
+    const labels = {};
+
     favoriteDuas.forEach(d => {
       const info = getDuaCategoryInfo(d, isEnglish);
-      if (!['morning', 'evening', 'sleep', 'general'].includes(info.key)) {
-        otherKeys.add(JSON.stringify({ id: info.key, label: info.badge }));
+      const k = info.key;
+      counts[k] = (counts[k] || 0) + 1;
+      if (!labels[k]) {
+        labels[k] = categoryMap[k] || info.badge || 'General';
       }
     });
 
-    otherKeys.forEach(str => {
-      try {
-        defaultPills.push(JSON.parse(str));
-      } catch {
-        // ignore
-      }
+    const activeKeys = Object.keys(counts).filter(k => counts[k] > 0);
+
+    // If 0 or only 1 category exists, no category filter tabs needed
+    if (activeKeys.length <= 1) return [];
+
+    // If 2 or more categories have bookmarked items, show 'All' and only non-empty categories
+    const pills = [
+      { id: 'all', label: isEnglish ? 'All' : 'All' }
+    ];
+
+    activeKeys.forEach(k => {
+      pills.push({
+        id: k,
+        label: labels[k]
+      });
     });
 
-    return defaultPills;
+    return pills;
   }, [favoriteDuas, isEnglish]);
+
+  // If selected filter is no longer in active pills, reset to 'all'
+  useEffect(() => {
+    if (selectedFilter !== 'all') {
+      const exists = filterPills.some(p => p.id === selectedFilter);
+      if (!exists) {
+        setSelectedFilter('all');
+      }
+    }
+  }, [filterPills, selectedFilter]);
 
   // Filtered duas according to active pill
   const filteredDuas = useMemo(() => {
     if (selectedFilter === 'all') return favoriteDuas;
-    return favoriteDuas.filter(d => {
+    const filtered = favoriteDuas.filter(d => {
       const info = getDuaCategoryInfo(d, isEnglish);
       return info.key === selectedFilter;
     });
+    return filtered.length > 0 ? filtered : favoriteDuas;
   }, [favoriteDuas, selectedFilter, isEnglish]);
 
   return (
@@ -166,26 +201,28 @@ export default function FavoritesScreen({
         </div>
       </div>
 
-      {/* 2. Category Filter Pills */}
-      <div className="fav-pills-scroll" role="tablist" aria-label="Favorites Categories">
-        {filterPills.map(pill => {
-          const isActive = selectedFilter === pill.id;
-          return (
-            <button
-              key={pill.id}
-              role="tab"
-              aria-selected={isActive}
-              className={`fav-pill ${isActive ? 'active' : ''}`}
-              onClick={() => setSelectedFilter(pill.id)}
-            >
-              {pill.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* 2. Category Filter Pills (Only rendered when there are multiple non-empty categories) */}
+      {filterPills.length > 0 && (
+        <div className="fav-pills-scroll" role="tablist" aria-label="Favorites Categories">
+          {filterPills.map(pill => {
+            const isActive = selectedFilter === pill.id;
+            return (
+              <button
+                key={pill.id}
+                role="tab"
+                aria-selected={isActive}
+                className={`fav-pill ${isActive ? 'active' : ''}`}
+                onClick={() => setSelectedFilter(pill.id)}
+              >
+                {pill.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* 3. Empty State or Dua Cards List */}
-      {filteredDuas.length === 0 ? (
+      {favoriteDuas.length === 0 ? (
         <div className="fav-empty-container">
           <div className="fav-empty-icon-circle">
             <Bookmark size={38} className="fav-empty-bookmark-icon" />
