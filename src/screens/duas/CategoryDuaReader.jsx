@@ -278,10 +278,10 @@ const DuaCard = ({
               <span className="cdr-dua-badge">
                 Dua #{dua.id}
               </span>
-              {/* Short hint / repetition badge (<= 40 chars, e.g. "✨ ഇത് മൂന്ന് പ്രാവശ്യം പറയുക") */}
+              {/* Short hint / repetition badge (<= 40 chars, e.g. " ഇത് മൂന്ന് പ്രാവശ്യം പറയുക") */}
               {dua.hint && dua.hint.trim().length <= 40 && (
                 <span className="cdr-short-hint-pill">
-                  ✨ {dua.hint.trim()}
+                   {dua.hint.trim()}
                 </span>
               )}
             </div>

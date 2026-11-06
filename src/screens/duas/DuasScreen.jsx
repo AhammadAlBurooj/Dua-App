@@ -130,7 +130,7 @@ export default function DuasScreen({
   };
 
   return (
-    <div className={`reference-ui-screen ${selectedAwraadCategory || activeReading ? 'category-reader-active' : ''}`}>
+    <div className={`reference-ui-screen ${selectedAwraadCategory || activeReading || isAsmaulHusnaOpen ? 'category-reader-active' : ''}`}>
       {/* ========================================================
           CASE 0: READING MODE (Full Dua Swiping Reader)
           ======================================================== */}

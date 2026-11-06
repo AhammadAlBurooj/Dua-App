@@ -5,12 +5,9 @@ import {
   BookOpen, 
   Search, 
   X, 
-  ChevronLeft, 
-  ChevronRight, 
   Play, 
   Pause, 
   Volume2,
-  VolumeX,
   Layers
 } from 'lucide-react';
 import { ASMAUL_HUSNA } from '../../data/asmaulHusna';
@@ -139,16 +136,50 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           font-family: 'Inter', 'Noto Sans Malayalam', sans-serif;
           -webkit-tap-highlight-color: transparent;
           background-color: #f8fafc;
-          min-height: 100vh;
-          width: 100%;
-          position: relative;
-          color: #1e293b;
-          overflow-x: hidden;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          height: 100dvh;
+          max-height: 100dvh;
+          z-index: 95;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
           box-sizing: border-box;
+          color: #1e293b;
         }
 
         .font-arabic {
           font-family: 'Amiri', serif;
+        }
+
+        /* Sticky Top Navigation Bar */
+        .asma-nav-sticky {
+          flex-shrink: 0;
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          width: 100%;
+          border-radius: 0 !important;
+          border-left: none !important;
+          border-right: none !important;
+          border-top: none !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+          box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Scrollable Content Container */
+        .asma-scroll-body {
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          position: relative;
+          z-index: 1;
         }
 
         /* Premium Ambient Aurora Blobs */
@@ -220,21 +251,8 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         <div className="bg-blob blob-2" />
         <div className="bg-blob blob-3" />
 
-        {/* Sticky Top Navigation Bar */}
-        <nav 
-          className="glass-card"
-          style={{
-            position: 'sticky',
-            top: 0,
-            zIndex: 50,
-            width: '100%',
-            borderRadius: 0,
-            borderLeft: 'none',
-            borderRight: 'none',
-            borderTop: 'none',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.6)'
-          }}
-        >
+        {/* Sticky Top Navigation Bar (Always Pinned at Top) */}
+        <nav className="glass-card asma-nav-sticky">
           <div 
             style={{
               maxWidth: '480px',
@@ -333,570 +351,501 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
           </div>
         </nav>
 
-        {/* Main Content Area */}
-        {viewMode === 'slide' ? (
-          /* ========================================================
-             CASE 1: SLIDE VIEW (Matching User Template Exactly)
-             ======================================================== */
-          <div 
-            style={{
-              maxWidth: '480px',
-              margin: '0 auto',
-              width: '100%',
-              padding: '20px 20px 48px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              position: 'relative',
-              zIndex: 1
-            }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {/* Badge */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4px' }}>
-              <div 
-                className="glass-card"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '8px 20px',
-                  borderRadius: '9999px',
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                  color: '#115e59' // teal-800
-                }}
-              >
-                <span>✨</span> #{currentName.id} / 99 • {isEnglish ? "Asmaul Husna" : "അസ്മാഉൽ ഹുസ്നാ"}
-              </div>
-            </div>
-
-            {/* Main Calligraphy Card */}
+        {/* Scrollable Content Container (Smooth Scroll Under Sticky Navbar) */}
+        <div className="asma-scroll-body">
+          {viewMode === 'slide' ? (
+            /* ========================================================
+               CASE 1: SLIDE VIEW (Clean View without Bottom Pagination)
+               ======================================================== */
             <div 
-              className={`glass-card ${isCurrentPlaying ? 'calligraphy-playing' : ''}`}
               style={{
-                borderRadius: '1.5rem',
-                padding: '72px 16px',
+                maxWidth: '480px',
+                margin: '0 auto',
+                width: '100%',
+                padding: '20px 20px 60px',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                gap: '20px',
                 position: 'relative',
-                overflow: 'hidden'
+                zIndex: 1
               }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
-              {/* Subtle inner glow */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent)',
-                  zIndex: 0,
-                  pointerEvents: 'none'
-                }} 
-              />
-              <span 
-                className="font-arabic"
-                style={{
-                  fontSize: '5.5rem',
-                  color: '#065f46', // emerald-800
-                  fontWeight: 700,
-                  zIndex: 10,
-                  lineHeight: 1.2,
-                  textAlign: 'center',
-                  userSelect: 'none',
-                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))'
-                }}
-              >
-                {currentName.arabic}
-              </span>
-            </div>
-
-            {/* Audio Player Card */}
-            <div 
-              onClick={() => handleTogglePlay(currentName)}
-              className="glass-card glass-card-hover"
-              style={{
-                borderRadius: '1rem',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                {/* Large Emerald Play Circle */}
+              {/* Badge */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4px' }}>
                 <div 
+                  className="glass-card"
                   style={{
-                    width: '56px',
-                    height: '56px',
-                    backgroundColor: '#059669', // emerald-600
-                    borderRadius: '50%',
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.35)',
-                    color: '#ffffff',
-                    flexShrink: 0,
-                    transition: 'transform 0.2s ease'
+                    gap: '8px',
+                    padding: '8px 20px',
+                    borderRadius: '9999px',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    color: '#115e59' // teal-800
                   }}
                 >
-                  {isCurrentPlaying ? (
-                    <Pause size={24} fill="currentColor" />
-                  ) : (
-                    <Play size={24} fill="currentColor" style={{ marginLeft: '3px' }} />
-                  )}
-                </div>
-                <div>
-                  <h3 
-                    style={{
-                      fontWeight: 700,
-                      color: '#0f172a',
-                      fontSize: '1.125rem',
-                      margin: '0 0 2px 0'
-                    }}
-                  >
-                    {isCurrentPlaying ? (isEnglish ? "Playing Recitation..." : "പാരായണം കേൾക്കുന്നു...") : (isEnglish ? "Listen Recitation" : "പാരായണം കേൾക്കുക")}
-                  </h3>
-                  <p 
-                    style={{
-                      fontSize: '0.875rem',
-                      color: '#475569',
-                      fontWeight: 500,
-                      margin: 0
-                    }}
-                  >
-                    {currentName.transliterationEn || currentName.transliteration} • {isEnglish ? "Studio Audio" : "സ്റ്റുഡിയോ ഓഡിയോ"}
-                  </p>
+                  <span></span> {currentName.id} / 99 • {isEnglish ? "Asmaul Husna" : "അസ്മാഉൽ ഹുസ്നാ"}
                 </div>
               </div>
 
-              {/* Loop / Repeat Sound Button */}
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  audioService.toggleLoop();
-                }}
-                title={audioState.isLoop ? "Loop On" : "Loop Off"}
-                aria-label="Toggle Repeat"
+              {/* Main Calligraphy Card */}
+              <div 
+                className={`glass-card ${isCurrentPlaying ? 'calligraphy-playing' : ''}`}
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.8)',
-                  backgroundColor: audioState.isLoop ? 'rgba(5, 150, 105, 0.15)' : 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '1.5rem',
+                  padding: '72px 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: audioState.isLoop ? '#059669' : '#64748b',
-                  cursor: 'pointer',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-                  transition: 'all 0.15s ease'
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                {audioState.isLoop ? (
-                  <Volume2 size={20} strokeWidth={2} />
-                ) : (
-                  <Volume2 size={20} strokeWidth={1.8} />
-                )}
-              </button>
-            </div>
-
-            {/* Detail Cards Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              
-              {/* Transliteration */}
-              <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
-                <h4 
+                {/* Subtle inner glow */}
+                <div 
                   style={{
-                    fontSize: '0.875rem',
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent)',
+                    zIndex: 0,
+                    pointerEvents: 'none'
+                  }} 
+                />
+                <span 
+                  className="font-arabic"
+                  style={{
+                    fontSize: '5.5rem',
+                    color: '#065f46', // emerald-800
                     fontWeight: 700,
-                    color: '#047857', // emerald-700
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    margin: '0 0 8px 0'
+                    zIndex: 10,
+                    lineHeight: 1.2,
+                    textAlign: 'center',
+                    userSelect: 'none',
+                    filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))'
                   }}
                 >
-                  {isEnglish ? "Pronunciation (Transliteration)" : "ഉച്ചാരണം (Transliteration)"}
-                </h4>
-                <p 
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: 700,
-                    color: '#0f172a',
-                    margin: 0
-                  }}
-                >
-                  {currentName.transliteration}
-                </p>
+                  {currentName.arabic}
+                </span>
               </div>
 
-              {/* Meaning */}
-              <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
-                <h4 
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: 700,
-                    color: '#047857', // emerald-700
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    margin: '0 0 8px 0'
-                  }}
-                >
-                  {isEnglish ? "Malayalam Meaning" : "മലയാളം അർത്ഥം"}
-                </h4>
-                <p 
-                  style={{
-                    fontSize: '1.125rem',
-                    fontWeight: 700,
-                    color: '#0f172a',
-                    margin: 0
-                  }}
-                >
-                  {currentName.meaningMl}
-                </p>
-              </div>
-
-              {/* Translation */}
-              <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
-                <h4 
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: 700,
-                    color: '#047857', // emerald-700
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    margin: '0 0 8px 0'
-                  }}
-                >
-                  English Translation
-                </h4>
-                <p 
-                  style={{
-                    fontSize: '1.125rem',
-                    fontWeight: 700,
-                    color: '#1e293b',
-                    margin: 0
-                  }}
-                >
-                  {currentName.meaningEn}
-                </p>
-              </div>
-
-              {/* Hadith Card */}
+              {/* Audio Player Card */}
               <div 
-                className="glass-card" 
+                onClick={() => handleTogglePlay(currentName)}
+                className="glass-card glass-card-hover"
                 style={{
                   borderRadius: '1rem',
-                  padding: '20px',
+                  padding: '16px',
                   display: 'flex',
-                  gap: '16px',
-                  marginTop: '4px'
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer'
                 }}
               >
-                <div 
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  {/* Large Emerald Play Circle */}
+                  <div 
+                    style={{
+                      width: '56px',
+                      height: '56px',
+                      backgroundColor: '#059669', // emerald-600
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.35)',
+                      color: '#ffffff',
+                      flexShrink: 0,
+                      transition: 'transform 0.2s ease'
+                    }}
+                  >
+                    {isCurrentPlaying ? (
+                      <Pause size={24} fill="currentColor" />
+                    ) : (
+                      <Play size={24} fill="currentColor" style={{ marginLeft: '3px' }} />
+                    )}
+                  </div>
+                  <div>
+                    <h3 
+                      style={{
+                        fontWeight: 700,
+                        color: '#0f172a',
+                        fontSize: '1.125rem',
+                        margin: '0 0 2px 0'
+                      }}
+                    >
+                      {isCurrentPlaying ? (isEnglish ? "Playing Recitation..." : "പാരായണം കേൾക്കുന്നു...") : (isEnglish ? "Listen Recitation" : "പാരായണം കേൾക്കുക")}
+                    </h3>
+                    <p 
+                      style={{
+                        fontSize: '0.875rem',
+                        color: '#475569',
+                        fontWeight: 500,
+                        margin: 0
+                      }}
+                    >
+                      {currentName.transliterationEn || currentName.transliteration} • {isEnglish ? "Studio Audio" : "സ്റ്റുഡിയോ ഓഡിയോ"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Loop / Repeat Sound Button */}
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    audioService.toggleLoop();
+                  }}
+                  title={audioState.isLoop ? "Loop On" : "Loop Off"}
+                  aria-label="Toggle Repeat"
                   style={{
                     width: '40px',
                     height: '40px',
-                    backgroundColor: '#ecfdf5', // emerald-50
-                    borderRadius: '0.75rem',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(255, 255, 255, 0.8)',
+                    backgroundColor: audioState.isLoop ? 'rgba(5, 150, 105, 0.15)' : 'rgba(255, 255, 255, 0.5)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#059669', // emerald-600
-                    flexShrink: 0,
-                    border: '1px solid #d1fae5',
-                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+                    color: audioState.isLoop ? '#059669' : '#64748b',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <BookOpen size={20} strokeWidth={2} />
-                </div>
-                <div>
+                  <Volume2 size={20} strokeWidth={audioState.isLoop ? 2.2 : 1.8} />
+                </button>
+              </div>
+
+              {/* Detail Cards Container */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                
+                {/* Transliteration */}
+                <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
                   <h4 
                     style={{
                       fontSize: '0.875rem',
                       fontWeight: 700,
                       color: '#047857', // emerald-700
+                      marginBottom: '8px',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                       margin: '0 0 8px 0'
                     }}
                   >
-                    {isEnglish ? "Authentic Hadith" : "വിശുദ്ധ ഹദീസ്"}
+                    {isEnglish ? "Pronunciation (Transliteration)" : "ഉച്ചാരണം (Transliteration)"}
                   </h4>
                   <p 
                     style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      color: '#334155',
-                      lineHeight: 1.6,
+                      fontSize: '1.25rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
                       margin: 0
                     }}
                   >
-                    {isEnglish 
-                      ? "The Prophet (ﷺ) said: 'Allah has ninety-nine names; whoever preserves and memorizes them will enter Paradise.' (Sahih al-Bukhari 2736, Sahih Muslim 2677)"
-                      : "നബി (സ) അരുളി: 'തീർച്ചയായും അല്ലാഹുവിന് 99 നാമങ്ങളുണ്ട്. അവ ഹൃദിസ്ഥമാക്കിയവൻ സ്വർഗത്തിൽ പ്രവേശിക്കും.' (സഹീഹ് അൽ-ബുഖാരി 2736, സഹീഹ് മുസ്ലിം 2677)"
-                    }
+                    {currentName.transliteration}
                   </p>
                 </div>
-              </div>
 
-            </div>
-
-            {/* Previous & Next Navigation Controls */}
-            <div 
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginTop: '12px',
-                paddingBottom: '16px'
-              }}
-            >
-              <button 
-                onClick={handlePrev}
-                disabled={!hasPrev}
-                className="glass-card active:scale-95"
-                style={{
-                  opacity: hasPrev ? 1 : 0.4,
-                  padding: '10px 18px',
-                  borderRadius: '9999px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: '#0f172a',
-                  cursor: hasPrev ? 'pointer' : 'default',
-                  border: '1px solid rgba(255, 255, 255, 0.85)',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <ChevronLeft size={16} strokeWidth={2.4} />
-                <span>{isEnglish ? "Previous" : "മുമ്പത്തേത്"}</span>
-              </button>
-
-              <span 
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                  color: '#059669'
-                }}
-              >
-                {currentIndex + 1} / {totalNames}
-              </span>
-
-              <button 
-                onClick={handleNext}
-                disabled={!hasNext}
-                className="glass-card active:scale-95"
-                style={{
-                  opacity: hasNext ? 1 : 0.4,
-                  padding: '10px 18px',
-                  borderRadius: '9999px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: '#0f172a',
-                  cursor: hasNext ? 'pointer' : 'default',
-                  border: '1px solid rgba(255, 255, 255, 0.85)',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <span>{isEnglish ? "Next" : "അടുത്തത്"}</span>
-                <ChevronRight size={16} strokeWidth={2.4} />
-              </button>
-            </div>
-          </div>
-        ) : (
-          /* ========================================================
-             CASE 2: GRID VIEW (Browse all 99 Names)
-             ======================================================== */
-          <div 
-            style={{
-              maxWidth: '480px',
-              margin: '0 auto',
-              width: '100%',
-              padding: '16px 20px 80px',
-              position: 'relative',
-              zIndex: 1
-            }}
-          >
-            {/* Search Input Box */}
-            <div 
-              className="glass-card"
-              style={{
-                borderRadius: '1rem',
-                padding: '10px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                marginBottom: '16px'
-              }}
-            >
-              <Search size={18} style={{ color: '#059669', flexShrink: 0 }} />
-              <input 
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder={isEnglish ? "Search 99 names..." : "തിരുനാമങ്ങൾ അല്ലെങ്കിൽ അർത്ഥം തിരയുക..."}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  outline: 'none',
-                  fontSize: '0.925rem',
-                  fontWeight: 500,
-                  color: '#0f172a',
-                  width: '100%'
-                }}
-              />
-              {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery('')}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#64748b',
-                    cursor: 'pointer',
-                    padding: 0
-                  }}
-                >
-                  <X size={16} />
-                </button>
-              )}
-            </div>
-
-            {/* Grid of 99 Names */}
-            <div 
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-                gap: '12px'
-              }}
-            >
-              {filteredNames.map(item => {
-                const originalIndex = ASMAUL_HUSNA.findIndex(n => n.id === item.id);
-                const isItemPlaying = audioState.isPlaying && audioState.currentDuaId === `asma-${item.id}`;
-
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      setCurrentIndex(originalIndex !== -1 ? originalIndex : 0);
-                      setViewMode('slide');
-                    }}
-                    className="glass-card glass-card-hover"
+                {/* Meaning */}
+                <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
+                  <h4 
                     style={{
-                      padding: '14px 10px',
-                      textAlign: 'center',
-                      borderRadius: '1rem',
-                      cursor: 'pointer',
-                      position: 'relative',
-                      border: isItemPlaying ? '1.5px solid #059669' : '1px solid rgba(255, 255, 255, 0.85)'
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      color: '#047857', // emerald-700
+                      marginBottom: '8px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      margin: '0 0 8px 0'
                     }}
                   >
-                    {/* Number Badge */}
-                    <span 
-                      style={{
-                        position: 'absolute',
-                        top: '8px',
-                        left: '8px',
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        color: '#047857',
-                        backgroundColor: '#ecfdf5',
-                        padding: '2px 6px',
-                        borderRadius: '6px'
-                      }}
-                    >
-                      #{item.id}
-                    </span>
+                    {isEnglish ? "Malayalam Meaning" : "മലയാളം അർത്ഥം"}
+                  </h4>
+                  <p 
+                    style={{
+                      fontSize: '1.125rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      margin: 0
+                    }}
+                  >
+                    {currentName.meaningMl}
+                  </p>
+                </div>
 
-                    {/* Quick Play Audio Button */}
-                    <button
-                      onClick={(e) => handleTogglePlay(item, e)}
-                      style={{
-                        position: 'absolute',
-                        top: '6px',
-                        right: '8px',
-                        background: isItemPlaying ? '#059669' : 'rgba(255, 255, 255, 0.8)',
-                        color: isItemPlaying ? '#ffffff' : '#059669',
-                        border: '1px solid rgba(5, 150, 105, 0.2)',
-                        borderRadius: '50%',
-                        width: '26px',
-                        height: '26px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        padding: 0
-                      }}
-                      title={isItemPlaying ? "Pause" : "Play"}
-                    >
-                      {isItemPlaying ? <Pause size={12} fill="currentColor" /> : <Play size={12} fill="currentColor" style={{ marginLeft: '1px' }} />}
-                    </button>
+                {/* Translation */}
+                <div className="glass-card" style={{ borderRadius: '1rem', padding: '20px' }}>
+                  <h4 
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      color: '#047857', // emerald-700
+                      marginBottom: '8px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      margin: '0 0 8px 0'
+                    }}
+                  >
+                    English Translation
+                  </h4>
+                  <p 
+                    style={{
+                      fontSize: '1.125rem',
+                      fontWeight: 700,
+                      color: '#1e293b',
+                      margin: 0
+                    }}
+                  >
+                    {currentName.meaningEn}
+                  </p>
+                </div>
 
-                    {/* Arabic Text */}
-                    <div 
-                      className="font-arabic"
-                      style={{
-                        fontSize: '26px',
-                        color: '#065f46',
-                        fontWeight: 700,
-                        marginTop: '16px',
-                        marginBottom: '4px',
-                        lineHeight: 1.5
-                      }}
-                    >
-                      {item.arabic}
-                    </div>
-
-                    {/* Transliteration */}
-                    <div 
-                      style={{
-                        fontSize: '12.5px',
-                        fontWeight: 700,
-                        color: '#0f172a',
-                        marginBottom: '2px'
-                      }}
-                    >
-                      {item.transliteration}
-                    </div>
-
-                    {/* Meaning */}
-                    <div 
-                      style={{
-                        fontSize: '11px',
-                        color: '#64748b',
-                        lineHeight: 1.3
-                      }}
-                    >
-                      {isEnglish ? item.meaningEn : item.meaningMl}
-                    </div>
+                {/* Hadith Card */}
+                <div 
+                  className="glass-card" 
+                  style={{
+                    borderRadius: '1rem',
+                    padding: '20px',
+                    display: 'flex',
+                    gap: '16px',
+                    marginTop: '4px'
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      backgroundColor: '#ecfdf5', // emerald-50
+                      borderRadius: '0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#059669', // emerald-600
+                      flexShrink: 0,
+                      border: '1px solid #d1fae5',
+                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+                    }}
+                  >
+                    <BookOpen size={20} strokeWidth={2} />
                   </div>
-                );
-              })}
-            </div>
+                  <div>
+                    <h4 
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 700,
+                        color: '#047857', // emerald-700
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        margin: '0 0 8px 0'
+                      }}
+                    >
+                      {isEnglish ? "Authentic Hadith" : "വിശുദ്ധ ഹദീസ്"}
+                    </h4>
+                    <p 
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        color: '#334155',
+                        lineHeight: 1.6,
+                        margin: 0
+                      }}
+                    >
+                      {isEnglish 
+                        ? "The Prophet (ﷺ) said: 'Allah has ninety-nine names; whoever preserves and memorizes them will enter Paradise.' (Sahih al-Bukhari 2736, Sahih Muslim 2677)"
+                        : "നബി (സ) അരുളി: 'തീർച്ചയായും അല്ലാഹുവിന് 99 നാമങ്ങളുണ്ട്. അവ ഹൃദിസ്ഥമാക്കിയവൻ സ്വർഗത്തിൽ പ്രവേശിക്കും.' (സഹീഹ് അൽ-ബുഖാരി 2736, സഹീഹ് മുസ്ലിം 2677)"
+                      }
+                    </p>
+                  </div>
+                </div>
 
-            {filteredNames.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 16px' }}>
-                <p style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px 0' }}>
-                  {isEnglish ? "No names found" : "നാമങ്ങൾ കണ്ടെത്താനായില്ല"}
-                </p>
-                <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
-                  {isEnglish ? "Try another search keyword." : "മറ്റൊരു വാക്ക് നൽകി തിരയുക."}
-                </p>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            /* ========================================================
+               CASE 2: GRID VIEW (Browse all 99 Names)
+               ======================================================== */
+            <div 
+              style={{
+                maxWidth: '480px',
+                margin: '0 auto',
+                width: '100%',
+                padding: '16px 20px 80px',
+                position: 'relative',
+                zIndex: 1
+              }}
+            >
+              {/* Search Input Box */}
+              <div 
+                className="glass-card"
+                style={{
+                  borderRadius: '1rem',
+                  padding: '10px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  marginBottom: '16px'
+                }}
+              >
+                <Search size={18} style={{ color: '#059669', flexShrink: 0 }} />
+                <input 
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder={isEnglish ? "Search 99 names..." : "Search 99 names..."}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none',
+                    fontSize: '0.925rem',
+                    fontWeight: 500,
+                    color: '#0f172a',
+                    width: '100%'
+                  }}
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: '#64748b',
+                      cursor: 'pointer',
+                      padding: 0
+                    }}
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+
+              {/* Grid of 99 Names */}
+              <div 
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                  gap: '12px'
+                }}
+              >
+                {filteredNames.map(item => {
+                  const originalIndex = ASMAUL_HUSNA.findIndex(n => n.id === item.id);
+                  const isItemPlaying = audioState.isPlaying && audioState.currentDuaId === `asma-${item.id}`;
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        setCurrentIndex(originalIndex !== -1 ? originalIndex : 0);
+                        setViewMode('slide');
+                      }}
+                      className="glass-card glass-card-hover"
+                      style={{
+                        padding: '14px 10px',
+                        textAlign: 'center',
+                        borderRadius: '1rem',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        border: isItemPlaying ? '1.5px solid #059669' : '1px solid rgba(255, 255, 255, 0.85)'
+                      }}
+                    >
+                      {/* Number Badge */}
+                      <span 
+                        style={{
+                          position: 'absolute',
+                          top: '8px',
+                          left: '8px',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          color: '#047857',
+                          backgroundColor: '#ecfdf5',
+                          padding: '2px 6px',
+                          borderRadius: '6px'
+                        }}
+                      >
+                        {item.id}
+                      </span>
+
+                      {/* Quick Play Audio Button */}
+                      <button
+                        onClick={(e) => handleTogglePlay(item, e)}
+                        style={{
+                          position: 'absolute',
+                          top: '6px',
+                          right: '8px',
+                          background: isItemPlaying ? '#059669' : 'rgba(255, 255, 255, 0.8)',
+                          color: isItemPlaying ? '#ffffff' : '#059669',
+                          border: '1px solid rgba(5, 150, 105, 0.2)',
+                          borderRadius: '50%',
+                          width: '26px',
+                          height: '26px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          padding: 0
+                        }}
+                        title={isItemPlaying ? "Pause" : "Play"}
+                      >
+                        {isItemPlaying ? <Pause size={12} fill="currentColor" /> : <Play size={12} fill="currentColor" style={{ marginLeft: '1px' }} />}
+                      </button>
+
+                      {/* Arabic Text */}
+                      <div 
+                        className="font-arabic"
+                        style={{
+                          fontSize: '26px',
+                          color: '#065f46',
+                          fontWeight: 700,
+                          marginTop: '16px',
+                          marginBottom: '4px',
+                          lineHeight: 1.5
+                        }}
+                      >
+                        {item.arabic}
+                      </div>
+
+                      {/* Transliteration */}
+                      <div 
+                        style={{
+                          fontSize: '12.5px',
+                          fontWeight: 700,
+                          color: '#0f172a',
+                          marginBottom: '2px'
+                        }}
+                      >
+                        {item.transliteration}
+                      </div>
+
+                      {/* Meaning */}
+                      <div 
+                        style={{
+                          fontSize: '11px',
+                          color: '#64748b',
+                          lineHeight: 1.3
+                        }}
+                      >
+                        {isEnglish ? item.meaningEn : item.meaningMl}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {filteredNames.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '40px 16px' }}>
+                  <p style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px 0' }}>
+                    {isEnglish ? "No names found" : "നാമങ്ങൾ കണ്ടെത്താനായില്ല"}
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
+                    {isEnglish ? "Try another search keyword." : "മറ്റൊരു വാക്ക് നൽകി തിരയുക."}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
