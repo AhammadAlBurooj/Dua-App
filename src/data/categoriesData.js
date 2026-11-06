@@ -33,7 +33,8 @@ const ARABIC_CAT_NAMES = {
   17: "الأَخْلَاقُ وَالمُعَامَلَةُ",
   18: "الحَجُّ وَالعُمْرَةُ",
   19: "أَدْعِيَةٌ عَامَّةٌ",
-  20: "المُلْحَقَاتُ"
+  20: "المُلْحَقَاتُ",
+  21: "أَدْعِيَةٌ مِنَ القُرْآنِ"
 };
 
 const duasById = new Map();
@@ -54,23 +55,72 @@ if (awraadData && Array.isArray(awraadData.sub_categories)) {
   });
 }
 
-export const CATEGORIES_DATA = (awraadData?.categories || []).map(cat => ({
-  id: `cat_${cat.id}`,
-  originalId: cat.id,
-  name: cat.title,
-  nameArabic: ARABIC_CAT_NAMES[cat.id] || "",
-  icon: cat.icon || "",
-  subcategories: (cat.sub_cats || [])
-    .map(subId => subCatsById.get(subId))
-    .filter(Boolean)
-    .map(sc => ({
-      id: `sub_${sc.id}`,
-      originalId: sc.id,
-      name: sc.title,
-      nameArabic: sc.title_arabic || "",
-      duas: (sc.duas || []).map(dId => duasById.get(dId)).filter(Boolean)
-    }))
-}));
+export const QURANIC_DUA_IDS = [
+  345, 313, 346, 287, 348, 396, 349, 350, 
+  351, 352, 353, 354, 355, 361, 356, 357, 
+  358, 359, 360, 361, 364, 365, 367, 368, 
+  369, 370, 372, 374, 375, 376, 377, 378, 
+  380, 381, 379, 382, 384, 385, 386, 387, 
+  388, 389, 390, 391, 392, 393, 394
+];
+
+const quranDuas = QURANIC_DUA_IDS.map((id, index) => {
+  const d = duasById.get(id);
+  if (!d) return null;
+  const cleanRef = (d.ref || '').replace(/—?\s*Shared via Munajat App/gi, '').trim();
+  const isSecond361 = id === 361 && index === 19;
+  return {
+    ...d,
+    id: isSecond361 ? '361_q2' : d.id,
+    originalId: d.id,
+    ref: cleanRef
+  };
+}).filter(Boolean);
+
+export const QURAN_CATEGORY = {
+  id: 'cat_21',
+  originalId: 21,
+  name: 'ഖുർആനിലെ ദുആകൾ',
+  nameArabic: 'أَدْعِيَةٌ مِنَ القُرْآنِ',
+  icon: 'quran.png',
+  subcategories: [
+    {
+      id: 'sub_2101',
+      originalId: 2101,
+      name: 'ഖുർആനിലെ പ്രാർത്ഥനകൾ',
+      nameArabic: 'أَدْعِيَةٌ مِنَ القُرْآنِ الكَرِيمِ',
+      duas: quranDuas
+    }
+  ]
+};
+
+export const CATEGORIES_DATA = [
+  ...(awraadData?.categories || []).map(cat => ({
+    id: `cat_${cat.id}`,
+    originalId: cat.id,
+    name: cat.title,
+    nameArabic: ARABIC_CAT_NAMES[cat.id] || "",
+    icon: cat.icon || "",
+    subcategories: (cat.sub_cats || [])
+      .map(subId => subCatsById.get(subId))
+      .filter(Boolean)
+      .map(sc => ({
+        id: `sub_${sc.id}`,
+        originalId: sc.id,
+        name: sc.title,
+        nameArabic: sc.title_arabic || "",
+        duas: (sc.duas || []).map(dId => {
+          const rawD = duasById.get(dId);
+          if (!rawD) return null;
+          return {
+            ...rawD,
+            ref: (rawD.ref || '').replace(/—?\s*Shared via Munajat App/gi, '').trim()
+          };
+        }).filter(Boolean)
+      }))
+  })),
+  QURAN_CATEGORY
+];
 
 export const ALL_DUAS = awraadData?.duas || [];
 export const ASMAUL_HUSNA_RAW = awraadData?.asmaul_husna || [];
@@ -126,7 +176,7 @@ export const NORMALIZED_AWRAAD_DUAS = (awraadData?.duas || []).map(d => {
     meaningMl: d.trans || '',
     meaningEn: '',
     transliteration: d.transli || '',
-    reference: d.ref || '',
+    reference: (d.ref || '').replace(/—?\s*Shared via Munajat App/gi, '').trim(),
     audioUrl: audioFullUrl,
     recommendedCount: 1
   };
@@ -157,5 +207,6 @@ export const CATEGORY_THEMES = {
   17: { bg: '#059669', border: '#059669', accent: '#10B981', nameEn: 'Etiquette & Conduct' },
   18: { bg: '#059669', border: '#059669', accent: '#B45309', nameEn: 'Hajj & Umrah' },
   19: { bg: '#059669', border: '#059669', accent: '#64748B', nameEn: 'General Duas' },
-  20: { bg: '#059669', border: '#059669', accent: '#475569', nameEn: 'Appendix & Virtues' }
+  20: { bg: '#059669', border: '#059669', accent: '#475569', nameEn: 'Appendix & Virtues' },
+  21: { bg: '#059669', border: '#059669', accent: '#059669', nameEn: 'Quranic Duas' }
 };

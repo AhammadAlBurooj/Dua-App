@@ -349,9 +349,9 @@ export default function DuasScreen({
                           />
                           <div 
                             className="cdr-cat-fallback" 
-                            style={{ display: 'none', color: theme.accent, alignItems: 'center', justifyContent: 'center' }}
+                            style={{ display: 'none', color: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}
                           >
-                            <Folder size={22} />
+                            {cat.name.includes('ഖുർആൻ') ? <BookOpen size={22} /> : <Folder size={22} />}
                           </div>
                         </div>
 

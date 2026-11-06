@@ -44,7 +44,7 @@ export default function TopSlidingBanner({
       cardTheme: 'dark',
       image: '/quran_card.jpg',
       imagePosition: 'left',
-      action: () => (onSelectCategory ? onSelectCategory('prayer') : null)
+      action: () => (onSelectCategory ? onSelectCategory('cat_21') : null)
     },
     {
       id: 'asmaul_husna',
