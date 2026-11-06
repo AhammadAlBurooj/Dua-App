@@ -1,171 +1,418 @@
-/* ==========================================================================
-   FAVORITES SCREEN STYLES (MATCHING USER REFERENCE DESIGN)
-   ========================================================================== */
+/* ====================================================================
+   FavoritesScreen.css — Premium Glassmorphic Favorites & Bookmarks Screen
+   Classic Neat & Clean Top Bar + Animated Aurora Atmosphere
+   ==================================================================== */
 
-.fav-screen-container {
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 24px 18px 96px 18px;
+@keyframes fav-float {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(35px, -50px) scale(1.08); }
+  66% { transform: translate(-25px, 35px) scale(0.92); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.fav-glass-root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #F8FAFC;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: #0F172A;
+  padding-bottom: 96px;
   box-sizing: border-box;
 }
 
-/* Header Section */
-.fav-header-wrap {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 20px;
+/* ═══════ ANIMATED AURORA BACKGROUND BLOBS ═══════ */
+.fav-aurora-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+  animation: fav-float 16s infinite ease-in-out;
+  z-index: 0;
+  pointer-events: none;
 }
 
-.fav-title {
-  font-size: 26px;
+.fav-aurora-blob-1 {
+  background-color: #34D399; /* emerald-400 */
+  width: 380px;
+  height: 380px;
+  top: -8%;
+  left: -8%;
+}
+
+.fav-aurora-blob-2 {
+  background-color: #2DD4BF; /* teal-400 */
+  width: 340px;
+  height: 340px;
+  top: 38%;
+  right: -15%;
+  opacity: 0.35;
+  animation-delay: -5s;
+}
+
+.fav-aurora-blob-3 {
+  background-color: #7DD3FC; /* sky-300 */
+  width: 420px;
+  height: 420px;
+  bottom: -15%;
+  left: 8%;
+  opacity: 0.40;
+  animation-delay: -10s;
+}
+
+/* ═══════ CLASSIC NEAT & CLEAN GLASS TOP BAR ═══════ */
+.fav-glass-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.fav-glass-nav-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: max(12px, env(safe-area-inset-top, 0px)) 18px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.fav-glass-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.fav-glass-nav-icon-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1.5px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.fav-glass-nav-icon-badge:hover {
+  transform: scale(1.05);
+}
+
+.fav-nav-icon-svg.heart {
+  color: #EF4444;
+  fill: #EF4444;
+  filter: drop-shadow(0 1px 3px rgba(239, 68, 68, 0.25));
+}
+
+.fav-nav-icon-svg.bookmark {
+  color: #10B981;
+  fill: #10B981;
+}
+
+.fav-glass-nav-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fav-glass-nav-title {
+  font-size: 19px;
   font-weight: 800;
   color: #0F172A;
   margin: 0;
-  letter-spacing: -0.02em;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-[data-theme="dark"] .fav-title {
-  color: #F8FAFC;
-}
-
-.fav-subtitle {
-  font-size: 14px;
-  color: #64748B;
-  margin: 4px 0 0 0;
-  font-weight: 400;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-[data-theme="dark"] .fav-subtitle {
-  color: #94A3B8;
-}
-
-.fav-header-badge {
+.fav-glass-nav-subtitle {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: #059669;
-  background-color: #ECFDF5;
-  padding: 4px 10px;
-  border-radius: 9999px;
+  margin: 2px 0 0 0;
+  letter-spacing: 0.01em;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
+}
+
+.fav-glass-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.fav-count-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(5, 150, 105, 0.1);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+  color: #047857;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-[data-theme="dark"] .fav-header-badge {
-  background-color: rgba(6, 78, 59, 0.4);
-  color: #34D399;
+.fav-sparkle-dot {
+  color: #059669;
 }
 
-/* Category Filter Pills */
-.fav-pills-scroll {
+.fav-glass-theme-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  outline: none;
+}
+
+.fav-glass-theme-btn:hover {
+  background: #FFFFFF;
+  color: #059669;
+  transform: scale(1.08);
+}
+
+.fav-glass-theme-btn:active {
+  transform: scale(0.92);
+}
+
+/* ═══════ MAIN CONTENT AREA ═══════ */
+.fav-glass-content {
+  position: relative;
+  z-index: 10;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 18px 18px 32px;
+  box-sizing: border-box;
+}
+
+/* ═══════ CATEGORY FILTER CAPSULES ═══════ */
+.fav-pills-glass-wrapper {
+  margin-bottom: 20px;
+}
+
+.fav-pills-glass-bar {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 22px;
+  padding: 2px 0 6px 0;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
-.fav-pills-scroll::-webkit-scrollbar {
+.fav-no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-.fav-pill {
-  background-color: #F1F5F9;
-  color: #475569;
-  border: none;
+.fav-glass-pill {
+  padding: 7px 16px;
   border-radius: 9999px;
-  padding: 6px 16px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: #334155;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   outline: none;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-.fav-pill:hover {
-  background-color: #E2E8F0;
-  color: #1E293B;
+.fav-glass-pill:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #059669;
+  transform: translateY(-1px);
 }
 
-.fav-pill.active {
-  background-color: #059669;
+.fav-glass-pill.active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: #FFFFFF;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+  font-weight: 700;
+  border-color: #059669;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+  transform: translateY(-1px);
 }
 
-[data-theme="dark"] .fav-pill {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #CBD5E1;
-}
-
-[data-theme="dark"] .fav-pill:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
-[data-theme="dark"] .fav-pill.active {
-  background-color: #059669;
-  color: #FFFFFF;
-  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.35);
-}
-
-/* Cards List */
-.fav-list {
+/* ═══════ GLASSMORPHIC DUA CARDS ═══════ */
+.fav-cards-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Card Design Matching Reference */
-.fav-card {
-  background-color: #FFFFFF;
-  border: 1px solid #F1F5F9;
-  border-radius: 16px;
-  padding: 22px 20px 16px 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+.fav-glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 26px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 30px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  padding: 22px 20px 18px;
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
-  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
-.fav-card:hover {
+.fav-glass-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  border-color: #E2E8F0;
+  border-color: #A7F3D0;
+  box-shadow: 0 12px 36px -4px rgba(5, 150, 105, 0.10), 0 4px 10px -1px rgba(0, 0, 0, 0.03);
 }
 
-[data-theme="dark"] .fav-card {
-  background-color: #142820;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+.fav-card-shine-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, transparent 100%);
+  pointer-events: none;
 }
 
-[data-theme="dark"] .fav-card:hover {
-  border-color: rgba(52, 211, 153, 0.25);
+.fav-card-content-wrap {
+  position: relative;
+  z-index: 2;
 }
 
-/* Arabic Text */
+.fav-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 10px;
+}
+
+.fav-category-glass-pill {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 11px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
+}
+
+.fav-category-sparkle {
+  color: #059669;
+}
+
+.fav-card-actions-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.fav-card-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(241, 245, 249, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.fav-card-action-btn:hover {
+  background: #FFFFFF;
+  color: #059669;
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(5, 150, 105, 0.18);
+}
+
+.fav-card-action-btn:active {
+  transform: scale(0.92);
+}
+
+.fav-card-action-btn.playing {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #6EE7B7;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+}
+
+.fav-heart-btn {
+  color: #EF4444;
+}
+
+.fav-heart-btn:hover {
+  color: #DC2626;
+  background: #FEE2E2;
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.2);
+}
+
+.fav-copied-tooltip {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #064E3B;
+  color: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ═══════ ARABIC DUA TEXT ═══════ */
 .fav-arabic-wrap {
   width: 100%;
-  margin-bottom: 16px;
+  margin: 10px 0 16px;
 }
 
 .fav-arabic-text {
-  font-family: 'Amiri', 'Traditional Arabic', serif;
+  font-family: 'Scheherazade New', 'Amiri', serif;
   font-size: 24px;
-  line-height: 2.1;
+  line-height: 2.2;
   color: #0F172A;
+  font-weight: 700;
   text-align: right;
   direction: rtl;
   margin: 0;
@@ -173,191 +420,272 @@
   overflow-wrap: break-word;
 }
 
-[data-theme="dark"] .fav-arabic-text {
-  color: #F8FAFC;
-}
-
-/* Malayalam Meaning / Translation */
+/* ═══════ MALAYALAM MEANING ═══════ */
 .fav-meaning-text {
-  font-family: var(--font-malayalam, sans-serif);
   font-size: 14.5px;
-  line-height: 1.65;
+  font-weight: 600;
   color: #334155;
-  text-align: left;
-  margin: 0 0 18px 0;
+  line-height: 1.8;
+  margin: 0 0 16px 0;
   word-break: normal;
   overflow-wrap: break-word;
+  font-family: 'Noto Sans Malayalam', var(--font-malayalam, sans-serif);
 }
 
-[data-theme="dark"] .fav-meaning-text {
-  color: #CBD5E1;
-}
-
-/* Card Footer */
+/* ═══════ CARD FOOTER ═══════ */
 .fav-card-footer {
-  border-top: 1px solid #F1F5F9;
-  padding-top: 14px;
+  border-top: 1px solid rgba(226, 232, 240, 0.7);
+  padding-top: 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
-[data-theme="dark"] .fav-card-footer {
-  border-top-color: rgba(255, 255, 255, 0.08);
-}
-
-.fav-category-pill {
-  background-color: #ECFDF5;
-  color: #059669;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+.fav-ref-pill {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-[data-theme="dark"] .fav-category-pill {
-  background-color: rgba(6, 78, 59, 0.4);
-  color: #34D399;
+.fav-ref-icon {
+  color: #059669;
+  flex-shrink: 0;
 }
 
-.fav-card-actions {
-  display: flex;
+.fav-read-hint {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-}
-
-.fav-action-btn {
-  background: none;
-  border: none;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: transform 0.18s ease, color 0.18s ease;
-  outline: none;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.fav-action-btn:hover {
-  transform: scale(1.14);
-}
-
-.fav-action-btn:active {
-  transform: scale(0.92);
-}
-
-.fav-play-btn {
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
   color: #64748B;
+  transition: color 0.15s ease, transform 0.15s ease;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-.fav-play-btn:hover,
-.fav-play-btn.is-playing {
+.fav-glass-card:hover .fav-read-hint {
   color: #059669;
+  transform: translateX(2px);
 }
 
-[data-theme="dark"] .fav-play-btn {
-  color: #94A3B8;
+.fav-read-hint-arrow {
+  color: currentColor;
 }
 
-[data-theme="dark"] .fav-play-btn.is-playing {
-  color: #34D399;
-}
-
-.fav-heart-btn {
-  color: #059669;
-}
-
-[data-theme="dark"] .fav-heart-btn {
-  color: #059669;
-}
-
-/* Empty State Matching Reference */
-.fav-empty-container {
+/* ═══════ CLASSIC GLASS EMPTY STATE ═══════ */
+.fav-empty-glass-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 72px 20px 48px;
-  text-align: center;
+  padding: 32px 8px 48px;
 }
 
-.fav-empty-icon-circle {
+.fav-empty-glass-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 36px -4px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02);
+  padding: 56px 24px 44px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.fav-empty-icon-glow-wrap {
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background-color: #ECFDF5;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 70%);
+  border: 2px solid rgba(16, 185, 129, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+  animation: fav-float 10s infinite ease-in-out;
 }
 
-[data-theme="dark"] .fav-empty-icon-circle {
-  background-color: rgba(6, 78, 59, 0.35);
+.fav-empty-icon-svg {
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.3));
 }
 
-.fav-empty-bookmark-icon {
-  color: #10B981;
-  fill: #10B981;
-}
-
-.fav-empty-title {
-  font-size: 20px;
-  font-weight: 700;
+.fav-empty-glass-title {
+  font-size: 22px;
+  font-weight: 800;
   color: #0F172A;
-  margin: 0 0 8px 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.01em;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-[data-theme="dark"] .fav-empty-title {
-  color: #F8FAFC;
-}
-
-.fav-empty-desc {
-  font-size: 14px;
+.fav-empty-glass-desc {
+  font-size: 14.5px;
+  font-weight: 500;
   color: #64748B;
-  max-width: 290px;
-  margin: 0 auto;
-  line-height: 1.55;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  max-width: 320px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-[data-theme="dark"] .fav-empty-desc {
-  color: #94A3B8;
-}
-
-.fav-explore-btn {
-  margin-top: 24px;
-  background-color: #059669;
+.fav-explore-glass-btn {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
   border: none;
   border-radius: 9999px;
-  padding: 10px 24px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 12px 28px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.32);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  font-family: 'Noto Sans Malayalam', var(--font-sans, sans-serif);
 }
 
-.fav-explore-btn:hover {
-  background-color: #047857;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.32);
+.fav-explore-glass-btn:hover {
+  background: linear-gradient(135deg, #047857 0%, #065F46 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.42);
 }
 
-.fav-explore-btn:active {
+.fav-explore-glass-btn:active {
   transform: scale(0.96);
 }
 
+/* ════════════════════════════════════════════════════════════
+   DARK THEME: GLASSMORPHIC FAVORITES
+   ════════════════════════════════════════════════════════════ */
+[data-theme='dark'] .fav-glass-root {
+  background-color: #08120D;
+  color: #F8FAFC;
+}
+
+[data-theme='dark'] .fav-aurora-blob-1 { background-color: #065F46; opacity: 0.35; }
+[data-theme='dark'] .fav-aurora-blob-2 { background-color: #0D4F4F; opacity: 0.25; }
+[data-theme='dark'] .fav-aurora-blob-3 { background-color: #1E3A5F; opacity: 0.25; }
+
+[data-theme='dark'] .fav-glass-nav {
+  background: rgba(10, 22, 17, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .fav-glass-nav-title {
+  color: #F8FAFC;
+}
+
+[data-theme='dark'] .fav-glass-nav-subtitle {
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-count-pill {
+  background: rgba(6, 78, 59, 0.45);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-glass-theme-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #E2E8F0;
+}
+
+[data-theme='dark'] .fav-glass-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #CBD5E1;
+}
+
+[data-theme='dark'] .fav-glass-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-glass-pill.active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #FFFFFF;
+  border-color: #059669;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.4);
+}
+
+[data-theme='dark'] .fav-glass-card,
+[data-theme='dark'] .fav-empty-glass-card {
+  background: rgba(14, 28, 22, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .fav-glass-card:hover {
+  border-color: rgba(52, 211, 153, 0.3);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .fav-card-shine-top {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 100%);
+}
+
+[data-theme='dark'] .fav-category-glass-pill {
+  background: rgba(6, 78, 59, 0.5);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-card-action-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #CBD5E1;
+}
+
+[data-theme='dark'] .fav-card-action-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-arabic-text {
+  color: #F8FAFC;
+}
+
+[data-theme='dark'] .fav-meaning-text {
+  color: #CBD5E1;
+}
+
+[data-theme='dark'] .fav-card-footer {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .fav-ref-pill {
+  color: #34D399;
+}
+
+[data-theme='dark'] .fav-read-hint {
+  color: #94A3B8;
+}
+
+[data-theme='dark'] .fav-empty-glass-title {
+  color: #F8FAFC;
+}
+
+[data-theme='dark'] .fav-empty-glass-desc {
+  color: #94A3B8;
+}
+
+[data-theme='dark'] .fav-empty-icon-glow-wrap {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 70%);
+  border-color: rgba(52, 211, 153, 0.3);
+}

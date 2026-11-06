@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
-  ChevronLeft, 
-  ChevronRight, 
   Play, 
   Pause, 
   Volume2, 
@@ -11,11 +9,14 @@ import {
   BookOpen, 
   ChevronDown, 
   ChevronUp, 
+  ChevronLeft,
+  ChevronRight,
   Share2, 
   Info,
   ArrowLeft,
   Folder,
-  Sparkles
+  Sparkles,
+  BookMarked
 } from 'lucide-react';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
@@ -126,7 +127,7 @@ const AudioPlayer = ({ url }) => {
 
   return (
     <div 
-      className="cdr-audio-player flex items-center gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm mt-6"
+      className="cdr-audio-pill"
       onTouchStart={(e) => e.stopPropagation()}
       onTouchMove={(e) => e.stopPropagation()}
       onTouchEnd={(e) => e.stopPropagation()}
@@ -137,30 +138,30 @@ const AudioPlayer = ({ url }) => {
         onClick={togglePlay}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
-        className="cdr-audio-play-btn w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-700 transition-colors shadow-md flex-shrink-0"
-        aria-label={isPlaying ? "Pause" : "Play"}
-        title={isPlaying ? "Pause" : "Play"}
+        className="cdr-audio-circle-btn"
+        aria-label={isPlaying ? 'Pause' : 'Play'}
+        title={isPlaying ? 'Pause' : 'Play'}
       >
-        {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" style={{ marginLeft: '2px' }} />}
+        {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" style={{ marginLeft: '2px' }} />}
       </button>
       <div 
-        className="cdr-audio-track-wrap flex-1 cursor-pointer" 
+        className="cdr-audio-track-wrap" 
         onClick={handleSeek}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
         role="progressbar"
       >
-        <div className="cdr-audio-track h-1.5 w-full bg-emerald-200 rounded-full overflow-hidden">
+        <div className="cdr-audio-track">
           <div 
-            className="cdr-audio-fill h-full bg-emerald-600 rounded-full transition-all duration-150 ease-linear"
+            className="cdr-audio-fill"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
       <button 
         type="button"
-        className="cdr-audio-vol-btn text-emerald-600 hover:text-emerald-800 p-1"
+        className="cdr-audio-vol-btn"
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
         onClick={(e) => {
@@ -179,75 +180,38 @@ const AudioPlayer = ({ url }) => {
   );
 };
 
-// --- WORD BY WORD ACCORDION ---
-const WordByWordAccordion = ({ words }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  if (!words || words.length === 0) return null;
-
-  return (
-    <div className="cdr-wbw-box mt-6 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm max-w-full">
-      <button 
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-        className="cdr-wbw-btn w-full px-3.5 py-3 flex items-center justify-between gap-2 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
-        aria-expanded={isOpen}
-      >
-        <div className="cdr-wbw-title flex items-center gap-2 text-slate-700 font-medium min-w-0 flex-1 flex-wrap">
-          <BookOpen size={18} className="text-emerald-600 flex-shrink-0" />
-          <span className="break-words">Word by Word Meaning (പദാനുപദ അർത്ഥം)</span>
-          <span style={{ fontSize: '11px', background: '#ECFDF5', color: '#059669', padding: '2px 8px', borderRadius: '999px', fontWeight: 600, flexShrink: 0 }}>
-            {words.length} പദങ്ങൾ
-          </span>
-        </div>
-        <div className="flex-shrink-0 text-slate-500">
-          {isOpen ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
-        </div>
-      </button>
-      
-      {isOpen && (
-        <div className="cdr-wbw-grid p-2.5 sm:p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-4 bg-white border-t border-slate-100">
-          {words.map((word, idx) => (
-            <div key={idx} className="cdr-wbw-card min-w-0 flex flex-col items-end text-right p-2.5 sm:p-3 rounded-lg bg-slate-50 border border-slate-100 hover:border-emerald-200 transition-colors overflow-hidden">
-              <span className="cdr-wbw-ar text-lg sm:text-xl font-arabic text-emerald-900 mb-1.5 font-medium max-w-full break-words" dir="rtl">{word.ar}</span>
-              <span className="cdr-wbw-ml text-xs sm:text-sm text-slate-600 w-full text-right font-malayalam break-words leading-relaxed">{word.ml}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// --- DUA CARD ---
-const DuaCard = ({ 
+// --- MULTI-CARD DUA DISPLAY COMPONENT ---
+const DuaMultiCard = ({ 
   dua, 
-  currentPage, 
-  totalPages, 
+  duaNumber,
   isCurrentSlide,
   isBookmarked,
   onToggleBookmark
 }) => {
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [wbwOpen, setWbwOpen] = useState(false);
+
+  if (!dua) return null;
 
   const bookmarkedStatus = isBookmarked !== undefined ? isBookmarked : localBookmarked;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${dua.dua}\n\n${dua.trans}\n\n${dua.ref}`);
+    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(textParts.join('\n\n'));
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
-    const text = `${dua.dua}\n\n${dua.trans}\n\n${dua.ref}`;
+    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    const text = textParts.join('\n\n');
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Dua #${dua.id}`,
+          title: `${duaNumber || dua.id}`,
           text
         });
       } catch (err) {
@@ -267,38 +231,30 @@ const DuaCard = ({
   };
 
   return (
-    <div className="cdr-card-scroll w-full h-full p-4 sm:p-6 overflow-y-auto pb-6 scroll-smooth">
-      <div className="cdr-dua-card max-w-3xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+    <div className="cdr-cards-column">
+      {/* ═══════ CARD 1: Main Dua (Arabic + Audio Player) ═══════ */}
+      <div className="cdr-card-main-glass">
+        <div className="cdr-card-shine-top"></div>
         
-        {/* Card Header */}
-        <div className="cdr-card-header">
-          {/* Row 1: Badges & Action Buttons */}
-          <div className="cdr-card-top-bar">
-            <div className="cdr-top-badge-wrap">
-              <span className="cdr-dua-badge">
-                Dua #{dua.id}
-              </span>
-              {/* Short hint / repetition badge (<= 40 chars, e.g. " ഇത് മൂന്ന് പ്രാവശ്യം പറയുക") */}
-              {dua.hint && dua.hint.trim().length <= 40 && (
-                <span className="cdr-short-hint-pill">
-                   {dua.hint.trim()}
-                </span>
-              )}
+        <div className="cdr-card-relative-content">
+          {/* Header: Badge & Icons */}
+          <div className="cdr-card-top-row">
+            <div className="cdr-card-dua-badge">
+              {duaNumber ? `${duaNumber}` : (dua.id ? `DUA #${dua.id}` : 'DUA')}
             </div>
-
             <div 
-              className="cdr-card-actions"
+              className="cdr-card-action-group"
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
             >
               <button 
                 onClick={handleCopy} 
-                className="cdr-action-btn"
+                className="cdr-icon-btn" 
                 title="Copy Dua"
                 aria-label="Copy Dua"
               >
-                <Copy size={18} />
+                <Copy size={20} />
                 {copied && (
                   <span className="cdr-copied-pill">
                     Copied!
@@ -307,135 +263,171 @@ const DuaCard = ({
               </button>
               <button 
                 onClick={handleBookmarkClick} 
-                className={`cdr-action-btn ${bookmarkedStatus ? 'bookmarked' : ''}`}
+                className={`cdr-icon-btn ${bookmarkedStatus ? 'bookmarked' : ''}`}
                 title={bookmarkedStatus ? "Remove Bookmark" : "Bookmark Dua"}
                 aria-label="Bookmark"
               >
-                {bookmarkedStatus ? <BookmarkCheck size={18} fill="currentColor" /> : <Bookmark size={18} />}
+                {bookmarkedStatus ? <BookmarkCheck size={20} fill="currentColor" /> : <Bookmark size={20} />}
               </button>
               <button 
-                onClick={handleShare}
-                className="cdr-action-btn"
+                onClick={handleShare} 
+                className="cdr-icon-btn" 
                 title="Share"
                 aria-label="Share"
               >
-                <Share2 size={18} />
+                <Share2 size={20} />
               </button>
             </div>
           </div>
 
-          {/* Row 2: Full-width Dua Occasion / Context Title (spans 100% of the card) */}
-          {dua.desc && (
-            <div className="cdr-dua-desc-row">
-              <p className="cdr-dua-desc-text">
-                {dua.desc.trim()}
-              </p>
+          {/* Malayalam Instruction / Occasion Text */}
+          {dua.desc && dua.desc.trim().length > 0 && (
+            <div className="cdr-card-desc-text">
+              {dua.desc.trim()}
             </div>
           )}
-        </div>
 
-        {/* Main Content */}
-        <div className="cdr-card-body p-4 sm:p-6 md:p-8">
-          {/* Full-width Context & Timing Callout (for detailed notes > 40 chars) */}
+          {/* Short hint badge if exists */}
+          {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
+            <div className="cdr-card-hint-pill">
+              <Sparkles size={14} className="cdr-hint-sparkle" />
+              <span>{dua.hint.trim()}</span>
+            </div>
+          )}
+
+          {/* Detailed instruction callout if hint > 40 chars */}
           {dua.hint && dua.hint.trim().length > 40 && (
-            <div className="cdr-instruction-callout">
-              <div className="cdr-instruction-icon-wrap">
+            <div className="cdr-card-callout">
+              <div className="cdr-callout-icon-wrap">
                 <Sparkles size={16} />
               </div>
-              <div className="cdr-instruction-body">
-                <span className="cdr-instruction-label">
+              <div className="cdr-callout-body">
+                <span className="cdr-callout-label">
                   സമയം & നിർദ്ദേശം
                 </span>
-                <p className="cdr-instruction-text">
+                <p className="cdr-callout-text">
                   {dua.hint.trim()}
                 </p>
               </div>
             </div>
           )}
 
-          <div className="cdr-arabic-wrap mb-6 sm:mb-8">
-            <p 
-              className="cdr-arabic-text text-2xl sm:text-4xl md:text-5xl font-arabic text-slate-800 leading-[2.3] sm:leading-[2.5] text-right break-words" 
-              dir="rtl" 
-              style={{ fontFamily: "'Amiri', serif" }}
-            >
+          {/* Arabic Dua */}
+          {dua.dua && (
+            <div className="cdr-card-arabic" dir="rtl">
               {dua.dua}
-            </p>
-          </div>
-
-          <AudioPlayer url={dua.audio_url} isCurrentSlide={isCurrentSlide} />
-          <hr className="cdr-divider my-6 sm:my-8 border-slate-100" />
-
-          <div className="mb-6">
-            <h4 className="cdr-section-title text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-3">
-              Translation
-            </h4>
-            <p className="cdr-trans-p text-base sm:text-lg text-slate-700 leading-relaxed whitespace-pre-line font-malayalam break-words">
-              {dua.trans}
-            </p>
-          </div>
-
-          {dua.transli && (
-            <div className="cdr-transli-box mb-6 bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-100">
-              <h4 className="cdr-transli-title text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                Transliteration
-              </h4>
-              <p className="cdr-transli-p text-sm sm:text-base text-slate-600 italic break-words leading-relaxed">
-                "{dua.transli}"
-              </p>
             </div>
           )}
 
-          <WordByWordAccordion words={dua.word_by_word} />
-
-          <div className="cdr-meta-grid mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {dua.ref && (
-              <div className="cdr-ref-box bg-emerald-50/50 p-3.5 sm:p-4 rounded-xl border border-emerald-100 min-w-0">
-                <div className="cdr-ref-title flex items-center gap-2 text-emerald-800 font-medium mb-1">
-                  <BookOpen size={16} className="flex-shrink-0" />
-                  <span className="text-sm">Reference</span>
-                </div>
-                <p className="cdr-ref-p text-slate-700 text-sm break-words leading-relaxed">{dua.ref}</p>
-              </div>
-            )}
-            
-            {dua.desc && (
-              <div className="cdr-virtue-box bg-amber-50/50 p-3.5 sm:p-4 rounded-xl border border-amber-100 min-w-0">
-                <div className="cdr-virtue-title flex items-center gap-2 text-amber-800 font-medium mb-1">
-                  <Info size={16} className="flex-shrink-0" />
-                  <span className="text-sm">Virtue / Info</span>
-                </div>
-                <p className="cdr-virtue-p text-slate-700 text-sm break-words leading-relaxed">{dua.desc}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Hadith Commentary (if available) */}
-          {dua.dua_hadith && dua.dua_hadith.filter(h => h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
-            <div 
-              key={hIdx} 
-              style={{ 
-                marginTop: '1rem', 
-                background: 'rgba(236, 253, 245, 0.75)', 
-                padding: '0.875rem 1rem', 
-                borderRadius: '0.75rem', 
-                border: '1px solid #A7F3D0',
-                overflowWrap: 'break-word',
-                wordBreak: 'break-word',
-                minWidth: 0
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#065F46', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.35rem', fontFamily: 'var(--font-malayalam, sans-serif)', flexWrap: 'wrap' }}>
-                <BookOpen size={16} style={{ flexShrink: 0 }} />
-                <span style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>{h.title || "ഹദീസ് വിവരണം"}</span>
-              </div>
-              <p style={{ margin: 0, color: '#334155', fontSize: '0.875rem', lineHeight: 1.6, fontFamily: 'var(--font-malayalam, sans-serif)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-                {h.hadith}
-              </p>
-            </div>
-          ))}
+          {/* Audio Player */}
+          {dua.audio_url && (
+            <AudioPlayer url={dua.audio_url} isCurrentSlide={isCurrentSlide} />
+          )}
         </div>
       </div>
+
+      {/* ═══════ CARD 2: Translation ═══════ */}
+      {dua.trans && dua.trans.trim().length > 0 && (
+        <div className="cdr-card-trans-glass">
+          <h3 className="cdr-trans-heading">TRANSLATION</h3>
+          <p className="cdr-trans-body">
+            {dua.trans}
+          </p>
+        </div>
+      )}
+
+      {/* ═══════ CARD 3: Transliteration (Separate Glass Card) ═══════ */}
+      {dua.transli && dua.transli.trim().length > 0 && (
+        <div className="cdr-card-transli-glass">
+          <h3 className="cdr-transli-heading">TRANSLITERATION</h3>
+          <p className="cdr-transli-body">
+            "{dua.transli}"
+          </p>
+        </div>
+      )}
+
+      {/* ═══════ CARD 4: Word by Word Meaning (Accordion) ═══════ */}
+      {Array.isArray(dua.word_by_word) && dua.word_by_word.length > 0 && (
+        <div className="cdr-card-wbw-glass">
+          <div 
+            onClick={() => setWbwOpen(!wbwOpen)}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            className="cdr-wbw-toggle-row"
+            role="button"
+            tabIndex={0}
+          >
+            <div className="cdr-wbw-left-info">
+              <div className="cdr-wbw-icon-wrap">
+                <BookMarked size={20} />
+              </div>
+              <div className="cdr-wbw-text-wrap">
+                <span className="cdr-wbw-main-title">Word by Word Meaning</span>
+                <span className="cdr-wbw-sub-title">(പദാനുപദ അർത്ഥം)</span>
+              </div>
+            </div>
+            <div className="cdr-wbw-right-info">
+              <span className="cdr-wbw-pill-badge">
+                {dua.word_by_word.length} പദങ്ങൾ
+              </span>
+              <div className="cdr-wbw-chevron-wrap">
+                {wbwOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </div>
+            </div>
+          </div>
+
+          {wbwOpen && (
+            <div className="cdr-wbw-grid-box">
+              {dua.word_by_word.map((word, idx) => (
+                <div key={idx} className="cdr-wbw-word-tile">
+                  <span className="cdr-wbw-ar-text" dir="rtl">{word?.ar || ''}</span>
+                  <span className="cdr-wbw-ml-text">{word?.ml || ''}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════ CARD 5: Reference ═══════ */}
+      {dua.ref && dua.ref.trim().length > 0 && (
+        <div className="cdr-card-ref-glass">
+          <div className="cdr-ref-header-row">
+            <BookOpen size={20} />
+            <h3 className="cdr-ref-heading">Reference</h3>
+          </div>
+          <p className="cdr-ref-body-text" dir="rtl">
+            {dua.ref}
+          </p>
+        </div>
+      )}
+
+      {/* ═══════ CARD 6: Virtue / Info ═══════ */}
+      {dua.desc && dua.desc.trim().length > 0 && (
+        <div className="cdr-card-virtue-glass">
+          <div className="cdr-virtue-header-row">
+            <Info size={20} />
+            <h3 className="cdr-virtue-heading">Virtue / Info</h3>
+          </div>
+          <p className="cdr-virtue-body-text">
+            {dua.desc}
+          </p>
+        </div>
+      )}
+
+      {/* ═══════ CARD 7: Hadith Commentary (if available) ═══════ */}
+      {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
+        <div key={hIdx} className="cdr-card-ref-glass">
+          <div className="cdr-ref-header-row">
+            <BookOpen size={20} />
+            <h3 className="cdr-ref-heading">{h.title || "ഹദീസ് വിവരണം"}</h3>
+          </div>
+          <p className="cdr-ref-body-text">
+            {h.hadith}
+          </p>
+        </div>
+      ))}
     </div>
   );
 };
@@ -457,14 +449,36 @@ export default function CategoryDuaReader({
     if (initialSubcategory && initialSubcategory.duas && initialSubcategory.duas.length > 0) {
       return initialSubcategory.duas;
     }
+    if (initialCategory) {
+      if (initialCategory.subcategories?.length === 1 && initialCategory.subcategories[0]?.duas?.length > 0) {
+        return initialCategory.subcategories[0].duas;
+      }
+      const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
+      if (allDuas.length > 0) return allDuas;
+    }
     const defaultSub = CATEGORIES_DATA[0]?.subcategories?.[0];
     return defaultSub ? defaultSub.duas : [];
   });
 
-  const [breadcrumb, setBreadcrumb] = useState(() => ({
-    category: initialCategory?.name || CATEGORIES_DATA[0]?.name || "നമസ്കാരം",
-    subcategory: initialSubcategory?.name || CATEGORIES_DATA[0]?.subcategories?.[0]?.name || "നമസ്കാരത്തിലെ പ്രാരംഭ പ്രാർത്ഥന"
-  }));
+  const [breadcrumb, setBreadcrumb] = useState(() => {
+    if (initialSubcategory) {
+      return {
+        category: initialCategory?.name || "നമസ്കാരം",
+        subcategory: initialSubcategory.name
+      };
+    }
+    if (initialCategory) {
+      const firstSub = initialCategory.subcategories?.[0];
+      return {
+        category: initialCategory.name,
+        subcategory: firstSub ? firstSub.name : initialCategory.name
+      };
+    }
+    return {
+      category: CATEGORIES_DATA[0]?.name || "നമസ്കാരം",
+      subcategory: CATEGORIES_DATA[0]?.subcategories?.[0]?.name || "നമസ്കാരത്തിലെ പ്രാരംഭ പ്രാർത്ഥന"
+    };
+  });
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
@@ -485,11 +499,22 @@ export default function CategoryDuaReader({
   useEffect(() => {
     if (initialCategory) {
       setExpandedCatId(initialCategory.id);
+      if (!initialSubcategory) {
+        const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
+        if (allDuas.length > 0) {
+          setActiveDuas(allDuas);
+          const firstSub = initialCategory.subcategories?.[0];
+          setBreadcrumb({
+            category: initialCategory.name,
+            subcategory: initialCategory.subcategories?.length === 1 && firstSub ? firstSub.name : initialCategory.name
+          });
+        }
+      }
       if (initialView === 'categories') {
         setView('categories');
       }
     }
-  }, [initialCategory, initialView]);
+  }, [initialCategory, initialView, initialSubcategory]);
 
   // --- Handlers for Category View ---
   const handleCategoryClick = (catId) => {
@@ -526,12 +551,11 @@ export default function CategoryDuaReader({
   const isInteractiveElement = (target) => {
     if (!target) return false;
     return !!target.closest(
-      'button, [role="button"], input, [role="progressbar"], .cdr-audio-player, audio, .cdr-action-btn, .cdr-wbw-toggle, .cdr-wbw-card, a, select, textarea, .no-swipe'
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe'
     );
   };
 
   const onTouchStart = (e) => {
-    // If touch begins on audio player, controls, buttons, or inputs, completely disable swipe
     if (isInteractiveElement(e.target)) {
       isSwipeIgnoredRef.current = true;
       return;
@@ -571,23 +595,17 @@ export default function CategoryDuaReader({
       return;
     }
 
-    // A tap without intentional dragging should NEVER flip the page
     if (!touchMoveRef.current.moved) return;
 
     const diffX = touchStartRef.current.x - touchMoveRef.current.x;
     const diffY = touchStartRef.current.y - touchMoveRef.current.y;
     const duration = Date.now() - touchStartRef.current.time;
 
-    // Reset moved flag
     touchMoveRef.current.moved = false;
 
-    // Minimum distance threshold to confirm intentional swipe (60px)
     const minSwipeDistance = 60;
-
-    // Horizontal movement must dominate vertical movement by at least 1.5x (prevents vertical scrolling conflict)
     const isHorizontalSwipe = Math.abs(diffX) >= minSwipeDistance && Math.abs(diffX) > Math.abs(diffY) * 1.5;
 
-    // Must be completed within a reasonable gesture duration (< 800ms)
     if (isHorizontalSwipe && duration < 800) {
       if (diffX > 0 && currentIndex < activeDuas.length - 1) {
         // Swiped Left -> Go to Next Dua
@@ -629,10 +647,24 @@ export default function CategoryDuaReader({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex, view, activeDuas.length, handleBackToHomeOrCategories]);
 
+  // Keep active pill scrolled into view in pagination bar
+  const pillBarRef = useRef(null);
+  useEffect(() => {
+    if (view === 'reading' && pillBarRef.current) {
+      const activeEl = pillBarRef.current.querySelector('.cdr-number-pill.active');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  }, [currentIndex, view]);
+
   return (
-    <div className="cdr-container h-full w-full bg-slate-100 flex flex-col font-sans overflow-hidden">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');`}</style>
-      
+    <div className="cdr-container">
+      {/* Global Fonts and Keyframes */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
+      `}} />
+
       {/* ------------------------------- */}
       {/* SCREEN 1: CATEGORY SELECTION UI */}
       {/* ------------------------------- */}
@@ -802,95 +834,70 @@ export default function CategoryDuaReader({
       )}
 
       {/* ------------------------------- */}
-      {/* SCREEN 2: DUA SWIPING READER UI */}
+      {/* SCREEN 2: DUA READING VIEW     */}
       {/* ------------------------------- */}
       {view === 'reading' && (
-        <>
-          <header className="cdr-reader-header bg-emerald-800 text-white shadow-md z-10 relative flex-shrink-0">
-            <div className="cdr-reader-header-inner max-w-4xl mx-auto px-4 py-2.5 sm:py-3.5 flex items-center justify-between">
-              <div className="cdr-reader-header-left flex items-center gap-3 min-w-0 flex-1 pr-2">
-                <button 
-                  onClick={handleBackToHomeOrCategories}
-                  className="cdr-back-btn p-1.5 bg-emerald-700/50 hover:bg-emerald-700 rounded-full transition-colors flex-shrink-0"
-                  aria-label={onBackToHome ? "Back to Home" : "Back to Categories"}
-                  title={onBackToHome ? "ഹോം പേജിലേക്ക് മടങ്ങുക" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
-                >
-                  <ArrowLeft size={20} />
-                </button>
-                <div className="min-w-0 flex-1">
-                  <h1 className="cdr-reader-title text-base sm:text-lg font-bold truncate">{breadcrumb.subcategory}</h1>
-                  <div className="cdr-reader-subtitle text-emerald-200 text-xs font-medium truncate">
-                    {breadcrumb.category}
-                  </div>
-                </div>
-              </div>
-              
-              {/* Pagination Desktop */}
-              <div className="cdr-desktop-page-pill hidden sm:flex items-center gap-1.5 bg-emerald-900/60 py-1 px-3 rounded-full text-emerald-100 text-xs font-semibold border border-emerald-700/40 flex-shrink-0">
-                <span>Page {currentIndex + 1} of {activeDuas.length}</span>
+        <div className="cdr-reading-root">
+          {/* Animated Aurora Background Blobs */}
+          <div className="cdr-aurora-blob cdr-aurora-blob-1"></div>
+          <div className="cdr-aurora-blob cdr-aurora-blob-2"></div>
+          <div className="cdr-aurora-blob cdr-aurora-blob-3"></div>
+
+          {/* Sticky Top Navigation Bar */}
+          <nav className="cdr-glass-nav">
+            <div className="cdr-glass-nav-inner">
+              <button 
+                onClick={handleBackToHomeOrCategories}
+                className="cdr-glass-back-btn"
+                aria-label={onBackToHome ? "Back to Home" : "Back to Categories"}
+                title={onBackToHome ? "ഹോം പേജിലേക്ക് മടങ്ങുക" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
+              >
+                <ArrowLeft size={20} strokeWidth={2.5} />
+              </button>
+              <div className="cdr-glass-nav-titles">
+                <h1 className="cdr-glass-nav-title">{breadcrumb.subcategory}</h1>
+                <p className="cdr-glass-nav-subtitle">{breadcrumb.category}</p>
               </div>
             </div>
-          </header>
+          </nav>
 
+          {/* Horizontal Number Pagination */}
+          <div className="cdr-number-capsule-wrapper">
+            <div ref={pillBarRef} className="cdr-number-capsule-bar cdr-no-scrollbar">
+              {activeDuas.map((_, i) => (
+                <button
+                  key={i} 
+                  onClick={() => setCurrentIndex(i)}
+                  className={`cdr-number-pill ${currentIndex === i ? 'active' : ''}`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Scrollable Content Container */}
           <main 
-            className="cdr-swiper-main flex-1 min-h-0 relative overflow-hidden flex bg-slate-100"
+            className="cdr-reading-scroll-area cdr-no-scrollbar"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <div 
-              className="cdr-slider-track flex flex-row w-full h-full transition-transform duration-500 ease-out will-change-transform"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-            >
-              {activeDuas.map((dua, idx) => {
-                const isFav = (favorites || []).some(f => {
+            {activeDuas[currentIndex] && (
+              <DuaMultiCard 
+                dua={activeDuas[currentIndex]}
+                duaNumber={currentIndex + 1}
+                isCurrentSlide={true}
+                isBookmarked={(favorites || []).some(f => {
                   const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-                  return fId === String(dua.id) || 
-                         (dua.originalId !== undefined && fId === String(dua.originalId));
-                });
-                return (
-                  <div key={dua.id} className="cdr-slide-wrapper w-full h-full flex-shrink-0">
-                    <DuaCard 
-                      dua={dua} 
-                      currentPage={idx + 1} 
-                      totalPages={activeDuas.length}
-                      isCurrentSlide={currentIndex === idx}
-                      isBookmarked={isFav}
-                      onToggleBookmark={onToggleFavorite}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Desktop Navigation Arrows */}
-            <button 
-              onClick={() => setCurrentIndex(prev => prev - 1)}
-              disabled={currentIndex === 0}
-              className={`cdr-arrow-btn prev absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full shadow-lg border border-slate-200 bg-white text-slate-700 hidden sm:block transition-all ${currentIndex === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:bg-slate-50 hover:text-emerald-600'}`}
-              aria-label="Previous"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            <button 
-              onClick={() => setCurrentIndex(prev => prev + 1)}
-              disabled={currentIndex === activeDuas.length - 1}
-              className={`cdr-arrow-btn next absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full shadow-lg border border-slate-200 bg-white text-slate-700 hidden sm:block transition-all ${currentIndex === activeDuas.length - 1 ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:bg-slate-50 hover:text-emerald-600'}`}
-              aria-label="Next"
-            >
-              <ChevronRight size={24} />
-            </button>
+                  const d = activeDuas[currentIndex];
+                  return fId === String(d.id) || (d.originalId !== undefined && fId === String(d.originalId));
+                })}
+                onToggleBookmark={onToggleFavorite}
+              />
+            )}
           </main>
-
-          {/* Mobile Bottom Navigation Bar - Clean Page Number Pill (Replaces arrows & dots) */}
-          <div className="cdr-mobile-bottom-bar sm:hidden flex-shrink-0 bg-white border-t border-slate-200/80 shadow-[0_-2px_8px_rgba(0,0,0,0.04)] z-20 pb-safe">
-            <div className="cdr-mobile-bottom-inner flex items-center justify-center px-4 py-2.5">
-              <div className="cdr-page-number-pill">
-                <span>Page {currentIndex + 1} of {activeDuas.length}</span>
-              </div>
-            </div>
-          </div>
-        </>
+        </div>
       )}
     </div>
   );

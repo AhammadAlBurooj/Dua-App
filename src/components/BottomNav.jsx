@@ -10,7 +10,7 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
     },
     { 
       id: 'favorites', 
-      label: language === 'en' ? 'Favourites' : 'പ്രിയപ്പെട്ടവ', 
+      label: language === 'en' ? 'Favourites' : 'Favourites', 
       icon: Heart, 
       badge: favoritesCount 
     },

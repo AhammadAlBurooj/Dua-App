@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Toast from './components/Toast';
@@ -36,6 +36,45 @@ export default function App() {
   const [isFullWidth, setIsFullWidth] = useState(false);
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
+
+  // Calculate valid favorites count based strictly on existing Duas
+  const validFavoritesCount = useMemo(() => {
+    if (!Array.isArray(favorites) || favorites.length === 0) return 0;
+    const seen = new Set();
+    return ALL_UNIFIED_DUAS.filter(d => {
+      const dId = String(d.id);
+      const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
+      const match = favorites.some(f => {
+        if (!f) return false;
+        const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+        return fId === dId || (dOrig && fId === dOrig);
+      });
+      if (!match) return false;
+      const key = dOrig || dId;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).length;
+  }, [favorites]);
+
+  // Clean up any stale, orphan or invalid favorite IDs on mount
+  useEffect(() => {
+    if (Array.isArray(favorites) && favorites.length > 0) {
+      const sanitized = favorites.filter(f => {
+        if (!f) return false;
+        const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+        return ALL_UNIFIED_DUAS.some(d => {
+          const dId = String(d.id);
+          const dOrig = d.originalId !== undefined ? String(d.originalId) : null;
+          return fId === dId || (dOrig && fId === dOrig);
+        });
+      });
+      if (sanitized.length !== favorites.length) {
+        setFavorites(sanitized);
+        saveStoredFavorites(sanitized);
+      }
+    }
+  }, []);
 
   // Listen to audio service state
   useEffect(() => {
@@ -285,7 +324,7 @@ export default function App() {
           }
           setActiveTab(tab);
         }}
-        favoritesCount={favorites.length}
+        favoritesCount={validFavoritesCount}
         language={settings.language}
       />
 
