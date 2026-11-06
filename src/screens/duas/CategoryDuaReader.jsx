@@ -742,7 +742,7 @@ export default function CategoryDuaReader({
                       </div>
 
                       <div className="cdr-chevron-pill">
-                        <ChevronDown size={18} />
+                        {isOpen ? <ChevronUp size={16} strokeWidth={2.4} /> : <ChevronDown size={16} strokeWidth={2.4} />}
                       </div>
                     </button>
 
