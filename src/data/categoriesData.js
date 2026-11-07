@@ -210,3 +210,88 @@ export const CATEGORY_THEMES = {
   20: { bg: '#059669', border: '#059669', accent: '#475569', nameEn: 'Appendix & Virtues' },
   21: { bg: '#059669', border: '#059669', accent: '#059669', nameEn: 'Quranic Duas' }
 };
+
+/**
+ * Master sequential catalog of all non-empty subcategories across all categories in the app.
+ * Enables seamless, continuous swipe navigation across the entire Dua collection:
+ * Category 1 (Sub 1 -> Sub 2 -> ...) -> Category 2 -> ... -> Quran Category.
+ */
+export const FLATTENED_SECTIONS = [];
+CATEGORIES_DATA.forEach((category, catIndex) => {
+  (category.subcategories || []).forEach((subcategory, subIndex) => {
+    if (subcategory && Array.isArray(subcategory.duas) && subcategory.duas.length > 0) {
+      FLATTENED_SECTIONS.push({
+        sectionIndex: FLATTENED_SECTIONS.length,
+        category,
+        subcategory,
+        categoryId: category.id,
+        categoryOriginalId: category.originalId,
+        categoryName: category.name,
+        categoryNameArabic: category.nameArabic || '',
+        subcategoryId: subcategory.id,
+        subcategoryOriginalId: subcategory.originalId,
+        subcategoryName: subcategory.name,
+        subcategoryNameArabic: subcategory.nameArabic || '',
+        duas: subcategory.duas,
+        categoryIndex: catIndex,
+        subcategoryIndex: subIndex,
+        isFirstSubOfCategory: subIndex === 0,
+        isLastSubOfCategory: subIndex === (category.subcategories.length - 1)
+      });
+    }
+  });
+});
+
+export const findSectionBySubcategory = (subId, catName = null) => {
+  if (subId) {
+    const subStr = String(subId);
+    const found = FLATTENED_SECTIONS.find(s => 
+      String(s.subcategoryId) === subStr || 
+      String(s.subcategoryOriginalId) === subStr
+    );
+    if (found) return found;
+  }
+  if (catName) {
+    const cTrim = String(catName).trim().toLowerCase();
+    const found = FLATTENED_SECTIONS.find(s => 
+      String(s.categoryName).trim().toLowerCase() === cTrim
+    );
+    if (found) return found;
+  }
+  return null;
+};
+
+export const findSectionByDuaId = (duaId) => {
+  if (!duaId) return null;
+  const dStr = String(duaId);
+  return FLATTENED_SECTIONS.find(s => 
+    s.duas.some(d => String(d.id) === dStr || (d.originalId !== undefined && String(d.originalId) === dStr))
+  ) || null;
+};
+
+export const findSectionIndex = (catName, subName, subId) => {
+  if (subId) {
+    const subStr = String(subId);
+    const idx = FLATTENED_SECTIONS.findIndex(s => 
+      String(s.subcategoryId) === subStr || 
+      String(s.subcategoryOriginalId) === subStr
+    );
+    if (idx !== -1) return idx;
+  }
+  if (subName) {
+    const sTrim = String(subName).trim().toLowerCase();
+    const idx = FLATTENED_SECTIONS.findIndex(s => 
+      String(s.subcategoryName).trim().toLowerCase() === sTrim
+    );
+    if (idx !== -1) return idx;
+  }
+  if (catName) {
+    const cTrim = String(catName).trim().toLowerCase();
+    const idx = FLATTENED_SECTIONS.findIndex(s => 
+      String(s.categoryName).trim().toLowerCase() === cTrim
+    );
+    if (idx !== -1) return idx;
+  }
+  return 0;
+};
+
