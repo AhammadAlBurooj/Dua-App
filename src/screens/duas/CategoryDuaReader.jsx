@@ -24,7 +24,8 @@ import {
   CheckCircle,
   Layers,
   ArrowRight,
-  Headphones
+  Headphones,
+  Repeat
 } from 'lucide-react';
 import { 
   CATEGORIES_DATA, 
@@ -463,6 +464,8 @@ export default function CategoryDuaReader({
   const [audioProgress, setAudioProgress] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [audioVolume, setAudioVolume] = useState(85);
+  const [isRepeat, setIsRepeat] = useState(false);
+  const isRepeatRef = useRef(false);
   const stickyAudioRef = useRef(null);
   const lastReportedViewRef = useRef('');
 
@@ -544,6 +547,7 @@ export default function CategoryDuaReader({
 
     const wasPlaying = isPlaying;
     stickyAudioRef.current.src = currentAudioUrl;
+    stickyAudioRef.current.loop = isRepeatRef.current;
     stickyAudioRef.current.playbackRate = playbackSpeed;
     stickyAudioRef.current.volume = audioVolume / 100;
     setAudioProgress(0);
@@ -565,6 +569,21 @@ export default function CategoryDuaReader({
     };
   }, []);
 
+  const toggleRepeat = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
+    setIsRepeat(prev => {
+      const next = !prev;
+      isRepeatRef.current = next;
+      if (stickyAudioRef.current) {
+        stickyAudioRef.current.loop = next;
+      }
+      return next;
+    });
+  };
+
   const toggleStickyPlay = (e) => {
     if (e) {
       e.stopPropagation();
@@ -574,6 +593,7 @@ export default function CategoryDuaReader({
 
     if (!stickyAudioRef.current) {
       const audio = new Audio(currentAudioUrl);
+      audio.loop = isRepeatRef.current;
       audio.playbackRate = playbackSpeed;
       audio.volume = audioVolume / 100;
 
@@ -591,6 +611,13 @@ export default function CategoryDuaReader({
       });
 
       audio.addEventListener('ended', () => {
+        if (isRepeatRef.current) {
+          if (stickyAudioRef.current) {
+            stickyAudioRef.current.currentTime = 0;
+            stickyAudioRef.current.play().catch(() => {});
+          }
+          return;
+        }
         setIsPlaying(false);
         setAudioProgress(0);
         setCurrentTimeSec(0);
@@ -1503,6 +1530,18 @@ export default function CategoryDuaReader({
 
                 {/* Vertical Divider Line */}
                 <div className="audio-player-divider" />
+
+                {/* Repeat Button */}
+                <button 
+                  type="button"
+                  onClick={toggleRepeat}
+                  className={`audio-player-repeat-btn ${isRepeat ? 'active' : ''}`}
+                  title={isRepeat ? "Repeat is ON" : "Repeat is OFF"}
+                  aria-label={isRepeat ? "Turn Repeat Off" : "Turn Repeat On"}
+                  aria-pressed={isRepeat}
+                >
+                  <Repeat size={16} strokeWidth={2.4} />
+                </button>
 
                 {/* Playback Speed Pill (1x, 1.25x, 1.5x, 2x) */}
                 <button 
