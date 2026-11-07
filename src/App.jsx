@@ -98,7 +98,7 @@ export default function App() {
   // Register exit confirmation toast on root Home screen
   useEffect(() => {
     registerBackToastCallback(() => {
-      showToast(settings.language === 'en' ? 'Press back again to exit' : 'ആപ്പിൽ നിന്ന് പുറത്തുകടക്കാൻ വീണ്ടും അമർത്തുക');
+      showToast(settings.language === 'en' ? 'Press back again to exit' : 'Press back again to exit');
     });
   }, [settings.language]);
 
@@ -127,13 +127,13 @@ export default function App() {
     const updatedSettings = { ...settings, theme: newTheme };
     setSettings(updatedSettings);
     saveStoredSettings(updatedSettings);
-    showToast(newTheme === 'dark' ? 'ഡാർക്ക് മോഡ് ഓണാക്കി 🌙' : 'ലൈറ്റ് മോഡ് ഓണാക്കി ☀️');
+    showToast(newTheme === 'dark' ? 'Dark Mode Enabled' : 'Light Mode Enabled');
   };
 
   // Toggle Responsive Width (Mobile viewport 440px vs Full Desktop Width)
   const handleToggleWidth = () => {
     setIsFullWidth(prev => !prev);
-    showToast(isFullWidth ? 'മൊബൈൽ വ്യൂവിലേക്ക് മാറ്റി' : 'ഫുൾ വിഡ്ത് വ്യൂവിലേക്ക് മാറ്റി');
+    showToast(isFullWidth ? 'Switched to Mobile View' : 'Switched to Full-Width View');
   };
 
   // Update Settings
