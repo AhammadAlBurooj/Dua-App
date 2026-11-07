@@ -1380,8 +1380,8 @@ export default function CategoryDuaReader({
                       <span className={`cdr-indicator-pill-dot ${boundaryTransition.readyToRelease ? 'ready' : ''}`} />
                       <span>
                         {boundaryTransition.readyToRelease 
-                          ? (boundaryTransition.direction === 'next' ? "Release now to enter" : "Release now to enter")
-                          : "Hold to confirm transition..."}
+                          ? (boundaryTransition.direction === 'next' ? "Release now" : "Release now")
+                          : "Keep holding..."}
                       </span>
                     </div>
                   </div>
