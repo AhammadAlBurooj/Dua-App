@@ -207,6 +207,11 @@ const DuaMultiCard = ({
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
+  const [virtueOpen, setVirtueOpen] = useState(false);
+
+  useEffect(() => {
+    setVirtueOpen(false);
+  }, [dua?.id]);
 
   if (!dua) return null;
 
@@ -253,11 +258,8 @@ const DuaMultiCard = ({
         <div className="cdr-card-shine-top"></div>
         
         <div className="cdr-card-relative-content">
-          {/* Header: Badge & Icons */}
+          {/* Header: Action Icons */}
           <div className="cdr-card-top-row">
-            <div className="cdr-card-dua-badge">
-              {duaNumber ? `${duaNumber}` : (dua.id ? `DUA #${dua.id}` : 'DUA')}
-            </div>
             <div 
               className="cdr-card-action-group"
               onTouchStart={(e) => e.stopPropagation()}
@@ -296,14 +298,42 @@ const DuaMultiCard = ({
             </div>
           </div>
 
-          {/* Malayalam Instruction / Occasion Text */}
+          {/* Expandable Virtue / Info Section (Replaces removed instruction) */}
           {dua.desc && dua.desc.trim().length > 0 && (
-            <div className="cdr-card-desc-text">
-              {dua.desc.trim()}
+            <div className="cdr-virtue-accordion">
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setVirtueOpen(!virtueOpen);
+                }}
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchEnd={(e) => e.stopPropagation()}
+                className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
+                aria-expanded={virtueOpen}
+                title={virtueOpen ? "Collapse Virtue / Info" : "Expand Virtue / Info"}
+              >
+                <div className="cdr-virtue-toggle-left">
+                  <Info size={14} className="cdr-virtue-toggle-icon" />
+                  <span className="cdr-virtue-toggle-label">Virtue / Info</span>
+                </div>
+                <ChevronDown 
+                  size={14} 
+                  className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
+                />
+              </button>
+
+              {virtueOpen && (
+                <div className="cdr-virtue-expanded-box">
+                  <p className="cdr-virtue-body-text">
+                    {dua.desc.trim()}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Short hint badge if exists */}
+          {/* Samayam Nirdhesham (Directly BELOW Virtue / Info section) */}
           {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
             <div className="cdr-card-hint-pill">
               <Sparkles size={14} className="cdr-hint-sparkle" />
@@ -311,7 +341,6 @@ const DuaMultiCard = ({
             </div>
           )}
 
-          {/* Detailed instruction callout if hint > 40 chars */}
           {dua.hint && dua.hint.trim().length > 40 && (
             <div className="cdr-card-callout">
               <div className="cdr-callout-icon-wrap">
@@ -414,20 +443,7 @@ const DuaMultiCard = ({
         </div>
       )}
 
-      {/* ═══════ CARD 6: Virtue / Info ═══════ */}
-      {dua.desc && dua.desc.trim().length > 0 && (
-        <div className="cdr-card-virtue-glass">
-          <div className="cdr-virtue-header-row">
-            <Info size={20} />
-            <h3 className="cdr-virtue-heading">Virtue / Info</h3>
-          </div>
-          <p className="cdr-virtue-body-text">
-            {dua.desc}
-          </p>
-        </div>
-      )}
-
-      {/* ═══════ CARD 7: Hadith Commentary (if available) ═══════ */}
+      {/* ═══════ CARD 6: Hadith Commentary (if available) ═══════ */}
       {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
