@@ -68,6 +68,17 @@
   gap: 0.875rem;
 }
 
+@media (min-width: 640px) {
+  .cdr-cat-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .cdr-cat-card.is-open {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ==========================================================================
    GLASSMORPHISM CATEGORY ACCORDION (MAIN CATEGORIES)
    ========================================================================== */
@@ -652,9 +663,9 @@
 }
 
 .cdr-glass-nav-inner {
-  max-width: 480px;
+  max-width: clamp(480px, 85vw, 680px);
   margin: 0 auto;
-  padding: max(10px, env(safe-area-inset-top, 0px)) 16px 10px;
+  padding: max(10px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
   display: flex;
   align-items: center;
   gap: 14px;
@@ -721,7 +732,7 @@
   top: 60px;
   z-index: 40;
   width: 100%;
-  max-width: min(calc(100% - 24px), 480px);
+  max-width: min(calc(100% - 24px), 680px);
   margin: 8px auto 4px;
   flex-shrink: 0;
 }
@@ -781,13 +792,23 @@
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 14px 16px 90px;
-  max-width: 480px;
+  padding: 14px max(16px, env(safe-area-inset-right, 0px)) 90px max(16px, env(safe-area-inset-left, 0px));
+  max-width: clamp(480px, 85vw, 680px);
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
   position: relative;
   z-index: 10;
+}
+
+.sticky-player {
+  position: fixed;
+  bottom: 0;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100% !important;
+  max-width: 540px !important;
+  box-sizing: border-box !important;
 }
 
 .cdr-cards-column {

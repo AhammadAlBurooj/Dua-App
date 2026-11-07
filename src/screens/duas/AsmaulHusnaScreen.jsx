@@ -255,7 +255,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         <nav className="glass-card asma-nav-sticky">
           <div 
             style={{
-              maxWidth: '480px',
+              maxWidth: '1080px',
               margin: '0 auto',
               padding: '12px 20px',
               display: 'flex',
@@ -359,7 +359,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                ======================================================== */
             <div 
               style={{
-                maxWidth: '480px',
+                maxWidth: 'clamp(480px, 85vw, 680px)',
                 margin: '0 auto',
                 width: '100%',
                 padding: '20px 20px 60px',
@@ -669,7 +669,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                ======================================================== */
             <div 
               style={{
-                maxWidth: '480px',
+                maxWidth: '1080px',
                 margin: '0 auto',
                 width: '100%',
                 padding: '16px 20px 80px',
@@ -686,7 +686,9 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
+                  maxWidth: '560px',
+                  margin: '0 auto 16px auto'
                 }}
               >
                 <Search size={18} style={{ color: '#059669', flexShrink: 0 }} />
@@ -725,7 +727,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
               <div 
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(130px, 20vw, 160px), 1fr))',
                   gap: '12px'
                 }}
               >

@@ -76,7 +76,7 @@
 }
 
 .fav-glass-nav-inner {
-  max-width: 640px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: max(12px, env(safe-area-inset-top, 0px)) 18px 12px;
   display: flex;
@@ -220,7 +220,7 @@
 .fav-glass-content {
   position: relative;
   z-index: 10;
-  max-width: 640px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 18px 18px 32px;
   box-sizing: border-box;
@@ -279,9 +279,23 @@
 
 /* ═══════ GLASSMORPHIC DUA CARDS ═══════ */
 .fav-cards-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .fav-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fav-cards-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
 }
 
 .fav-glass-card {
