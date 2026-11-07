@@ -389,7 +389,7 @@ const DuaMultiCard = ({
           </div>
 
           {wbwOpen && (
-            <div className="cdr-wbw-grid-box">
+            <div className="cdr-wbw-grid-box" dir="rtl">
               {dua.word_by_word.map((word, idx) => (
                 <div key={idx} className="cdr-wbw-word-tile">
                   <span className="cdr-wbw-ar-text" dir="rtl">{word?.ar || ''}</span>
