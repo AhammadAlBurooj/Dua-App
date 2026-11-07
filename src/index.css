@@ -169,18 +169,23 @@ html, body {
 /* Desktop Displays (> 1024px) */
 @media (min-width: 1025px) {
   #root {
-    background-color: #EFECE3;
+    background-color: #E8ECE9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   [data-theme='dark'] #root {
     background-color: #060B08;
   }
   .device-viewport {
-    max-width: 460px;
+    max-width: 1120px;
     margin: 0 auto;
-    border-radius: var(--radius-xl);
+    border-radius: 28px;
+    box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   }
-  .device-viewport.full-width {
-    max-width: 1080px;
+  [data-theme='dark'] .device-viewport {
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -3230,36 +3235,49 @@ button,
 
 /* ----------------------------------------------------
    4. DESKTOPS & LARGE DISPLAYS (> 1024px)
-   Fluid full-width mode & spacious layouts
+   Fluid desktop mode & spacious multi-column layouts
    ---------------------------------------------------- */
 @media (min-width: 1024px) {
-  .device-viewport.full-width {
-    max-width: 1100px;
-  }
-
-  .device-viewport.full-width .home-categories-section .cdr-cat-list {
+  .home-categories-section .cdr-cat-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
   }
 
-  .device-viewport.full-width .home-categories-section .cdr-cat-card.is-open {
+  .home-categories-section .cdr-cat-card.is-open {
     grid-column: 1 / -1;
   }
 
-  .device-viewport.full-width .category-duas-list {
+  .category-duas-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
   }
 
-  .device-viewport.full-width .app-content {
+  .app-content {
     padding: 0 32px 40px;
   }
 
-  .device-viewport.full-width .home-hero-banner {
+  .home-hero-banner {
     padding: 36px 32px 52px;
     border-radius: 0 0 38px 38px;
+  }
+}
+
+/* ----------------------------------------------------
+   5. MOBILE LANDSCAPE MODE (< 500px height)
+   e.g. iPhone / Android rotated horizontally
+   ---------------------------------------------------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-content {
+    padding-bottom: 72px !important;
+  }
+  .bottom-nav {
+    height: 52px;
+    bottom: 8px;
+  }
+  .nav-item {
+    height: 44px;
   }
 }
 

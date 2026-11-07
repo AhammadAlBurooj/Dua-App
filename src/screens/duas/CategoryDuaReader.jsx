@@ -1099,8 +1099,10 @@ export default function CategoryDuaReader({
             style={{
               position: 'fixed',
               bottom: 0,
-              left: 0,
-              right: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '100%',
+              maxWidth: '540px',
               zIndex: 50,
               borderTopLeftRadius: '2.25rem',
               borderTopRightRadius: '2.25rem',
@@ -1211,7 +1213,7 @@ export default function CategoryDuaReader({
                 {/* Header Title & Subtitle */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: '2px' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.2 }}>
-                    DUA {currentIndex + 1}
+                    Dua {currentIndex + 1}
                   </h3>
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0D9488', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '2px', marginBottom: 0 }}>
                     {subcategoryTitle}
