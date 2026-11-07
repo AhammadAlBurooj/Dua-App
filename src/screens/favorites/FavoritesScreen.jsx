@@ -11,7 +11,8 @@ import {
   Share2,
   BookOpen,
   ChevronRight,
-  Check
+  Check,
+  ArrowLeft
 } from 'lucide-react';
 import './FavoritesScreen.css';
 
@@ -88,6 +89,7 @@ export default function FavoritesScreen({
   onTogglePlay, 
   onSelectDua, 
   onExploreDuas,
+  onBack,
   language = 'ml',
   theme = 'light',
   onToggleTheme,
@@ -243,6 +245,19 @@ export default function FavoritesScreen({
       <header className="fav-glass-nav">
         <div className="fav-glass-nav-inner">
           <div className="fav-glass-nav-left">
+            <button 
+              type="button"
+              className="fav-glass-back-btn"
+              onClick={() => {
+                if (onBack) onBack();
+                else if (onExploreDuas) onExploreDuas();
+              }}
+              title={isEnglish ? "Back to Home" : "Back to Home"}
+              aria-label="Back"
+            >
+              <ArrowLeft size={20} strokeWidth={2.4} />
+            </button>
+
             <div className="fav-glass-nav-icon-badge">
               {isBookmarkView ? (
                 <Bookmark size={20} className="fav-nav-icon-svg bookmark" />
@@ -258,8 +273,8 @@ export default function FavoritesScreen({
               </h1>
               <p className="fav-glass-nav-subtitle">
                 {isBookmarkView 
-                  ? (isEnglish ? 'Your saved bookmarks' : 'സേവ് ചെയ്ത ബുക്ക്മാർക്കുകൾ')
-                  : (isEnglish ? 'Your saved Duas & Adhkar' : 'തിരഞ്ഞെടുത്ത പ്രാർത്ഥനകൾ')}
+                  ? (isEnglish ? 'Your saved bookmarks' : 'Your saved bookmarks')
+                  : (isEnglish ? 'Your saved Duas & Adhkar' : 'Your saved Duas & Adhkar')}
               </p>
             </div>
           </div>

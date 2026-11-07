@@ -278,6 +278,10 @@ export default function App() {
             language={settings.language}
             theme={theme}
             onToggleTheme={handleToggleTheme}
+            onBack={() => {
+              setSelectedCategoryId(null);
+              setActiveTab('duas');
+            }}
             onExploreDuas={() => {
               setSelectedCategoryId(null);
               setActiveTab('duas');
@@ -296,6 +300,10 @@ export default function App() {
             onSelectDua={handleSelectDua}
             language={settings.language}
             isBookmarkView={true}
+            onBack={() => {
+              setSelectedCategoryId(null);
+              setActiveTab('duas');
+            }}
             onExploreDuas={() => {
               setSelectedCategoryId(null);
               setActiveTab('duas');
