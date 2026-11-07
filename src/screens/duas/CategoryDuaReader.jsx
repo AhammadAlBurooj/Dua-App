@@ -16,7 +16,9 @@ import {
   ArrowLeft,
   Folder,
   Sparkles,
-  BookMarked
+  BookMarked,
+  SkipBack,
+  SkipForward
 } from 'lucide-react';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
@@ -318,11 +320,6 @@ const DuaMultiCard = ({
               {dua.dua}
             </div>
           )}
-
-          {/* Audio Player */}
-          {dua.audio_url && (
-            <AudioPlayer url={dua.audio_url} isCurrentSlide={isCurrentSlide} />
-          )}
         </div>
       </div>
 
@@ -440,9 +437,41 @@ export default function CategoryDuaReader({
   initialIndex = 0,
   onBackToHome = null,
   favorites = [],
-  onToggleFavorite = null
+  onToggleFavorite = null,
+  onViewChange = null
 }) {
   const [view, setView] = useState(initialView);
+  
+  // Sticky Curved Bottom Audio Player State
+  const [isPlayerExpanded, setIsPlayerExpanded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTimeSec, setCurrentTimeSec] = useState(0);
+  const [durationSec, setDurationSec] = useState(0);
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [audioVolume, setAudioVolume] = useState(85);
+  const stickyAudioRef = useRef(null);
+  const lastReportedViewRef = useRef('');
+
+  // Notify parent of reading view state & update body class for bottom nav hiding
+  useEffect(() => {
+    if (view === 'reading') {
+      document.body.classList.add('dua-page-active');
+    } else {
+      document.body.classList.remove('dua-page-active');
+    }
+
+    if (lastReportedViewRef.current !== view) {
+      lastReportedViewRef.current = view;
+      if (typeof onViewChange === 'function') {
+        onViewChange(view);
+      }
+    }
+
+    return () => {
+      document.body.classList.remove('dua-page-active');
+    };
+  }, [view, onViewChange]);
   
   // Reading Mode State
   const [activeDuas, setActiveDuas] = useState(() => {
@@ -482,6 +511,141 @@ export default function CategoryDuaReader({
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
+
+  // Format seconds into mm:ss
+  const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const currentDua = activeDuas[currentIndex] || {};
+  const currentAudioUrl = currentDua?.audio_url 
+    ? (String(currentDua.audio_url).startsWith('http') ? String(currentDua.audio_url) : `${AUDIO_BASE}${currentDua.audio_url}.mp3`) 
+    : null;
+
+  // Sync audio with current Dua: Only the Dua in the page plays
+  useEffect(() => {
+    if (!stickyAudioRef.current) return;
+
+    if (!currentAudioUrl) {
+      stickyAudioRef.current.pause();
+      setIsPlaying(false);
+      setAudioProgress(0);
+      setCurrentTimeSec(0);
+      setDurationSec(0);
+      return;
+    }
+
+    const wasPlaying = isPlaying;
+    stickyAudioRef.current.src = currentAudioUrl;
+    stickyAudioRef.current.playbackRate = playbackSpeed;
+    stickyAudioRef.current.volume = audioVolume / 100;
+    setAudioProgress(0);
+    setCurrentTimeSec(0);
+
+    if (wasPlaying) {
+      stickyAudioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    }
+  }, [currentIndex, currentAudioUrl]);
+
+  // Audio cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (stickyAudioRef.current) {
+        stickyAudioRef.current.pause();
+        stickyAudioRef.current.src = '';
+        stickyAudioRef.current = null;
+      }
+    };
+  }, []);
+
+  const toggleStickyPlay = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
+    if (!currentAudioUrl) return;
+
+    if (!stickyAudioRef.current) {
+      const audio = new Audio(currentAudioUrl);
+      audio.playbackRate = playbackSpeed;
+      audio.volume = audioVolume / 100;
+
+      audio.addEventListener('loadedmetadata', () => {
+        if (audio.duration && !isNaN(audio.duration)) {
+          setDurationSec(audio.duration);
+        }
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        if (audio.duration) {
+          setCurrentTimeSec(audio.currentTime);
+          setAudioProgress((audio.currentTime / audio.duration) * 100);
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        setIsPlaying(false);
+        setAudioProgress(0);
+        setCurrentTimeSec(0);
+      });
+
+      stickyAudioRef.current = audio;
+    }
+
+    if (isPlaying) {
+      stickyAudioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      stickyAudioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
+    }
+  };
+
+  const handleSeek = (e) => {
+    e.stopPropagation();
+    if (!stickyAudioRef.current || !stickyAudioRef.current.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const pct = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
+    const newTime = (pct / 100) * stickyAudioRef.current.duration;
+    stickyAudioRef.current.currentTime = newTime;
+    setCurrentTimeSec(newTime);
+    setAudioProgress(pct);
+  };
+
+  const toggleSpeed = (e) => {
+    e.stopPropagation();
+    const speeds = [1, 1.25, 1.5, 2];
+    const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length;
+    const newSpeed = speeds[nextIdx];
+    setPlaybackSpeed(newSpeed);
+    if (stickyAudioRef.current) {
+      stickyAudioRef.current.playbackRate = newSpeed;
+    }
+  };
+
+  const handleVolumeChange = (newVal) => {
+    setAudioVolume(newVal);
+    if (stickyAudioRef.current) {
+      stickyAudioRef.current.volume = newVal / 100;
+    }
+  };
+
+  const changeDua = (dir) => {
+    if (dir === 'next' && currentIndex < activeDuas.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else if (dir === 'prev' && currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
+  const subcategoryTitle = breadcrumb?.subcategory 
+    ? String(breadcrumb.subcategory).trim() 
+    : 'DRESSING';
 
   // Sync if initial props change
   useEffect(() => {
@@ -551,7 +715,7 @@ export default function CategoryDuaReader({
   const isInteractiveElement = (target) => {
     if (!target) return false;
     return !!target.closest(
-      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe'
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player'
     );
   };
 
@@ -618,6 +782,10 @@ export default function CategoryDuaReader({
   };
 
   const handleBackToHomeOrCategories = useCallback(() => {
+    if (stickyAudioRef.current) {
+      stickyAudioRef.current.pause();
+      setIsPlaying(false);
+    }
     if (view === 'reading' && initialView === 'categories') {
       setView('categories');
     } else if (onBackToHome) {
@@ -630,11 +798,15 @@ export default function CategoryDuaReader({
   // Handle mobile hardware / system back button (prevents closing the app)
   useEffect(() => {
     const unregister = registerBackButtonHandler(() => {
+      if (isPlayerExpanded) {
+        setIsPlayerExpanded(false);
+        return true;
+      }
       handleBackToHomeOrCategories();
       return true;
     }, 100);
     return unregister;
-  }, [handleBackToHomeOrCategories]);
+  }, [handleBackToHomeOrCategories, isPlayerExpanded]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -879,6 +1051,9 @@ export default function CategoryDuaReader({
           {/* Main Scrollable Content Container */}
           <main 
             className="cdr-reading-scroll-area cdr-no-scrollbar"
+            style={{
+              paddingBottom: isPlayerExpanded ? '300px' : '96px'
+            }}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -897,6 +1072,319 @@ export default function CategoryDuaReader({
               />
             )}
           </main>
+
+          {/* Backdrop Dimmer when Audio Player is Expanded */}
+          {isPlayerExpanded && (
+            <div 
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
+                zIndex: 45,
+                transition: 'opacity 0.25s ease'
+              }}
+              onClick={() => setIsPlayerExpanded(false)}
+            />
+          )}
+
+          {/* ========================================================
+              STICKY CURVED BOTTOM AUDIO PLAYER SHEET
+              Matches Reference Image: media_1794030845933_94d9d71c.png
+              Glassmorphism + clean curved edges
+              ======================================================== */}
+          <div 
+            className="sticky-player"
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 50,
+              borderTopLeftRadius: '2.25rem',
+              borderTopRightRadius: '2.25rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.95)',
+              borderLeft: '1px solid rgba(255, 255, 255, 0.85)',
+              borderRight: '1px solid rgba(255, 255, 255, 0.85)',
+              borderBottom: 'none',
+              boxShadow: '0 -10px 32px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+              height: isPlayerExpanded ? '280px' : '76px',
+              transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))',
+              userSelect: 'none'
+            }}
+          >
+            {/* Drag Handle Pill */}
+            <div 
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                paddingTop: '12px',
+                paddingBottom: '4px',
+                cursor: 'pointer'
+              }}
+              onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}
+              title={isPlayerExpanded ? "Collapse" : "Expand"}
+            >
+              <div 
+                style={{
+                  width: '44px',
+                  height: '5px',
+                  backgroundColor: '#CBD5E1',
+                  borderRadius: '9999px'
+                }}
+              />
+            </div>
+
+            {/* CASE A: COLLAPSED VIEW (Sticky Bottom Docked Bar) */}
+            {!isPlayerExpanded && (
+              <div 
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '2px 24px 8px',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+                onClick={() => setIsPlayerExpanded(true)}
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1, marginRight: '12px' }}>
+                  <span style={{ fontWeight: 800, color: '#1E293B', fontSize: '14px', lineHeight: 1.2 }}>
+                    Dua {currentIndex + 1}
+                  </span>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#0D9488', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>
+                    {subcategoryTitle}
+                  </span>
+                </div>
+
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleStickyPlay(e);
+                  }}
+                  style={{
+                    width: '46px',
+                    height: '46px',
+                    backgroundColor: '#0D9488',
+                    borderRadius: '50%',
+                    color: '#FFFFFF',
+                    boxShadow: '0 6px 16px -2px rgba(13, 148, 136, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: 'none',
+                    cursor: 'pointer',
+                    flexShrink: 0
+                  }}
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <Pause size={20} fill="currentColor" />
+                  ) : (
+                    <Play size={20} fill="currentColor" style={{ marginLeft: '2px' }} />
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* CASE B: EXPANDED VIEW (Exact Match to User Reference Screenshot) */}
+            {isPlayerExpanded && (
+              <div 
+                style={{
+                  padding: '0 24px 12px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                {/* Header Title & Subtitle */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: '2px' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.2 }}>
+                    DUA {currentIndex + 1}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0D9488', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '2px', marginBottom: 0 }}>
+                    {subcategoryTitle}
+                  </p>
+                </div>
+
+                {/* Time Stamps and Interactive Progress Bar */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', margin: '8px 0' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'left' }}>
+                    {formatTime(currentTimeSec)}
+                  </span>
+                  
+                  <div 
+                    style={{
+                      flex: 1,
+                      height: '8px',
+                      backgroundColor: '#F1F5F9',
+                      borderRadius: '9999px',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    onClick={handleSeek}
+                    role="progressbar"
+                    aria-valuenow={Math.round(audioProgress)}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    <div 
+                      style={{
+                        height: '6px',
+                        borderRadius: '9999px',
+                        backgroundColor: '#0D9488',
+                        width: `${audioProgress}%`,
+                        position: 'relative',
+                        transition: 'width 0.05s linear'
+                      }}
+                    >
+                      {/* Circular Thumb with white fill and teal border */}
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          right: 0,
+                          top: '50%',
+                          transform: 'translate(50%, -50%)',
+                          width: '14px',
+                          height: '14px',
+                          backgroundColor: '#FFFFFF',
+                          border: '3px solid #0D9488',
+                          borderRadius: '50%',
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.25)'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'right' }}>
+                    {formatTime(durationSec || 45)}
+                  </span>
+                </div>
+
+                {/* Main Controls: Previous, Big Play/Pause, Next */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '36px', margin: '2px 0' }}>
+                  <button 
+                    onClick={() => changeDua('prev')}
+                    disabled={currentIndex === 0}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '8px',
+                      cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
+                      color: currentIndex === 0 ? '#CBD5E1' : '#64748B',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'color 0.15s ease'
+                    }}
+                    title="Previous Dua"
+                    aria-label="Previous Dua"
+                  >
+                    <SkipBack size={26} strokeWidth={2} />
+                  </button>
+
+                  <button 
+                    onClick={toggleStickyPlay}
+                    style={{
+                      width: '64px',
+                      height: '64px',
+                      backgroundColor: '#0D9488',
+                      borderRadius: '50%',
+                      color: '#FFFFFF',
+                      boxShadow: '0 10px 25px -4px rgba(13, 148, 136, 0.45)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'transform 0.1s active'
+                    }}
+                    aria-label={isPlaying ? "Pause" : "Play"}
+                  >
+                    {isPlaying ? (
+                      <Pause size={28} fill="currentColor" />
+                    ) : (
+                      <Play size={28} fill="currentColor" style={{ marginLeft: '3px' }} />
+                    )}
+                  </button>
+
+                  <button 
+                    onClick={() => changeDua('next')}
+                    disabled={currentIndex === activeDuas.length - 1}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '8px',
+                      cursor: currentIndex === activeDuas.length - 1 ? 'not-allowed' : 'pointer',
+                      color: currentIndex === activeDuas.length - 1 ? '#CBD5E1' : '#64748B',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'color 0.15s ease'
+                    }}
+                    title="Next Dua"
+                    aria-label="Next Dua"
+                  >
+                    <SkipForward size={26} strokeWidth={2} />
+                  </button>
+                </div>
+
+                {/* Bottom Controls: Speed Pill & Volume Slider */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: '6px', padding: '0 4px' }}>
+                  <button 
+                    onClick={toggleSpeed}
+                    style={{
+                      backgroundColor: '#ECFDF5',
+                      color: '#0D9488',
+                      borderRadius: '9999px',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      padding: '6px 14px',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {playbackSpeed}x SPEED
+                  </button>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Volume2 size={16} style={{ color: '#94A3B8', flexShrink: 0 }} />
+                    <input 
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={audioVolume}
+                      onChange={(e) => handleVolumeChange(Number(e.target.value))}
+                      style={{
+                        width: '96px',
+                        height: '4px',
+                        backgroundColor: '#E2E8F0',
+                        borderRadius: '9999px',
+                        accentColor: '#0D9488',
+                        cursor: 'pointer'
+                      }}
+                      aria-label="Volume"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -36,6 +36,7 @@ export default function App() {
   const [isFullWidth, setIsFullWidth] = useState(false);
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
+  const [isReadingActive, setIsReadingActive] = useState(false);
 
   // Calculate valid favorites count based strictly on existing Duas
   const validFavoritesCount = useMemo(() => {
@@ -160,13 +161,13 @@ export default function App() {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       });
-      showToast('പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കം ചെയ്തു');
+      showToast('Removed from favorites');
     } else {
       updated = [targetId, ...favorites.filter(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       })];
-      showToast('പ്രിയപ്പെട്ടവയിൽ ചേർത്തു ❤️');
+      showToast('Added to favorites');
       audioService.playChime(520, 0.04);
     }
     setFavorites(updated);
@@ -261,6 +262,7 @@ export default function App() {
             onSelectDua={handleSelectDua}
             settings={settings}
             onNavigateTab={setActiveTab}
+            onReadingStateChange={setIsReadingActive}
           />
         )}
 
@@ -276,6 +278,10 @@ export default function App() {
             language={settings.language}
             theme={theme}
             onToggleTheme={handleToggleTheme}
+            onBack={() => {
+              setSelectedCategoryId(null);
+              setActiveTab('duas');
+            }}
             onExploreDuas={() => {
               setSelectedCategoryId(null);
               setActiveTab('duas');
@@ -294,6 +300,10 @@ export default function App() {
             onSelectDua={handleSelectDua}
             language={settings.language}
             isBookmarkView={true}
+            onBack={() => {
+              setSelectedCategoryId(null);
+              setActiveTab('duas');
+            }}
             onExploreDuas={() => {
               setSelectedCategoryId(null);
               setActiveTab('duas');
@@ -315,18 +325,20 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom Navigation (ഹോം, പ്രിയപ്പെട്ടവ, ബുക്ക്മാർക്ക്, കൂടുതൽ) */}
-      <BottomNav 
-        activeTab={activeTab}
-        onSelectTab={(tab) => {
-          if (tab === 'duas') {
-            setSelectedCategoryId(null);
-          }
-          setActiveTab(tab);
-        }}
-        favoritesCount={validFavoritesCount}
-        language={settings.language}
-      />
+      {/* Bottom Navigation (ഹോം, പ്രിയപ്പെട്ടവ, ബുക്ക്മാർക്ക്, കൂടുതൽ) - Hidden on Dua Reading Page */}
+      {!isReadingActive && !selectedDua && (
+        <BottomNav 
+          activeTab={activeTab}
+          onSelectTab={(tab) => {
+            if (tab === 'duas') {
+              setSelectedCategoryId(null);
+            }
+            setActiveTab(tab);
+          }}
+          favoritesCount={validFavoritesCount}
+          language={settings.language}
+        />
+      )}
 
       {/* Full Dedicated Dua Detail Page (matching Screens 3, 4, 5, 6 or CategoryDuaReader) */}
       {selectedDua && (() => {

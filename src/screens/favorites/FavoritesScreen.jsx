@@ -11,7 +11,8 @@ import {
   Share2,
   BookOpen,
   ChevronRight,
-  Check
+  Check,
+  ArrowLeft
 } from 'lucide-react';
 import './FavoritesScreen.css';
 
@@ -88,6 +89,7 @@ export default function FavoritesScreen({
   onTogglePlay, 
   onSelectDua, 
   onExploreDuas,
+  onBack,
   language = 'ml',
   theme = 'light',
   onToggleTheme,
@@ -156,7 +158,7 @@ export default function FavoritesScreen({
 
     // If 2 or more categories have bookmarked items, show 'All' and only non-empty categories
     const pills = [
-      { id: 'all', label: isEnglish ? 'All' : 'എല്ലാം' }
+      { id: 'all', label: isEnglish ? 'All' : 'All' }
     ];
 
     activeKeys.forEach(k => {
@@ -243,13 +245,19 @@ export default function FavoritesScreen({
       <header className="fav-glass-nav">
         <div className="fav-glass-nav-inner">
           <div className="fav-glass-nav-left">
-            <div className="fav-glass-nav-icon-badge">
-              {isBookmarkView ? (
-                <Bookmark size={20} className="fav-nav-icon-svg bookmark" />
-              ) : (
-                <Heart size={20} className="fav-nav-icon-svg heart" fill="#EF4444" color="#EF4444" />
-              )}
-            </div>
+            <button 
+              type="button"
+              className="fav-glass-back-btn"
+              onClick={() => {
+                if (onBack) onBack();
+                else if (onExploreDuas) onExploreDuas();
+              }}
+              title={isEnglish ? "Back to Home" : "Back to Home"}
+              aria-label="Back"
+            >
+              <ArrowLeft size={20} strokeWidth={2.4} />
+            </button>
+
             <div className="fav-glass-nav-titles">
               <h1 className="fav-glass-nav-title">
                 {isBookmarkView 
@@ -258,21 +266,21 @@ export default function FavoritesScreen({
               </h1>
               <p className="fav-glass-nav-subtitle">
                 {isBookmarkView 
-                  ? (isEnglish ? 'Your saved bookmarks' : 'സേവ് ചെയ്ത ബുക്ക്മാർക്കുകൾ')
-                  : (isEnglish ? 'Your saved Duas & Adhkar' : 'തിരഞ്ഞെടുത്ത പ്രാർത്ഥനകൾ')}
+                  ? (isEnglish ? 'Your saved bookmarks' : 'Your saved bookmarks')
+                  : (isEnglish ? 'Your saved Duas & Adhkar' : 'Your saved Duas & Adhkar')}
               </p>
             </div>
           </div>
 
           <div className="fav-glass-nav-right">
-            {favoriteDuas.length > 0 && (
+            {/* {favoriteDuas.length > 0 && (
               <span className="fav-count-pill">
                 <Sparkles size={13} className="fav-sparkle-dot" />
                 <span>
                   {favoriteDuas.length} {isEnglish ? 'Duas' : 'ദുആകൾ'}
                 </span>
               </span>
-            )}
+            )} */}
             {onToggleTheme && (
               <button 
                 className="fav-glass-theme-btn"
@@ -462,7 +470,7 @@ export default function FavoritesScreen({
                       ) : <div />}
 
                       <div className="fav-read-hint">
-                        <span>{isEnglish ? 'Read full Dua' : 'പൂർണ്ണമായി വായിക്കുക'}</span>
+                        <span>{isEnglish ? 'Read More' : 'Read More'}</span>
                         <ChevronRight size={14} className="fav-read-hint-arrow" />
                       </div>
                     </div>
