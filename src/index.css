@@ -3107,7 +3107,7 @@ button,
   }
 
   .home-categories-section {
-    padding: 0 clamp(12px, 3.5vw, 16px) calc(96px + env(safe-area-inset-bottom, 14px)) clamp(12px, 3.5vw, 16px);
+    padding: 16px clamp(12px, 3.8vw, 16px) calc(96px + env(safe-area-inset-bottom, 14px)) clamp(12px, 3.8vw, 16px);
   }
 }
 

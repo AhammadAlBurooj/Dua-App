@@ -9,9 +9,38 @@
 .top-sliding-banner-container {
   position: relative;
   width: 100%;
-  padding: max(16px, env(safe-area-inset-top, 0px)) 16px 14px;
+  padding: max(16px, env(safe-area-inset-top, 0px)) clamp(12px, 3.8vw, 16px) 16px;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+/* Seamless Bottom Fade Overlay: Smoothly blends top section into the section below */
+.top-sliding-banner-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 249, 244, 0) 0%,
+    rgba(250, 249, 244, 0.25) 35%,
+    rgba(250, 249, 244, 0.7) 65%,
+    var(--bg-app, #FAF9F4) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+[data-theme='dark'] .top-sliding-banner-container::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 21, 17, 0) 0%,
+    rgba(11, 21, 17, 0.3) 35%,
+    rgba(11, 21, 17, 0.75) 65%,
+    var(--bg-app, #0B1511) 100%
+  );
 }
 
 /* Scenic Background Image with Mask & Overlay */
@@ -20,14 +49,31 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 520px;
+  height: 100%;
+  min-height: 520px;
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   z-index: 0;
   pointer-events: none;
   background-image: url('/scenic_mosque_bg.jpg');
-  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 48%,
+    rgba(0, 0, 0, 0.75) 65%,
+    rgba(0, 0, 0, 0.35) 80%,
+    rgba(0, 0, 0, 0.08) 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 48%,
+    rgba(0, 0, 0, 0.75) 65%,
+    rgba(0, 0, 0, 0.35) 80%,
+    rgba(0, 0, 0, 0.08) 92%,
+    transparent 100%
+  );
 }
 
 .top-banner-green-overlay {
@@ -131,6 +177,7 @@
 /* Glassmorphic Curved Card */
 .top-banner-card {
   position: relative;
+  min-height: 336px;
   aspect-ratio: 1.12;
   width: 100%;
   border-radius: 28px;
@@ -369,8 +416,24 @@
 
 /* Dark Mode Adjustments */
 [data-theme="dark"] .top-banner-scenic-backdrop {
-  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 48%,
+    rgba(0, 0, 0, 0.75) 65%,
+    rgba(0, 0, 0, 0.35) 80%,
+    rgba(0, 0, 0, 0.08) 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 48%,
+    rgba(0, 0, 0, 0.75) 65%,
+    rgba(0, 0, 0, 0.35) 80%,
+    rgba(0, 0, 0, 0.08) 92%,
+    transparent 100%
+  );
 }
 
 [data-theme="dark"] .top-banner-green-overlay {
