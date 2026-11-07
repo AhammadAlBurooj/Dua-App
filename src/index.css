@@ -1741,7 +1741,7 @@ input:checked + .slider:before {
 
 /* Home Categories Section */
 .home-categories-section {
-  padding: 16px 16px 88px 16px;
+  padding: 16px clamp(12px, 3.8vw, 16px) calc(96px + env(safe-area-inset-bottom, 14px)) clamp(12px, 3.8vw, 16px);
 }
 
 .home-section-title {
@@ -3107,47 +3107,7 @@ button,
   }
 
   .home-categories-section {
-    padding: 0 12px 88px 12px;
-  }
-
-  .cdr-cat-card {
-    border-radius: 0.85rem;
-  }
-
-  .cdr-cat-toggle-btn {
-    padding: 0.75rem 0.75rem;
-  }
-
-  .cdr-cat-icon-wrap {
-    width: 2.35rem;
-    height: 2.35rem;
-    min-width: 2.35rem;
-    border-radius: 0.65rem;
-    padding: 0.25rem;
-  }
-
-  .cdr-cat-name {
-    font-size: 0.95rem;
-  }
-
-  .cdr-cat-arabic-name {
-    font-size: 0.825rem;
-    text-align: right;
-    direction: rtl;
-    width: 100%;
-  }
-
-  .cdr-subcat-btn {
-    padding: 0.65rem 0.75rem;
-  }
-
-  .cdr-subcat-name {
-    font-size: 0.8125rem;
-  }
-
-  .cdr-subcat-badge {
-    font-size: 0.65rem;
-    padding: 0.15rem 0.4rem;
+    padding: 0 clamp(12px, 3.5vw, 16px) calc(96px + env(safe-area-inset-bottom, 14px)) clamp(12px, 3.5vw, 16px);
   }
 }
 
