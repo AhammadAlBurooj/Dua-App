@@ -18,9 +18,20 @@ import {
   Sparkles,
   BookMarked,
   SkipBack,
-  SkipForward
+  SkipForward,
+  CheckCircle2,
+  CheckCircle,
+  Layers,
+  ArrowRight
 } from 'lucide-react';
-import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
+import { 
+  CATEGORIES_DATA, 
+  CATEGORY_THEMES,
+  FLATTENED_SECTIONS,
+  findSectionIndex,
+  findSectionBySubcategory,
+  findSectionByDuaId
+} from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import './CategoryDuaReader.css';
 
@@ -473,44 +484,35 @@ export default function CategoryDuaReader({
     };
   }, [view, onViewChange]);
   
-  // Reading Mode State
-  const [activeDuas, setActiveDuas] = useState(() => {
-    if (initialSubcategory && initialSubcategory.duas && initialSubcategory.duas.length > 0) {
-      return initialSubcategory.duas;
+  // Reading Mode State & Flattened Continuous Navigation
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(() => {
+    if (initialSubcategory) {
+      const idx = findSectionIndex(
+        initialCategory?.name,
+        initialSubcategory.name,
+        initialSubcategory.id || initialSubcategory.originalId
+      );
+      if (idx !== -1) return idx;
     }
     if (initialCategory) {
-      if (initialCategory.subcategories?.length === 1 && initialCategory.subcategories[0]?.duas?.length > 0) {
-        return initialCategory.subcategories[0].duas;
-      }
-      const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
-      if (allDuas.length > 0) return allDuas;
+      const idx = findSectionIndex(initialCategory.name, null, null);
+      if (idx !== -1) return idx;
     }
-    const defaultSub = CATEGORIES_DATA[0]?.subcategories?.[0];
-    return defaultSub ? defaultSub.duas : [];
+    return 0;
   });
 
-  const [breadcrumb, setBreadcrumb] = useState(() => {
-    if (initialSubcategory) {
-      return {
-        category: initialCategory?.name || "നമസ്കാരം",
-        subcategory: initialSubcategory.name
-      };
-    }
-    if (initialCategory) {
-      const firstSub = initialCategory.subcategories?.[0];
-      return {
-        category: initialCategory.name,
-        subcategory: firstSub ? firstSub.name : initialCategory.name
-      };
-    }
-    return {
-      category: CATEGORIES_DATA[0]?.name || "നമസ്കാരം",
-      subcategory: CATEGORIES_DATA[0]?.subcategories?.[0]?.name || "നമസ്കാരത്തിലെ പ്രാരംഭ പ്രാർത്ഥന"
-    };
-  });
+  const currentSection = FLATTENED_SECTIONS[currentSectionIndex] || FLATTENED_SECTIONS[0] || {};
+  const activeDuas = (currentSection?.duas && currentSection.duas.length > 0) 
+    ? currentSection.duas 
+    : (initialSubcategory?.duas || []);
+  const prevSection = currentSectionIndex > 0 ? FLATTENED_SECTIONS[currentSectionIndex - 1] : null;
+  const nextSection = currentSectionIndex < FLATTENED_SECTIONS.length - 1 ? FLATTENED_SECTIONS[currentSectionIndex + 1] : null;
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
+
+  const categoryTitle = currentSection?.categoryName || initialCategory?.name || "നമസ്കാരം";
+  const subcategoryTitle = currentSection?.subcategoryName || initialSubcategory?.name || "പ്രാർത്ഥന";
 
   // Format seconds into mm:ss
   const formatTime = (seconds) => {
@@ -520,7 +522,7 @@ export default function CategoryDuaReader({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const currentDua = activeDuas[currentIndex] || {};
+  const currentDua = activeDuas[currentIndex] || activeDuas[0] || {};
   const currentAudioUrl = currentDua?.audio_url 
     ? (String(currentDua.audio_url).startsWith('http') ? String(currentDua.audio_url) : `${AUDIO_BASE}${currentDua.audio_url}.mp3`) 
     : null;
@@ -548,7 +550,7 @@ export default function CategoryDuaReader({
     if (wasPlaying) {
       stickyAudioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
-  }, [currentIndex, currentAudioUrl]);
+  }, [currentIndex, currentSectionIndex, currentAudioUrl]);
 
   // Audio cleanup on unmount
   useEffect(() => {
@@ -635,26 +637,37 @@ export default function CategoryDuaReader({
     }
   };
 
+  // Continuous Navigation across Duas, Subcategories, and Categories
   const changeDua = (dir) => {
-    if (dir === 'next' && currentIndex < activeDuas.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    } else if (dir === 'prev' && currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+    if (dir === 'next') {
+      if (currentIndex < activeDuas.length - 1) {
+        setCurrentIndex(prev => prev + 1);
+      } else if (nextSection) {
+        setCurrentSectionIndex(prev => prev + 1);
+        setCurrentIndex(0);
+      }
+    } else if (dir === 'prev') {
+      if (currentIndex > 0) {
+        setCurrentIndex(prev => prev - 1);
+      } else if (prevSection) {
+        const prevIdx = currentSectionIndex - 1;
+        setCurrentSectionIndex(prevIdx);
+        setCurrentIndex(FLATTENED_SECTIONS[prevIdx].duas.length - 1);
+      }
     }
   };
 
-  const subcategoryTitle = breadcrumb?.subcategory 
-    ? String(breadcrumb.subcategory).trim() 
-    : 'DRESSING';
-
   // Sync if initial props change
   useEffect(() => {
-    if (initialSubcategory && initialSubcategory.duas && initialSubcategory.duas.length > 0) {
-      setActiveDuas(initialSubcategory.duas);
-      setBreadcrumb({
-        category: initialCategory?.name || "നമസ്കാരം",
-        subcategory: initialSubcategory.name
-      });
+    if (initialSubcategory) {
+      const idx = findSectionIndex(
+        initialCategory?.name,
+        initialSubcategory.name,
+        initialSubcategory.id || initialSubcategory.originalId
+      );
+      if (idx !== -1) {
+        setCurrentSectionIndex(idx);
+      }
       setCurrentIndex(initialIndex || 0);
       setView('reading');
     }
@@ -664,14 +677,9 @@ export default function CategoryDuaReader({
     if (initialCategory) {
       setExpandedCatId(initialCategory.id);
       if (!initialSubcategory) {
-        const allDuas = (initialCategory.subcategories || []).flatMap(s => s.duas || []);
-        if (allDuas.length > 0) {
-          setActiveDuas(allDuas);
-          const firstSub = initialCategory.subcategories?.[0];
-          setBreadcrumb({
-            category: initialCategory.name,
-            subcategory: initialCategory.subcategories?.length === 1 && firstSub ? firstSub.name : initialCategory.name
-          });
+        const idx = findSectionIndex(initialCategory.name, null, null);
+        if (idx !== -1) {
+          setCurrentSectionIndex(idx);
         }
       }
       if (initialView === 'categories') {
@@ -686,99 +694,274 @@ export default function CategoryDuaReader({
   };
 
   const openSubcategory = (category, subcategory) => {
-    if (subcategory.duas.length === 0) return; // Prevent opening empty ones
-    
-    setBreadcrumb({ category: category.name, subcategory: subcategory.name });
-    setActiveDuas(subcategory.duas);
+    if (!subcategory.duas || subcategory.duas.length === 0) return;
+    const idx = findSectionIndex(
+      category.name, 
+      subcategory.name, 
+      subcategory.id || subcategory.originalId
+    );
+    if (idx !== -1) {
+      setCurrentSectionIndex(idx);
+    }
     setCurrentIndex(0);
     setView('reading');
   };
 
   const openAllDuas = (category) => {
-    const allDuas = (category.subcategories || []).flatMap(s => (s.duas || []).map(d => ({
-      ...d,
-      subcategoryName: s.name
-    })));
-    if (allDuas.length === 0) return;
-    setBreadcrumb({ category: category.name, subcategory: category.name });
-    setActiveDuas(allDuas);
+    const idx = findSectionIndex(category.name, null, null);
+    if (idx !== -1) {
+      setCurrentSectionIndex(idx);
+    }
     setCurrentIndex(0);
     setView('reading');
   };
 
-  // --- Bulletproof Swipe Gesture Detection for Reading View ---
-  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
-  const touchMoveRef = useRef({ x: 0, y: 0, moved: false });
-  const isSwipeIgnoredRef = useRef(false);
+  // --- Continuous Swipe Navigation & Smart Boundary Transition Indicator ---
+  const [dragOffset, setDragOffset] = useState(0);
 
-  // Exclude interactive elements so taps/drags on controls never trigger page navigation
+  const [boundaryTransition, setBoundaryTransition] = useState({
+    active: false,
+    direction: null, // 'next' | 'prev'
+    currentSubcategoryName: '',
+    targetSubcategoryName: '',
+    targetCategoryName: '',
+    isCategoryChange: false,
+    isEnd: false,
+    isBeginning: false,
+    progress: 0,
+    readyToRelease: false
+  });
+
+  const gestureRef = useRef({
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0,
+    startTime: 0,
+    isSwipingHorizontal: false,
+    isIgnored: false,
+    boundaryActive: false,
+    readyToRelease: false,
+    direction: null
+  });
+
+  const holdProgressIntervalRef = useRef(null);
+
   const isInteractiveElement = (target) => {
     if (!target) return false;
     return !!target.closest(
-      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player'
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player, .cdr-swipe-indicator-card'
     );
   };
 
-  const onTouchStart = (e) => {
-    if (isInteractiveElement(e.target)) {
-      isSwipeIgnoredRef.current = true;
+  const startBoundaryHold = (direction, targetSec, isCatChange, isEnd = false, isBeginning = false) => {
+    if (gestureRef.current.boundaryActive) return;
+    gestureRef.current.boundaryActive = true;
+    gestureRef.current.readyToRelease = false;
+    gestureRef.current.direction = direction;
+
+    setBoundaryTransition({
+      active: true,
+      direction,
+      currentSubcategoryName: currentSection?.subcategoryName || subcategoryTitle || '',
+      targetSubcategoryName: targetSec?.subcategoryName || '',
+      targetCategoryName: targetSec?.categoryName || '',
+      isCategoryChange: isCatChange,
+      isEnd,
+      isBeginning,
+      progress: 0,
+      readyToRelease: false
+    });
+
+    if (holdProgressIntervalRef.current) {
+      clearInterval(holdProgressIntervalRef.current);
+    }
+
+    const startTime = Date.now();
+    const duration = 900; // Hold for ~1 second
+
+    holdProgressIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+
+      if (pct >= 100) {
+        clearInterval(holdProgressIntervalRef.current);
+        holdProgressIntervalRef.current = null;
+        gestureRef.current.readyToRelease = true;
+        setBoundaryTransition(prev => ({
+          ...prev,
+          progress: 100,
+          readyToRelease: true
+        }));
+        if (window.navigator?.vibrate) {
+          try { window.navigator.vibrate(18); } catch (_) {}
+        }
+      } else {
+        setBoundaryTransition(prev => ({
+          ...prev,
+          progress: pct
+        }));
+      }
+    }, 20);
+  };
+
+  const cancelBoundaryHold = useCallback(() => {
+    if (holdProgressIntervalRef.current) {
+      clearInterval(holdProgressIntervalRef.current);
+      holdProgressIntervalRef.current = null;
+    }
+    gestureRef.current.boundaryActive = false;
+    gestureRef.current.readyToRelease = false;
+    gestureRef.current.direction = null;
+
+    setBoundaryTransition({
+      active: false,
+      direction: null,
+      currentSubcategoryName: '',
+      targetSubcategoryName: '',
+      targetCategoryName: '',
+      isCategoryChange: false,
+      isEnd: false,
+      isBeginning: false,
+      progress: 0,
+      readyToRelease: false
+    });
+  }, []);
+
+  const handleGestureStart = (clientX, clientY, target) => {
+    if (isInteractiveElement(target)) {
+      gestureRef.current.isIgnored = true;
       return;
     }
 
-    isSwipeIgnoredRef.current = false;
-    const touch = e.touches[0] || e.targetTouches[0];
-    if (!touch) return;
-
-    touchStartRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      time: Date.now()
-    };
-    touchMoveRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      moved: false
+    gestureRef.current = {
+      startX: clientX,
+      startY: clientY,
+      currentX: clientX,
+      currentY: clientY,
+      startTime: Date.now(),
+      isSwipingHorizontal: false,
+      isIgnored: false,
+      boundaryActive: false,
+      readyToRelease: false,
+      direction: null
     };
   };
 
-  const onTouchMove = (e) => {
-    if (isSwipeIgnoredRef.current) return;
-    const touch = e.touches[0] || e.targetTouches[0];
-    if (!touch) return;
+  const handleGestureMove = (clientX, clientY) => {
+    if (gestureRef.current.isIgnored) return;
 
-    touchMoveRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      moved: true
-    };
+    gestureRef.current.currentX = clientX;
+    gestureRef.current.currentY = clientY;
+
+    const diffX = clientX - gestureRef.current.startX;
+    const diffY = clientY - gestureRef.current.startY;
+
+    // Detect direction lock
+    if (!gestureRef.current.isSwipingHorizontal) {
+      if (Math.abs(diffY) > 15 && Math.abs(diffY) > Math.abs(diffX)) {
+        // Vertical reading scroll -> ignore horizontal swipe
+        gestureRef.current.isIgnored = true;
+        return;
+      }
+      if (Math.abs(diffX) > 15 && Math.abs(diffX) > Math.abs(diffY) * 1.1) {
+        gestureRef.current.isSwipingHorizontal = true;
+      }
+    }
+
+    if (!gestureRef.current.isSwipingHorizontal) return;
+
+    // Gentle tactile drag resistance
+    const offset = Math.max(-75, Math.min(75, diffX * 0.35));
+    setDragOffset(offset);
+
+    // Boundary Detection:
+    // 1. Swiping Left at last Dua of subcategory -> Next subcategory
+    if (diffX < -35 && currentIndex === activeDuas.length - 1) {
+      if (!gestureRef.current.boundaryActive) {
+        if (nextSection) {
+          const isCatChange = nextSection.categoryId !== currentSection.categoryId;
+          startBoundaryHold('next', nextSection, isCatChange);
+        } else {
+          startBoundaryHold('next', null, false, true, false); // Reached end of app
+        }
+      }
+    }
+    // 2. Swiping Right at first Dua of subcategory -> Previous subcategory
+    else if (diffX > 35 && currentIndex === 0) {
+      if (!gestureRef.current.boundaryActive) {
+        if (prevSection) {
+          const isCatChange = prevSection.categoryId !== currentSection.categoryId;
+          startBoundaryHold('prev', prevSection, isCatChange);
+        } else {
+          startBoundaryHold('prev', null, false, false, true); // Reached beginning of app
+        }
+      }
+    }
+    // 3. User moved finger back toward center -> Cancel boundary hold
+    else if (gestureRef.current.boundaryActive && Math.abs(diffX) < 25) {
+      cancelBoundaryHold();
+    }
   };
 
-  const onTouchEnd = () => {
-    if (isSwipeIgnoredRef.current) {
-      isSwipeIgnoredRef.current = false;
+  const handleGestureEnd = () => {
+    setDragOffset(0);
+
+    if (gestureRef.current.isIgnored) {
+      gestureRef.current.isIgnored = false;
       return;
     }
 
-    if (!touchMoveRef.current.moved) return;
+    const diffX = gestureRef.current.currentX - gestureRef.current.startX;
+    const wasHorizontal = gestureRef.current.isSwipingHorizontal;
+    const wasBoundaryActive = gestureRef.current.boundaryActive;
+    const isReady = gestureRef.current.readyToRelease;
+    const direction = gestureRef.current.direction;
 
-    const diffX = touchStartRef.current.x - touchMoveRef.current.x;
-    const diffY = touchStartRef.current.y - touchMoveRef.current.y;
-    const duration = Date.now() - touchStartRef.current.time;
+    // Case 1: Boundary Release
+    if (wasBoundaryActive) {
+      if (isReady) {
+        // Released after 1-second hold was completed: perform navigation!
+        if (direction === 'next' && nextSection) {
+          setCurrentSectionIndex(prev => prev + 1);
+          setCurrentIndex(0);
+        } else if (direction === 'prev' && prevSection) {
+          const prevIdx = currentSectionIndex - 1;
+          setCurrentSectionIndex(prevIdx);
+          setCurrentIndex(FLATTENED_SECTIONS[prevIdx].duas.length - 1);
+        }
+      }
+      cancelBoundaryHold();
+      return;
+    }
 
-    touchMoveRef.current.moved = false;
-
-    const minSwipeDistance = 60;
-    const isHorizontalSwipe = Math.abs(diffX) >= minSwipeDistance && Math.abs(diffX) > Math.abs(diffY) * 1.5;
-
-    if (isHorizontalSwipe && duration < 800) {
-      if (diffX > 0 && currentIndex < activeDuas.length - 1) {
-        // Swiped Left -> Go to Next Dua
+    // Case 2: Standard within-subcategory Dua navigation
+    if (wasHorizontal) {
+      if (diffX < -50 && currentIndex < activeDuas.length - 1) {
+        // Swipe left -> Next Dua
         setCurrentIndex(prev => prev + 1);
-      } else if (diffX < 0 && currentIndex > 0) {
-        // Swiped Right -> Go to Previous Dua
+      } else if (diffX > 50 && currentIndex > 0) {
+        // Swipe right -> Prev Dua
         setCurrentIndex(prev => prev - 1);
       }
     }
+  };
+
+  const handleGestureCancel = () => {
+    setDragOffset(0);
+    cancelBoundaryHold();
+  };
+
+  const handleDirectRelease = () => {
+    if (boundaryTransition.direction === 'next' && nextSection) {
+      setCurrentSectionIndex(prev => prev + 1);
+      setCurrentIndex(0);
+    } else if (boundaryTransition.direction === 'prev' && prevSection) {
+      const prevIdx = currentSectionIndex - 1;
+      setCurrentSectionIndex(prevIdx);
+      setCurrentIndex(FLATTENED_SECTIONS[prevIdx].duas.length - 1);
+    }
+    cancelBoundaryHold();
   };
 
   const handleBackToHomeOrCategories = useCallback(() => {
@@ -811,13 +994,17 @@ export default function CategoryDuaReader({
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (view !== 'reading') return;
-      if (e.key === 'ArrowRight' && currentIndex < activeDuas.length - 1) setCurrentIndex(prev => prev + 1);
-      if (e.key === 'ArrowLeft' && currentIndex > 0) setCurrentIndex(prev => prev - 1);
-      if (e.key === 'Escape') handleBackToHomeOrCategories();
+      if (e.key === 'ArrowRight') {
+        changeDua('next');
+      } else if (e.key === 'ArrowLeft') {
+        changeDua('prev');
+      } else if (e.key === 'Escape') {
+        handleBackToHomeOrCategories();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, view, activeDuas.length, handleBackToHomeOrCategories]);
+  }, [view, currentIndex, activeDuas.length, currentSectionIndex, nextSection, prevSection, handleBackToHomeOrCategories]);
 
   // Keep active pill scrolled into view in pagination bar
   const pillBarRef = useRef(null);
@@ -1027,8 +1214,8 @@ export default function CategoryDuaReader({
                 <ArrowLeft size={20} strokeWidth={2.5} />
               </button>
               <div className="cdr-glass-nav-titles">
-                <h1 className="cdr-glass-nav-title">{breadcrumb.subcategory}</h1>
-                <p className="cdr-glass-nav-subtitle">{breadcrumb.category}</p>
+                <h1 className="cdr-glass-nav-title">{subcategoryTitle}</h1>
+                <p className="cdr-glass-nav-subtitle">{categoryTitle}</p>
               </div>
             </div>
           </nav>
@@ -1048,30 +1235,169 @@ export default function CategoryDuaReader({
             </div>
           </div>
 
-          {/* Main Scrollable Content Container */}
+          {/* Main Scrollable Content Container with Continuous Swipe & Pointer Support */}
           <main 
             className="cdr-reading-scroll-area cdr-no-scrollbar"
             style={{
               paddingBottom: isPlayerExpanded ? '300px' : '96px'
             }}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+            onTouchStart={(e) => {
+              const t = e.touches[0] || e.targetTouches[0];
+              if (t) handleGestureStart(t.clientX, t.clientY, e.target);
+            }}
+            onTouchMove={(e) => {
+              const t = e.touches[0] || e.targetTouches[0];
+              if (t) handleGestureMove(t.clientX, t.clientY);
+            }}
+            onTouchEnd={handleGestureEnd}
+            onTouchCancel={handleGestureCancel}
+            onPointerDown={(e) => {
+              if (e.pointerType === 'mouse' && e.button !== 0) return;
+              handleGestureStart(e.clientX, e.clientY, e.target);
+            }}
+            onPointerMove={(e) => {
+              if (e.pointerType === 'mouse' && e.buttons !== 1) return;
+              handleGestureMove(e.clientX, e.clientY);
+            }}
+            onPointerUp={handleGestureEnd}
+            onPointerCancel={handleGestureCancel}
           >
             {activeDuas[currentIndex] && (
-              <DuaMultiCard 
-                dua={activeDuas[currentIndex]}
-                duaNumber={currentIndex + 1}
-                isCurrentSlide={true}
-                isBookmarked={(favorites || []).some(f => {
-                  const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
-                  const d = activeDuas[currentIndex];
-                  return fId === String(d.id) || (d.originalId !== undefined && fId === String(d.originalId));
-                })}
-                onToggleBookmark={onToggleFavorite}
-              />
+              <div 
+                className="cdr-dua-slide-container"
+                style={{
+                  transform: dragOffset ? `translateX(${dragOffset}px)` : 'none',
+                  transition: dragOffset ? 'none' : 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
+                <DuaMultiCard 
+                  dua={activeDuas[currentIndex]}
+                  duaNumber={currentIndex + 1}
+                  isCurrentSlide={true}
+                  isBookmarked={(favorites || []).some(f => {
+                    const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
+                    const d = activeDuas[currentIndex];
+                    return fId === String(d.id) || (d.originalId !== undefined && fId === String(d.originalId));
+                  })}
+                  onToggleBookmark={onToggleFavorite}
+                />
+              </div>
             )}
           </main>
+
+          {/* Smart Glassmorphic Transition Indicator (1-Second Hold & Release Interaction) */}
+          {boundaryTransition.active && (
+            <div 
+              className="cdr-swipe-indicator-backdrop"
+              onClick={cancelBoundaryHold}
+            >
+              <div 
+                className="cdr-swipe-indicator-card"
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Header Pill */}
+                <div className="cdr-indicator-header-pill">
+                  <Sparkles size={14} className="cdr-indicator-sparkle" />
+                  <span>
+                    {boundaryTransition.isEnd
+                      ? "END OF COLLECTION"
+                      : boundaryTransition.isBeginning
+                      ? "FIRST DUA"
+                      : boundaryTransition.isCategoryChange
+                      ? (boundaryTransition.direction === 'next' ? "Moving to Next Category" : "Moving to Previous Category")
+                      : (boundaryTransition.direction === 'next' ? "Moving to Next Subcategory" : "Moving to Previous Subcategory")}
+                  </span>
+                </div>
+
+                {/* Content */}
+                {boundaryTransition.isEnd ? (
+                  <div className="cdr-indicator-end-box">
+                    <CheckCircle2 size={36} style={{ color: '#10B981', margin: '4px 0 8px' }} />
+                    <p className="cdr-indicator-end-title">അവസാന ദുആയിൽ എത്തിച്ചേർന്നു</p>
+                    <p className="cdr-indicator-end-desc">You've reached the end of all Duas & Adhkar in the app</p>
+                    <button 
+                      className="cdr-indicator-close-btn"
+                      onClick={cancelBoundaryHold}
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : boundaryTransition.isBeginning ? (
+                  <div className="cdr-indicator-end-box">
+                    <Sparkles size={36} style={{ color: '#10B981', margin: '4px 0 8px' }} />
+                    <p className="cdr-indicator-end-title">ആദ്യ ദുആയിലാണ് താങ്കൾ</p>
+                    <p className="cdr-indicator-end-desc">You are at the beginning of the Dua collection</p>
+                    <button 
+                      className="cdr-indicator-close-btn"
+                      onClick={cancelBoundaryHold}
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : (
+                  <div className="cdr-indicator-body">
+                    {/* Current Section Row */}
+                    <div className="cdr-indicator-row current">
+                      <span className="cdr-indicator-label">Current:</span>
+                      <span className="cdr-indicator-val">
+                        {boundaryTransition.currentSubcategoryName}
+                      </span>
+                    </div>
+
+                    {/* Animated Direction Arrow */}
+                    <div className="cdr-indicator-arrow-wrap">
+                      <ChevronDown size={22} className="cdr-indicator-arrow-down" />
+                    </div>
+
+                    {/* Target Next / Prev Section Row */}
+                    <div className="cdr-indicator-row target">
+                      <span className="cdr-indicator-label">
+                        {boundaryTransition.direction === 'next' ? 'Next:' : 'Previous:'}
+                      </span>
+                      <div className="cdr-indicator-target-text">
+                        <span className="cdr-indicator-val highlight">
+                          {boundaryTransition.targetSubcategoryName}
+                        </span>
+                        {boundaryTransition.isCategoryChange && (
+                          <div className="cdr-indicator-cat-badge">
+                            <Folder size={12} />
+                            <span>{boundaryTransition.targetCategoryName}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 1-Second Animated Progress Bar */}
+                    <div className="cdr-indicator-progress-wrap">
+                      <div 
+                        className="cdr-indicator-progress-fill"
+                        style={{ width: `${boundaryTransition.progress}%` }}
+                      />
+                    </div>
+
+                    {/* Action Prompt Pill */}
+                    <div className="cdr-indicator-action-wrap">
+                      {boundaryTransition.readyToRelease ? (
+                        <button 
+                          className="cdr-indicator-release-btn"
+                          onClick={handleDirectRelease}
+                        >
+                          <span>
+                            {boundaryTransition.direction === 'next' ? "Release Now →" : "← Release Now"}
+                          </span>
+                        </button>
+                      ) : (
+                        <div className="cdr-indicator-holding-pill">
+                          <span className="cdr-indicator-holding-dot" />
+                          <span>Hold to confirm transition...</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Backdrop Dimmer when Audio Player is Expanded */}
           {isPlayerExpanded && (
@@ -1280,13 +1606,13 @@ export default function CategoryDuaReader({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '36px', margin: '2px 0' }}>
                   <button 
                     onClick={() => changeDua('prev')}
-                    disabled={currentIndex === 0}
+                    disabled={currentIndex === 0 && !prevSection}
                     style={{
                       background: 'none',
                       border: 'none',
                       padding: '8px',
-                      cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
-                      color: currentIndex === 0 ? '#CBD5E1' : '#64748B',
+                      cursor: (currentIndex === 0 && !prevSection) ? 'not-allowed' : 'pointer',
+                      color: (currentIndex === 0 && !prevSection) ? '#CBD5E1' : '#64748B',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1325,13 +1651,13 @@ export default function CategoryDuaReader({
 
                   <button 
                     onClick={() => changeDua('next')}
-                    disabled={currentIndex === activeDuas.length - 1}
+                    disabled={currentIndex === activeDuas.length - 1 && !nextSection}
                     style={{
                       background: 'none',
                       border: 'none',
                       padding: '8px',
-                      cursor: currentIndex === activeDuas.length - 1 ? 'not-allowed' : 'pointer',
-                      color: currentIndex === activeDuas.length - 1 ? '#CBD5E1' : '#64748B',
+                      cursor: (currentIndex === activeDuas.length - 1 && !nextSection) ? 'not-allowed' : 'pointer',
+                      color: (currentIndex === activeDuas.length - 1 && !nextSection) ? '#CBD5E1' : '#64748B',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
