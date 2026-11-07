@@ -23,7 +23,8 @@ import {
   CheckCircle2,
   CheckCircle,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Headphones
 } from 'lucide-react';
 import { 
   CATEGORIES_DATA, 
@@ -608,6 +609,17 @@ export default function CategoryDuaReader({
     }
   };
 
+  const handleCollapsedButtonClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
+    setIsPlayerExpanded(true);
+    if (!isPlaying) {
+      toggleStickyPlay(e);
+    }
+  };
+
   const handleSeek = (e) => {
     e.stopPropagation();
     if (!stickyAudioRef.current || !stickyAudioRef.current.duration) return;
@@ -751,7 +763,7 @@ export default function CategoryDuaReader({
   const isInteractiveElement = (target) => {
     if (!target) return false;
     return !!target.closest(
-      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player, .cdr-swipe-indicator-card'
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player, .cdr-swipe-indicator-card, .audio-player-expanded-dock, .audio-player-collapsed-wrapper'
     );
   };
 
@@ -1390,320 +1402,154 @@ export default function CategoryDuaReader({
             </div>
           )}
 
-          {/* Backdrop Dimmer when Audio Player is Expanded */}
-          {isPlayerExpanded && (
-            <div 
-              style={{
-                position: 'fixed',
-                inset: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
-                zIndex: 45,
-                transition: 'opacity 0.25s ease'
-              }}
-              onClick={() => setIsPlayerExpanded(false)}
-            />
-          )}
-
           {/* ========================================================
-              STICKY CURVED BOTTOM AUDIO PLAYER SHEET
-              Matches Reference Image: media_1794030845933_94d9d71c.png
-              Glassmorphism + clean curved edges
+              AUDIO PLAYER COMPONENT (COLLAPSED & EXPANDED)
+              Matches Reference Image: media_1794068274071_28e30207.jpg
               ======================================================== */}
-          <div 
-            className="sticky-player"
-            style={{
-              position: 'fixed',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '100%',
-              maxWidth: '540px',
-              zIndex: 50,
-              borderTopLeftRadius: '2.25rem',
-              borderTopRightRadius: '2.25rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              borderTop: '1px solid rgba(255, 255, 255, 0.95)',
-              borderLeft: '1px solid rgba(255, 255, 255, 0.85)',
-              borderRight: '1px solid rgba(255, 255, 255, 0.85)',
-              borderBottom: 'none',
-              boxShadow: '0 -10px 32px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-              height: isPlayerExpanded ? '280px' : '76px',
-              transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))',
-              userSelect: 'none'
-            }}
-          >
-            {/* Drag Handle Pill */}
-            <div 
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                paddingTop: '12px',
-                paddingBottom: '4px',
-                cursor: 'pointer'
-              }}
-              onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}
-              title={isPlayerExpanded ? "Collapse" : "Expand"}
-            >
-              <div 
-                style={{
-                  width: '44px',
-                  height: '5px',
-                  backgroundColor: '#CBD5E1',
-                  borderRadius: '9999px'
-                }}
-              />
-            </div>
-
-            {/* CASE A: COLLAPSED VIEW (Sticky Bottom Docked Bar) */}
-            {!isPlayerExpanded && (
-              <div 
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '2px 24px 8px',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-                onClick={() => setIsPlayerExpanded(true)}
+          {!isPlayerExpanded ? (
+            /* 1. COLLAPSED VIEW: Minimal centered circular emerald Play button */
+            <div className="audio-player-collapsed-wrapper">
+              <button 
+                type="button"
+                onClick={handleCollapsedButtonClick}
+                className="audio-player-collapsed-btn"
+                aria-label={isPlaying ? "Pause Audio" : "Play Audio & Expand Player"}
+                title={isPlaying ? "Pause" : "Play Audio"}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1, marginRight: '12px' }}>
-                  <span style={{ fontWeight: 800, color: '#1E293B', fontSize: '14px', lineHeight: 1.2 }}>
-                    Dua {currentIndex + 1}
-                  </span>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#0D9488', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>
-                    {subcategoryTitle}
+                {isPlaying ? (
+                  <Pause size={24} fill="#FFFFFF" color="#FFFFFF" />
+                ) : (
+                  <Play size={24} fill="#FFFFFF" color="#FFFFFF" style={{ marginLeft: '3px' }} />
+                )}
+              </button>
+            </div>
+          ) : (
+            /* 2. EXPANDED VIEW: Exact match to user reference screenshot */
+            <div 
+              className="audio-player-expanded-dock"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              role="region"
+              aria-label="Audio Player"
+            >
+              {/* Top Row: Title on Left, Collapse Chevron on Right */}
+              <div className="audio-player-top-row">
+                <div className="audio-player-title-wrap">
+                  <span className="audio-player-title-text">
                   </span>
                 </div>
 
                 <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsPlayerExpanded(false);
+                  }}
+                  className="audio-player-collapse-btn"
+                  title="Collapse Player"
+                  aria-label="Collapse Audio Player"
+                >
+                  <ChevronDown size={22} strokeWidth={2.4} />
+                </button>
+              </div>
+
+              {/* Middle Row: Previous, Big Center Play/Pause, Next, Divider, Speed Selector */}
+              <div className="audio-player-controls-row">
+                {/* Previous Button */}
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDua('prev');
+                  }}
+                  disabled={currentIndex === 0 && !prevSection}
+                  className="audio-player-track-btn"
+                  title="Previous Dua"
+                  aria-label="Previous Dua"
+                >
+                  <SkipBack size={19} strokeWidth={2.4} />
+                </button>
+
+                {/* Large Center Play / Pause Button */}
+                <button 
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleStickyPlay(e);
                   }}
-                  style={{
-                    width: '46px',
-                    height: '46px',
-                    backgroundColor: '#0D9488',
-                    borderRadius: '50%',
-                    color: '#FFFFFF',
-                    boxShadow: '0 6px 16px -2px rgba(13, 148, 136, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: 'none',
-                    cursor: 'pointer',
-                    flexShrink: 0
-                  }}
+                  className="audio-player-main-play-btn"
                   aria-label={isPlaying ? "Pause" : "Play"}
+                  title={isPlaying ? "Pause" : "Play"}
                 >
                   {isPlaying ? (
-                    <Pause size={20} fill="currentColor" />
+                    <Pause size={24} fill="#FFFFFF" color="#FFFFFF" />
                   ) : (
-                    <Play size={20} fill="currentColor" style={{ marginLeft: '2px' }} />
+                    <Play size={24} fill="#FFFFFF" color="#FFFFFF" style={{ marginLeft: '3px' }} />
                   )}
                 </button>
+
+                {/* Next Button */}
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDua('next');
+                  }}
+                  disabled={currentIndex === activeDuas.length - 1 && !nextSection}
+                  className="audio-player-track-btn"
+                  title="Next Dua"
+                  aria-label="Next Dua"
+                >
+                  <SkipForward size={19} strokeWidth={2.4} />
+                </button>
+
+                {/* Vertical Divider Line */}
+                <div className="audio-player-divider" />
+
+                {/* Playback Speed Pill (1x, 1.25x, 1.5x, 2x) */}
+                <button 
+                  type="button"
+                  onClick={toggleSpeed}
+                  className="audio-player-speed-btn"
+                  title="Playback Speed"
+                  aria-label="Change Playback Speed"
+                >
+                  <span>{playbackSpeed}x</span>
+                  <ChevronDown size={14} strokeWidth={2.4} />
+                </button>
               </div>
-            )}
 
-            {/* CASE B: EXPANDED VIEW (Exact Match to User Reference Screenshot) */}
-            {isPlayerExpanded && (
-              <div 
-                style={{
-                  padding: '0 24px 12px',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between'
-                }}
-              >
-                {/* Header Title & Subtitle */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: '2px' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.2 }}>
-                    Dua {currentIndex + 1}
-                  </h3>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0D9488', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '2px', marginBottom: 0 }}>
-                    {subcategoryTitle}
-                  </p>
-                </div>
+              {/* Bottom Row: Current Time, Progress Slider with Knob, Total Duration */}
+              <div className="audio-player-timeline-row">
+                <span className="audio-player-time-text">
+                  {formatTime(currentTimeSec)}
+                </span>
 
-                {/* Time Stamps and Interactive Progress Bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', margin: '8px 0' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'left' }}>
-                    {formatTime(currentTimeSec)}
-                  </span>
-                  
-                  <div 
-                    style={{
-                      flex: 1,
-                      height: '8px',
-                      backgroundColor: '#F1F5F9',
-                      borderRadius: '9999px',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                    onClick={handleSeek}
-                    role="progressbar"
-                    aria-valuenow={Math.round(audioProgress)}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  >
+                <div 
+                  className="audio-player-slider-wrap"
+                  onClick={handleSeek}
+                  role="progressbar"
+                  aria-valuenow={Math.round(audioProgress)}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div className="audio-player-slider-track">
                     <div 
-                      style={{
-                        height: '6px',
-                        borderRadius: '9999px',
-                        backgroundColor: '#0D9488',
-                        width: `${audioProgress}%`,
-                        position: 'relative',
-                        transition: 'width 0.05s linear'
-                      }}
+                      className="audio-player-slider-fill"
+                      style={{ width: `${audioProgress}%` }}
                     >
-                      {/* Circular Thumb with white fill and teal border */}
-                      <div 
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                          top: '50%',
-                          transform: 'translate(50%, -50%)',
-                          width: '14px',
-                          height: '14px',
-                          backgroundColor: '#FFFFFF',
-                          border: '3px solid #0D9488',
-                          borderRadius: '50%',
-                          boxShadow: '0 1px 4px rgba(0,0,0,0.25)'
-                        }}
-                      />
+                      <div className="audio-player-slider-thumb" />
                     </div>
                   </div>
-
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'right' }}>
-                    {formatTime(durationSec || 45)}
-                  </span>
                 </div>
 
-                {/* Main Controls: Previous, Big Play/Pause, Next */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '36px', margin: '2px 0' }}>
-                  <button 
-                    onClick={() => changeDua('prev')}
-                    disabled={currentIndex === 0 && !prevSection}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: '8px',
-                      cursor: (currentIndex === 0 && !prevSection) ? 'not-allowed' : 'pointer',
-                      color: (currentIndex === 0 && !prevSection) ? '#CBD5E1' : '#64748B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'color 0.15s ease'
-                    }}
-                    title="Previous Dua"
-                    aria-label="Previous Dua"
-                  >
-                    <SkipBack size={26} strokeWidth={2} />
-                  </button>
-
-                  <button 
-                    onClick={toggleStickyPlay}
-                    style={{
-                      width: '64px',
-                      height: '64px',
-                      backgroundColor: '#0D9488',
-                      borderRadius: '50%',
-                      color: '#FFFFFF',
-                      boxShadow: '0 10px 25px -4px rgba(13, 148, 136, 0.45)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'transform 0.1s active'
-                    }}
-                    aria-label={isPlaying ? "Pause" : "Play"}
-                  >
-                    {isPlaying ? (
-                      <Pause size={28} fill="currentColor" />
-                    ) : (
-                      <Play size={28} fill="currentColor" style={{ marginLeft: '3px' }} />
-                    )}
-                  </button>
-
-                  <button 
-                    onClick={() => changeDua('next')}
-                    disabled={currentIndex === activeDuas.length - 1 && !nextSection}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: '8px',
-                      cursor: (currentIndex === activeDuas.length - 1 && !nextSection) ? 'not-allowed' : 'pointer',
-                      color: (currentIndex === activeDuas.length - 1 && !nextSection) ? '#CBD5E1' : '#64748B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'color 0.15s ease'
-                    }}
-                    title="Next Dua"
-                    aria-label="Next Dua"
-                  >
-                    <SkipForward size={26} strokeWidth={2} />
-                  </button>
-                </div>
-
-                {/* Bottom Controls: Speed Pill & Volume Slider */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: '6px', padding: '0 4px' }}>
-                  <button 
-                    onClick={toggleSpeed}
-                    style={{
-                      backgroundColor: '#ECFDF5',
-                      color: '#0D9488',
-                      borderRadius: '9999px',
-                      fontSize: '11px',
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      padding: '6px 14px',
-                      border: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {playbackSpeed}x SPEED
-                  </button>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Volume2 size={16} style={{ color: '#94A3B8', flexShrink: 0 }} />
-                    <input 
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={audioVolume}
-                      onChange={(e) => handleVolumeChange(Number(e.target.value))}
-                      style={{
-                        width: '96px',
-                        height: '4px',
-                        backgroundColor: '#E2E8F0',
-                        borderRadius: '9999px',
-                        accentColor: '#0D9488',
-                        cursor: 'pointer'
-                      }}
-                      aria-label="Volume"
-                    />
-                  </div>
-                </div>
-
+                <span className="audio-player-time-text" style={{ textAlign: 'right' }}>
+                  {formatTime(durationSec || 48)}
+                </span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
