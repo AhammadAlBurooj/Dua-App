@@ -594,6 +594,12 @@ export default function CategoryDuaReader({
         setIsPlaying(false);
         setAudioProgress(0);
         setCurrentTimeSec(0);
+        setIsPlayerExpanded(false);
+      });
+
+      audio.addEventListener('error', () => {
+        setIsPlaying(false);
+        setIsPlayerExpanded(false);
       });
 
       stickyAudioRef.current = audio;
@@ -602,10 +608,15 @@ export default function CategoryDuaReader({
     if (isPlaying) {
       stickyAudioRef.current.pause();
       setIsPlaying(false);
+      setIsPlayerExpanded(false);
     } else {
+      setIsPlayerExpanded(true);
       stickyAudioRef.current.play()
         .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false));
+        .catch(() => {
+          setIsPlaying(false);
+          setIsPlayerExpanded(false);
+        });
     }
   };
 
@@ -614,8 +625,14 @@ export default function CategoryDuaReader({
       e.stopPropagation();
       e.preventDefault?.();
     }
-    setIsPlayerExpanded(true);
-    if (!isPlaying) {
+    if (isPlaying) {
+      if (stickyAudioRef.current) {
+        stickyAudioRef.current.pause();
+      }
+      setIsPlaying(false);
+      setIsPlayerExpanded(false);
+    } else {
+      setIsPlayerExpanded(true);
       toggleStickyPlay(e);
     }
   };
@@ -1434,26 +1451,6 @@ export default function CategoryDuaReader({
               aria-label="Audio Player"
             >
               {/* Top Row: Title on Left, Collapse Chevron on Right */}
-              <div className="audio-player-top-row">
-                <div className="audio-player-title-wrap">
-                  <span className="audio-player-title-text">
-                  </span>
-                </div>
-
-                <button 
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsPlayerExpanded(false);
-                  }}
-                  className="audio-player-collapse-btn"
-                  title="Collapse Player"
-                  aria-label="Collapse Audio Player"
-                >
-                  <ChevronDown size={22} strokeWidth={2.4} />
-                </button>
-              </div>
-
               {/* Middle Row: Previous, Big Center Play/Pause, Next, Divider, Speed Selector */}
               <div className="audio-player-controls-row">
                 {/* Previous Button */}
@@ -1545,7 +1542,7 @@ export default function CategoryDuaReader({
                 </div>
 
                 <span className="audio-player-time-text" style={{ textAlign: 'right' }}>
-                  {formatTime(durationSec || 48)}
+                  {formatTime(durationSec || 0)}
                 </span>
               </div>
             </div>

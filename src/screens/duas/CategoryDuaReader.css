@@ -815,23 +815,35 @@
    Matches Reference: media_1794068274071_28e30207.jpg
    ========================================================================== */
 
-/* 1. Collapsed Floating Action Button */
+/* 1. Collapsed Floating Action Button: Right-aligned at bottom-right corner */
 .audio-player-collapsed-wrapper {
   position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  right: max(20px, calc(50% - 240px + 20px));
+  left: auto;
+  transform: none;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
   user-select: none;
+  animation: audioCollapsedPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes audioCollapsedPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .audio-player-collapsed-btn {
-  width: 58px;
-  height: 58px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background-color: #059669; /* primary emerald */
   color: #FFFFFF;
@@ -853,13 +865,13 @@
 }
 
 .audio-player-collapsed-btn:active {
-  transform: scale(0.94);
+  transform: scale(0.92);
 }
 
 /* 2. Expanded Floating Audio Player Card */
 .audio-player-expanded-dock {
   position: fixed;
-  bottom: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   left: 14px;
   right: 14px;
   max-width: 480px;
@@ -871,20 +883,19 @@
   -webkit-backdrop-filter: blur(24px);
   border: 1.5px solid #A7F3D0;
   box-shadow: 0 12px 32px -4px rgba(5, 150, 105, 0.16), 0 4px 16px rgba(0, 0, 0, 0.04);
-  padding: 14px 18px 13px;
+  padding: 14px 18px 14px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: all 0.35s cubic-bezier(0.32, 0.72, 0, 1);
   user-select: none;
   box-sizing: border-box;
-  animation: audioPlayerExpand 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: audioPlayerExpand 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes audioPlayerExpand {
   0% {
     opacity: 0;
-    transform: translateY(20px) scale(0.96);
+    transform: translateY(18px) scale(0.96);
   }
   100% {
     opacity: 1;
