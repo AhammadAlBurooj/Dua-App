@@ -251,23 +251,26 @@
 /* Card Content Area */
 .top-banner-content {
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   margin-top: 4px;
   z-index: 10;
 }
 
 .top-banner-art-wrap {
-  width: 92px;
-  height: 92px;
+  width: clamp(78px, 22vw, 92px);
+  height: clamp(78px, 22vw, 92px);
   border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border: 2px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45);
   background: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .top-banner-art-img {
@@ -278,31 +281,37 @@
 }
 
 .top-banner-title {
+  width: 100%;
   font-weight: 700;
   color: #FFFFFF;
   line-height: 1.25;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   margin: 0;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .top-banner-title.font-sans {
   font-family: 'Outfit', sans-serif;
-  font-size: 26px;
+  font-size: clamp(21px, 5.8vw, 26px);
 }
 
 .top-banner-title.font-malayalam {
   font-family: 'Manjari', sans-serif;
-  font-size: 23px;
+  font-size: clamp(18.5px, 5.2vw, 23px);
 }
 
 .top-banner-subtitle {
+  width: 100%;
   font-family: 'Manjari', sans-serif;
-  font-size: 13.5px;
+  font-size: clamp(11.5px, 3.3vw, 13.5px);
   color: rgba(209, 250, 229, 0.95);
   margin-top: 4px;
   margin-bottom: 0;
   line-height: 1.35;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* Action Button */
@@ -316,8 +325,10 @@
   font-family: 'Manjari', sans-serif;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   cursor: pointer;
+  align-self: center;
   border: none;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
