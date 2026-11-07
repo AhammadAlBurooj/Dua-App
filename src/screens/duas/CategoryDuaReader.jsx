@@ -315,7 +315,7 @@ const DuaMultiCard = ({
               >
                 <div className="cdr-virtue-toggle-left">
                   <Info size={14} className="cdr-virtue-toggle-icon" />
-                  <span className="cdr-virtue-toggle-label">Virtue / Info</span>
+                  <span className="cdr-virtue-toggle-label">Info</span>
                 </div>
                 <ChevronDown 
                   size={14} 
@@ -330,30 +330,6 @@ const DuaMultiCard = ({
                   </p>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Samayam Nirdhesham (Directly BELOW Virtue / Info section) */}
-          {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
-            <div className="cdr-card-hint-pill">
-              <Sparkles size={14} className="cdr-hint-sparkle" />
-              <span>{dua.hint.trim()}</span>
-            </div>
-          )}
-
-          {dua.hint && dua.hint.trim().length > 40 && (
-            <div className="cdr-card-callout">
-              <div className="cdr-callout-icon-wrap">
-                <Sparkles size={16} />
-              </div>
-              <div className="cdr-callout-body">
-                <span className="cdr-callout-label">
-                  സമയം & നിർദ്ദേശം
-                </span>
-                <p className="cdr-callout-text">
-                  {dua.hint.trim()}
-                </p>
-              </div>
             </div>
           )}
 
@@ -443,7 +419,31 @@ const DuaMultiCard = ({
         </div>
       )}
 
-      {/* ═══════ CARD 6: Hadith Commentary (if available) ═══════ */}
+      {/* ═══════ CARD 6: Samayam & Nirdhesham (Below Reference Section) ═══════ */}
+      {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
+        <div className="cdr-card-hint-pill">
+          <Sparkles size={14} className="cdr-hint-sparkle" />
+          <span>{dua.hint.trim()}</span>
+        </div>
+      )}
+
+      {dua.hint && dua.hint.trim().length > 40 && (
+        <div className="cdr-card-callout">
+          <div className="cdr-callout-icon-wrap">
+            <Sparkles size={16} />
+          </div>
+          <div className="cdr-callout-body">
+            <span className="cdr-callout-label">
+              സമയം & നിർദ്ദേശം
+            </span>
+            <p className="cdr-callout-text">
+              {dua.hint.trim()}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════ CARD 7: Hadith Commentary (if available) ═══════ */}
       {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
