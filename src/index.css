@@ -3263,4 +3263,19 @@ button,
   }
 }
 
+/* ==========================================================================
+   HIDE BOTTOM NAVIGATION BAR ON DUA READING PAGE
+   ========================================================================== */
+body.dua-page-active .bottom-nav,
+.dua-page-active .bottom-nav,
+body.dua-page-active nav.bottom-nav,
+.dua-page-active nav.bottom-nav,
+body.dua-page-active .bottom-navigation-container,
+.dua-page-active .bottom-navigation-container {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+
 

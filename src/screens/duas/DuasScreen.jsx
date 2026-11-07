@@ -58,7 +58,8 @@ export default function DuasScreen({
   onTogglePlay, 
   onSelectDua, 
   settings, 
-  onNavigateTab 
+  onNavigateTab,
+  onReadingStateChange
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAsmaulHusnaOpen, setIsAsmaulHusnaOpen] = useState(false);
@@ -140,9 +141,13 @@ export default function DuasScreen({
           initialCategory={activeReading.category}
           initialSubcategory={activeReading.subcategory}
           initialIndex={activeReading.index || 0}
-          onBackToHome={() => setActiveReading(null)}
+          onBackToHome={() => {
+            setActiveReading(null);
+            if (onReadingStateChange) onReadingStateChange(false);
+          }}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
+          onViewChange={(v) => onReadingStateChange && onReadingStateChange(v === 'reading')}
         />
       ) : isAsmaulHusnaOpen ? (
         <AsmaulHusnaScreen 
@@ -159,9 +164,13 @@ export default function DuasScreen({
         <CategoryDuaReader 
           initialView="categories"
           initialCategory={selectedAwraadCategory}
-          onBackToHome={() => onSelectCategory(null)}
+          onBackToHome={() => {
+            onSelectCategory(null);
+            if (onReadingStateChange) onReadingStateChange(false);
+          }}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
+          onViewChange={(v) => onReadingStateChange && onReadingStateChange(v === 'reading')}
         />
       ) : searchQuery.trim() !== '' ? (
         <div className="search-active-container">

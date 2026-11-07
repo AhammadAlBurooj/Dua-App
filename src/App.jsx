@@ -36,6 +36,7 @@ export default function App() {
   const [isFullWidth, setIsFullWidth] = useState(false);
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
+  const [isReadingActive, setIsReadingActive] = useState(false);
 
   // Calculate valid favorites count based strictly on existing Duas
   const validFavoritesCount = useMemo(() => {
@@ -261,6 +262,7 @@ export default function App() {
             onSelectDua={handleSelectDua}
             settings={settings}
             onNavigateTab={setActiveTab}
+            onReadingStateChange={setIsReadingActive}
           />
         )}
 
@@ -315,18 +317,20 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom Navigation (ഹോം, പ്രിയപ്പെട്ടവ, ബുക്ക്മാർക്ക്, കൂടുതൽ) */}
-      <BottomNav 
-        activeTab={activeTab}
-        onSelectTab={(tab) => {
-          if (tab === 'duas') {
-            setSelectedCategoryId(null);
-          }
-          setActiveTab(tab);
-        }}
-        favoritesCount={validFavoritesCount}
-        language={settings.language}
-      />
+      {/* Bottom Navigation (ഹോം, പ്രിയപ്പെട്ടവ, ബുക്ക്മാർക്ക്, കൂടുതൽ) - Hidden on Dua Reading Page */}
+      {!isReadingActive && !selectedDua && (
+        <BottomNav 
+          activeTab={activeTab}
+          onSelectTab={(tab) => {
+            if (tab === 'duas') {
+              setSelectedCategoryId(null);
+            }
+            setActiveTab(tab);
+          }}
+          favoritesCount={validFavoritesCount}
+          language={settings.language}
+        />
+      )}
 
       {/* Full Dedicated Dua Detail Page (matching Screens 3, 4, 5, 6 or CategoryDuaReader) */}
       {selectedDua && (() => {
