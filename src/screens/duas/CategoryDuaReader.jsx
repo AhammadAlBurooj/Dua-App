@@ -8,6 +8,7 @@ import {
   BookmarkCheck, 
   BookOpen, 
   ChevronDown, 
+  ChevronsDown,
   ChevronUp, 
   ChevronLeft,
   ChevronRight,
@@ -1297,22 +1298,22 @@ export default function CategoryDuaReader({
               >
                 {/* Header Pill */}
                 <div className="cdr-indicator-header-pill">
-                  <Sparkles size={14} className="cdr-indicator-sparkle" />
+                  <Sparkles size={13} className="cdr-indicator-sparkle" />
                   <span>
                     {boundaryTransition.isEnd
                       ? "END OF COLLECTION"
                       : boundaryTransition.isBeginning
                       ? "FIRST DUA"
                       : boundaryTransition.isCategoryChange
-                      ? (boundaryTransition.direction === 'next' ? "Moving to Next Category" : "Moving to Previous Category")
-                      : (boundaryTransition.direction === 'next' ? "Moving to Next Subcategory" : "Moving to Previous Subcategory")}
+                      ? (boundaryTransition.direction === 'next' ? "MOVING TO NEXT CATEGORY" : "MOVING TO PREVIOUS CATEGORY")
+                      : (boundaryTransition.direction === 'next' ? "MOVING TO NEXT SUBCATEGORY" : "MOVING TO PREVIOUS SUBCATEGORY")}
                   </span>
                 </div>
 
                 {/* Content */}
                 {boundaryTransition.isEnd ? (
                   <div className="cdr-indicator-end-box">
-                    <CheckCircle2 size={36} style={{ color: '#10B981', margin: '4px 0 8px' }} />
+                    <CheckCircle2 size={36} style={{ color: '#0D9488', margin: '4px 0 8px' }} />
                     <p className="cdr-indicator-end-title">അവസാന ദുആയിൽ എത്തിച്ചേർന്നു</p>
                     <p className="cdr-indicator-end-desc">You've reached the end of all Duas & Adhkar in the app</p>
                     <button 
@@ -1324,7 +1325,7 @@ export default function CategoryDuaReader({
                   </div>
                 ) : boundaryTransition.isBeginning ? (
                   <div className="cdr-indicator-end-box">
-                    <Sparkles size={36} style={{ color: '#10B981', margin: '4px 0 8px' }} />
+                    <Sparkles size={36} style={{ color: '#0D9488', margin: '4px 0 8px' }} />
                     <p className="cdr-indicator-end-title">ആദ്യ ദുആയിലാണ് താങ്കൾ</p>
                     <p className="cdr-indicator-end-desc">You are at the beginning of the Dua collection</p>
                     <button 
@@ -1336,36 +1337,30 @@ export default function CategoryDuaReader({
                   </div>
                 ) : (
                   <div className="cdr-indicator-body">
-                    {/* Current Section Row */}
-                    <div className="cdr-indicator-row current">
-                      <span className="cdr-indicator-label">Current:</span>
-                      <span className="cdr-indicator-val">
-                        {boundaryTransition.currentSubcategoryName}
-                      </span>
+                    {/* CURRENT: Section */}
+                    <span className="cdr-indicator-section-label">CURRENT:</span>
+                    <h3 className="cdr-indicator-current-title">
+                      {boundaryTransition.currentSubcategoryName}
+                    </h3>
+
+                    {/* Middle Circular Arrow Badge */}
+                    <div className="cdr-indicator-arrow-badge">
+                      <ChevronsDown size={22} strokeWidth={2.8} />
                     </div>
 
-                    {/* Animated Direction Arrow */}
-                    <div className="cdr-indicator-arrow-wrap">
-                      <ChevronDown size={22} className="cdr-indicator-arrow-down" />
-                    </div>
-
-                    {/* Target Next / Prev Section Row */}
-                    <div className="cdr-indicator-row target">
-                      <span className="cdr-indicator-label">
-                        {boundaryTransition.direction === 'next' ? 'Next:' : 'Previous:'}
-                      </span>
-                      <div className="cdr-indicator-target-text">
-                        <span className="cdr-indicator-val highlight">
-                          {boundaryTransition.targetSubcategoryName}
-                        </span>
-                        {boundaryTransition.isCategoryChange && (
-                          <div className="cdr-indicator-cat-badge">
-                            <Folder size={12} />
-                            <span>{boundaryTransition.targetCategoryName}</span>
-                          </div>
-                        )}
+                    {/* NEXT: Section */}
+                    <span className="cdr-indicator-section-label">
+                      {boundaryTransition.direction === 'next' ? 'NEXT:' : 'PREVIOUS:'}
+                    </span>
+                    <h3 className="cdr-indicator-next-title">
+                      {boundaryTransition.targetSubcategoryName}
+                    </h3>
+                    {boundaryTransition.isCategoryChange && (
+                      <div className="cdr-indicator-cat-badge">
+                        <Folder size={12} />
+                        <span>{boundaryTransition.targetCategoryName}</span>
                       </div>
-                    </div>
+                    )}
 
                     {/* 1-Second Animated Progress Bar */}
                     <div className="cdr-indicator-progress-wrap">
@@ -1375,23 +1370,19 @@ export default function CategoryDuaReader({
                       />
                     </div>
 
-                    {/* Action Prompt Pill */}
-                    <div className="cdr-indicator-action-wrap">
-                      {boundaryTransition.readyToRelease ? (
-                        <button 
-                          className="cdr-indicator-release-btn"
-                          onClick={handleDirectRelease}
-                        >
-                          <span>
-                            {boundaryTransition.direction === 'next' ? "Release Now →" : "← Release Now"}
-                          </span>
-                        </button>
-                      ) : (
-                        <div className="cdr-indicator-holding-pill">
-                          <span className="cdr-indicator-holding-dot" />
-                          <span>Hold to confirm transition...</span>
-                        </div>
-                      )}
+                    {/* Bottom Action / Status Pill */}
+                    <div 
+                      className={`cdr-indicator-status-pill ${boundaryTransition.readyToRelease ? 'ready' : ''}`}
+                      onClick={boundaryTransition.readyToRelease ? handleDirectRelease : undefined}
+                      role={boundaryTransition.readyToRelease ? 'button' : undefined}
+                      tabIndex={boundaryTransition.readyToRelease ? 0 : undefined}
+                    >
+                      <span className={`cdr-indicator-pill-dot ${boundaryTransition.readyToRelease ? 'ready' : ''}`} />
+                      <span>
+                        {boundaryTransition.readyToRelease 
+                          ? (boundaryTransition.direction === 'next' ? "Release now to enter" : "Release now to enter")
+                          : "Hold to confirm transition..."}
+                      </span>
                     </div>
                   </div>
                 )}
