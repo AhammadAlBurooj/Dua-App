@@ -161,13 +161,13 @@ export default function App() {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       });
-      showToast('പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കം ചെയ്തു');
+      showToast('Removed from favorites');
     } else {
       updated = [targetId, ...favorites.filter(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       })];
-      showToast('പ്രിയപ്പെട്ടവയിൽ ചേർത്തു ❤️');
+      showToast('Added to favorites');
       audioService.playChime(520, 0.04);
     }
     setFavorites(updated);

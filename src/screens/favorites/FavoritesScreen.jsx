@@ -158,7 +158,7 @@ export default function FavoritesScreen({
 
     // If 2 or more categories have bookmarked items, show 'All' and only non-empty categories
     const pills = [
-      { id: 'all', label: isEnglish ? 'All' : 'എല്ലാം' }
+      { id: 'all', label: isEnglish ? 'All' : 'All' }
     ];
 
     activeKeys.forEach(k => {
@@ -258,13 +258,6 @@ export default function FavoritesScreen({
               <ArrowLeft size={20} strokeWidth={2.4} />
             </button>
 
-            <div className="fav-glass-nav-icon-badge">
-              {isBookmarkView ? (
-                <Bookmark size={20} className="fav-nav-icon-svg bookmark" />
-              ) : (
-                <Heart size={20} className="fav-nav-icon-svg heart" fill="#EF4444" color="#EF4444" />
-              )}
-            </div>
             <div className="fav-glass-nav-titles">
               <h1 className="fav-glass-nav-title">
                 {isBookmarkView 
@@ -280,14 +273,14 @@ export default function FavoritesScreen({
           </div>
 
           <div className="fav-glass-nav-right">
-            {favoriteDuas.length > 0 && (
+            {/* {favoriteDuas.length > 0 && (
               <span className="fav-count-pill">
                 <Sparkles size={13} className="fav-sparkle-dot" />
                 <span>
                   {favoriteDuas.length} {isEnglish ? 'Duas' : 'ദുആകൾ'}
                 </span>
               </span>
-            )}
+            )} */}
             {onToggleTheme && (
               <button 
                 className="fav-glass-theme-btn"
@@ -477,7 +470,7 @@ export default function FavoritesScreen({
                       ) : <div />}
 
                       <div className="fav-read-hint">
-                        <span>{isEnglish ? 'Read full Dua' : 'പൂർണ്ണമായി വായിക്കുക'}</span>
+                        <span>{isEnglish ? 'Read More' : 'Read More'}</span>
                         <ChevronRight size={14} className="fav-read-hint-arrow" />
                       </div>
                     </div>
