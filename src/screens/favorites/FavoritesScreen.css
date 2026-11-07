@@ -15,7 +15,7 @@
   min-height: 100dvh;
   background-color: #F8FAFC;
   position: relative;
-  overflow-x: hidden;
+  overflow: visible;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
   color: #0F172A;
   padding-bottom: 96px;
@@ -63,15 +63,16 @@
 
 /* ═══════ CLASSIC NEAT & CLEAN GLASS TOP BAR ═══════ */
 .fav-glass-nav {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
   width: 100%;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
