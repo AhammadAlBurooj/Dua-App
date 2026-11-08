@@ -723,8 +723,45 @@
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   font-family: 'Noto Sans Malayalam', var(--font-malayalam, sans-serif);
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.cdr-glass-nav-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  width: max-content;
+  flex-shrink: 1;
+  animation: cdrNavMarquee 92s linear infinite;
+  will-change: transform;
+}
+
+.cdr-glass-nav-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 48px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes cdrNavMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cdr-glass-nav-marquee-track {
+    animation: none;
+    transform: none;
+  }
 }
 
 .cdr-glass-nav-subtitle {

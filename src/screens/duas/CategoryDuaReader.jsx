@@ -1291,7 +1291,14 @@ export default function CategoryDuaReader({
                 <ArrowLeft size={20} strokeWidth={2.5} />
               </button>
               <div className="cdr-glass-nav-titles">
-                <h1 className="cdr-glass-nav-title">{subcategoryTitle}</h1>
+                <h1 className="cdr-glass-nav-title" title={subcategoryTitle}>
+                  <span className="cdr-glass-nav-marquee-track">
+                    <span className="cdr-glass-nav-marquee-item">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                  </span>
+                </h1>
                 <p className="cdr-glass-nav-subtitle">{categoryTitle}</p>
               </div>
             </div>
