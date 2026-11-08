@@ -114,7 +114,7 @@ export default function DuaDetailModal({
     touchMoved.current = false;
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = () => {
     if (isTouchIgnored.current) return;
     touchMoved.current = true;
   };

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { 
   Languages, 
   Moon, 
-  Type, 
   Bell, 
   Share2, 
   Star, 
@@ -37,15 +36,6 @@ export default function SettingsScreen({
     if (onShowToast) {
       onShowToast(nextLang === 'ml' ? 'ഭാഷ മലയാളമാക്കി മാറ്റി' : 'Language set to English');
     }
-  };
-
-  // Font size slider change
-  const handleFontSizeChange = (e) => {
-    const newSize = Number(e.target.value);
-    onUpdateSettings({
-      ...settings,
-      arabicFontSize: newSize
-    });
   };
 
   // Daily reminder toggle
@@ -97,7 +87,6 @@ export default function SettingsScreen({
   };
 
   const isDarkMode = theme === 'dark';
-  const fontSize = settings.arabicFontSize || 28;
 
   return (
     <div className="settings-screen-container">
@@ -159,48 +148,6 @@ export default function SettingsScreen({
             <span className="settings-switch-thumb" />
           </button>
         </div>
-
-        <div className="settings-divider" />
-
-        {/* Item 3: Arabic Text Size */}
-        {/* <div className="settings-item-row" style={{ paddingBottom: '8px' }}>
-          <div className="settings-item-left">
-            <div className="settings-icon-badge">
-              <Type size={20} />
-            </div>
-            <div className="settings-item-text">
-              <h3 className="settings-item-title">Arabic Text Size</h3>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Slider & Arabic Live Preview */}
-        {/* <div className="settings-slider-wrapper">
-          <div className="settings-slider-row">
-            <span className="settings-slider-label">A-</span>
-            <input 
-              type="range"
-              min="20"
-              max="40"
-              step="1"
-              value={fontSize}
-              onChange={handleFontSizeChange}
-              className="settings-range-slider"
-              aria-label="Arabic Text Size Slider"
-            />
-            <span className="settings-slider-label">A+</span>
-          </div>
-
-          <div className="settings-preview-box">
-            <div className="settings-preview-label">Preview</div>
-            <p 
-              className="settings-preview-arabic"
-              style={{ fontSize: `${fontSize}px` }}
-            >
-              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-            </p>
-          </div>
-        </div> */}
       </div>
 
       {/* 3. NOTIFICATIONS Section */}

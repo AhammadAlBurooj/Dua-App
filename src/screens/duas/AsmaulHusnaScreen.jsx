@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, 
-  Sparkles, 
   BookOpen, 
   Search, 
   X, 
