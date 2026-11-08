@@ -25,7 +25,8 @@ import {
   Layers,
   ArrowRight,
   Headphones,
-  Repeat
+  Repeat,
+  RotateCcw
 } from 'lucide-react';
 import { 
   CATEGORIES_DATA, 
@@ -208,6 +209,64 @@ const DuaMultiCard = ({
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
   const [virtueOpen, setVirtueOpen] = useState(false);
+  const [arabicZoom, setArabicZoom] = useState(1);
+  const [isPinching, setIsPinching] = useState(false);
+  const pinchRef = useRef({ initialDist: 0, initialZoom: 1, isPinching: false });
+
+  const handleArabicTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      e.stopPropagation();
+      const x1 = e.touches[0].clientX;
+      const y1 = e.touches[0].clientY;
+      const x2 = e.touches[1].clientX;
+      const y2 = e.touches[1].clientY;
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      pinchRef.current = {
+        initialDist: dist,
+        initialZoom: arabicZoom,
+        isPinching: true
+      };
+      setIsPinching(true);
+    }
+  };
+
+  const handleArabicTouchMove = (e) => {
+    if (e.touches.length === 2 && pinchRef.current.isPinching) {
+      e.stopPropagation();
+      if (e.cancelable) e.preventDefault();
+      const x1 = e.touches[0].clientX;
+      const y1 = e.touches[0].clientY;
+      const x2 = e.touches[1].clientX;
+      const y2 = e.touches[1].clientY;
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      if (pinchRef.current.initialDist > 0) {
+        const factor = dist / pinchRef.current.initialDist;
+        const newZoom = Math.min(Math.max(pinchRef.current.initialZoom * factor, 0.75), 2.2);
+        setArabicZoom(parseFloat(newZoom.toFixed(2)));
+      }
+    }
+  };
+
+  const handleArabicTouchEnd = (e) => {
+    if (pinchRef.current.isPinching) {
+      if (e.touches.length < 2) {
+        pinchRef.current.isPinching = false;
+        setIsPinching(false);
+      }
+    }
+  };
+
+  const handleArabicWheel = (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      const delta = e.deltaY < 0 ? 0.08 : -0.08;
+      setArabicZoom((prev) => {
+        const next = Math.min(Math.max(prev + delta, 0.75), 2.2);
+        return parseFloat(next.toFixed(2));
+      });
+    }
+  };
 
   useEffect(() => {
     setVirtueOpen(false);
@@ -301,6 +360,20 @@ const DuaMultiCard = ({
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
             >
+              {/* Subtle Chrome-style Reset Zoom button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setArabicZoom(1);
+                }}
+                className={`cdr-icon-btn cdr-zoom-reset-btn ${arabicZoom !== 1 ? 'is-active' : ''}`}
+                title={arabicZoom !== 1 ? `Reset Zoom (${Math.round(arabicZoom * 100)}%)` : "Reset Zoom"}
+                aria-label="Reset Arabic font zoom"
+              >
+                <RotateCcw size={17} />
+              </button>
+
               <button 
                 onClick={handleCopy} 
                 className="cdr-icon-btn" 
@@ -342,12 +415,25 @@ const DuaMultiCard = ({
             </div>
           )}
 
-          
-
-          {/* Arabic Dua */}
+          {/* Arabic Dua with Pinch-to-Zoom & Pan support */}
           {dua.dua && (
-            <div className="cdr-card-arabic" dir="rtl">
-              {dua.dua}
+            <div 
+              className="cdr-card-arabic-wrap"
+              onTouchStart={handleArabicTouchStart}
+              onTouchMove={handleArabicTouchMove}
+              onTouchEnd={handleArabicTouchEnd}
+              onTouchCancel={handleArabicTouchEnd}
+              onWheel={handleArabicWheel}
+            >
+              <div 
+                className={`cdr-card-arabic ${isPinching ? 'is-pinching' : ''}`} 
+                dir="rtl"
+                style={{
+                  fontSize: `calc(34px * ${arabicZoom})`
+                }}
+              >
+                {dua.dua}
+              </div>
             </div>
           )}
         </div>
