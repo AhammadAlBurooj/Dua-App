@@ -909,6 +909,7 @@ export default function CategoryDuaReader({
   });
 
   const holdProgressIntervalRef = useRef(null);
+  const lastSwipeTimeRef = useRef(0);
 
   const isInteractiveElement = (target) => {
     if (!target) return false;
@@ -1081,10 +1082,20 @@ export default function CategoryDuaReader({
     const isReady = gestureRef.current.readyToRelease;
     const direction = gestureRef.current.direction;
 
+    // Reset gesture flags immediately to prevent duplicate triggers
+    gestureRef.current.isSwipingHorizontal = false;
+    gestureRef.current.startX = 0;
+    gestureRef.current.currentX = 0;
+    gestureRef.current.currentY = 0;
+    gestureRef.current.isIgnored = true;
+
+    const now = Date.now();
+
     // Case 1: Boundary Release
     if (wasBoundaryActive) {
-      if (isReady) {
-        // Released after 1-second hold was completed: perform navigation!
+      if (isReady && now - lastSwipeTimeRef.current > 350) {
+        lastSwipeTimeRef.current = now;
+        // Released after hold was completed: perform navigation!
         if (direction === 'next' && nextSection) {
           setCurrentSectionIndex(prev => prev + 1);
           setCurrentIndex(0);
@@ -1098,14 +1109,16 @@ export default function CategoryDuaReader({
       return;
     }
 
-    // Case 2: Standard within-subcategory Dua navigation
-    if (wasHorizontal) {
-      if (diffX < -50 && currentIndex < activeDuas.length - 1) {
-        // Swipe left -> Next Dua
-        setCurrentIndex(prev => prev + 1);
-      } else if (diffX > 50 && currentIndex > 0) {
-        // Swipe right -> Prev Dua
-        setCurrentIndex(prev => prev - 1);
+    // Case 2: Standard within-subcategory Dua navigation (strictly one step)
+    if (wasHorizontal && now - lastSwipeTimeRef.current > 350) {
+      if (diffX < -45 && currentIndex < activeDuas.length - 1) {
+        // Swipe left -> strictly next Dua (+1)
+        lastSwipeTimeRef.current = now;
+        setCurrentIndex(prev => Math.min(activeDuas.length - 1, prev + 1));
+      } else if (diffX > 45 && currentIndex > 0) {
+        // Swipe right -> strictly previous Dua (-1)
+        lastSwipeTimeRef.current = now;
+        setCurrentIndex(prev => Math.max(0, prev - 1));
       }
     }
   };
@@ -1422,15 +1435,21 @@ export default function CategoryDuaReader({
             onTouchEnd={handleGestureEnd}
             onTouchCancel={handleGestureCancel}
             onPointerDown={(e) => {
-              if (e.pointerType === 'mouse' && e.button !== 0) return;
+              if (e.pointerType !== 'mouse' || e.button !== 0) return;
               handleGestureStart(e.clientX, e.clientY, e.target);
             }}
             onPointerMove={(e) => {
-              if (e.pointerType === 'mouse' && e.buttons !== 1) return;
+              if (e.pointerType !== 'mouse' || e.buttons !== 1) return;
               handleGestureMove(e.clientX, e.clientY);
             }}
-            onPointerUp={handleGestureEnd}
-            onPointerCancel={handleGestureCancel}
+            onPointerUp={(e) => {
+              if (e.pointerType !== 'mouse') return;
+              handleGestureEnd();
+            }}
+            onPointerCancel={(e) => {
+              if (e.pointerType !== 'mouse') return;
+              handleGestureCancel();
+            }}
           >
             {activeDuas[currentIndex] && (
               <div 

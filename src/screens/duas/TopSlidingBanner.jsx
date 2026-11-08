@@ -21,7 +21,7 @@ export default function TopSlidingBanner({
   const slides = [
     {
       id: 1,
-      tag: 'DAILY ADHKAR',
+      tag: 'DAILY AAR',
       tagDot: 'dot-emerald',
       title: isEnglish ? 'Daily Adhkar' : 'നിത്യജീവിത ദുആകൾ',
       subtitle: isEnglish ? 'Morning & Evening Supplications' : 'പ്രഭാത & സായാഹ്ന പ്രാർത്ഥനകൾ',
