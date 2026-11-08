@@ -417,20 +417,7 @@ const DuaMultiCard = ({
         </div>
       )}
 
-      {/* ═══════ CARD 5: Reference ═══════ */}
-      {dua.ref && dua.ref.trim().length > 0 && (
-        <div className="cdr-card-ref-glass">
-          <div className="cdr-ref-header-row">
-            <BookOpen size={20} />
-            <h3 className="cdr-ref-heading">Reference</h3>
-          </div>
-          <p className="cdr-ref-body-text" dir="rtl">
-            {dua.ref}
-          </p>
-        </div>
-      )}
-
-      {/* ═══════ CARD 6: Samayam & Nirdhesham (Below Reference Section for detailed instructions) ═══════ */}
+      {/* ═══════ CARD 6: Samayam & Nirdhesham (for detailed instructions) ═══════ */}
       {dua.hint && dua.hint.trim().length > 40 && (
         <div className="cdr-card-callout">
           <div className="cdr-callout-icon-wrap">
@@ -459,6 +446,19 @@ const DuaMultiCard = ({
           </p>
         </div>
       ))}
+
+      {/* ═══════ Reference (At the very bottom of Dua content) ═══════ */}
+      {dua.ref && dua.ref.trim().length > 0 && (
+        <div className="cdr-card-ref-glass">
+          <div className="cdr-ref-header-row">
+            <BookOpen size={20} />
+            <h3 className="cdr-ref-heading">Reference</h3>
+          </div>
+          <p className="cdr-ref-body-text" dir="rtl">
+            {dua.ref}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
