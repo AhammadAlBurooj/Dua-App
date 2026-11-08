@@ -1,7 +1,9 @@
 import React from 'react';
-import { Home, Heart, Settings } from 'lucide-react';
+import { Home, Bookmark, Settings } from 'lucide-react';
 
 export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, language = 'ml' }) {
+  const isBookmarked = (favoritesCount || 0) > 0;
+
   const tabs = [
     { 
       id: 'duas', 
@@ -10,9 +12,10 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
     },
     { 
       id: 'favorites', 
-      label: language === 'en' ? 'Favourites' : 'Favourites', 
-      icon: Heart, 
-      badge: favoritesCount 
+      label: language === 'en' ? 'Bookmarks' : 'Bookmarks', 
+      icon: Bookmark, 
+      badge: favoritesCount,
+      isBookmarked: isBookmarked
     },
     { 
       id: 'settings', 
@@ -27,12 +30,14 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
+          const isBookmarkTab = tab.id === 'favorites';
+          const isFilled = isBookmarkTab && tab.isBookmarked;
 
           return (
             <button
               key={tab.id}
               id={`nav-tab-${tab.id}`}
-              className={`nav-item ${isActive ? 'active' : ''}`}
+              className={`nav-item ${isActive ? 'active' : ''} ${isFilled ? 'has-bookmarks' : ''}`}
               onClick={() => onSelectTab(tab.id)}
               aria-label={tab.label}
               title={tab.label}
@@ -42,6 +47,7 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
                 <Icon 
                   size={24} 
                   strokeWidth={isActive ? 2.25 : 1.85} 
+                  fill={isFilled ? "currentColor" : "none"}
                   className="nav-icon-svg"
                 />
                 {tab.badge > 0 && tab.id === 'favorites' && (
