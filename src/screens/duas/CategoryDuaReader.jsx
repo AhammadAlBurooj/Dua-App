@@ -2,206 +2,42 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   Play, 
   Pause, 
-  Volume2, 
   Copy, 
   Bookmark, 
   BookmarkCheck, 
   BookOpen, 
   ChevronDown, 
-  ChevronsDown,
+  ChevronsDown, 
   ChevronUp, 
-  ChevronLeft,
-  ChevronRight,
+  ChevronRight, 
   Share2, 
-  Info,
-  ArrowLeft,
-  Folder,
-  Sparkles,
-  BookMarked,
-  SkipBack,
-  SkipForward,
-  CheckCircle2,
-  CheckCircle,
-  Layers,
-  ArrowRight,
-  Headphones,
-  Repeat,
+  Info, 
+  ArrowLeft, 
+  Folder, 
+  Sparkles, 
+  BookMarked, 
+  SkipBack, 
+  SkipForward, 
+  CheckCircle2, 
+  Repeat, 
   RotateCcw
 } from 'lucide-react';
 import { 
   CATEGORIES_DATA, 
-  CATEGORY_THEMES,
-  FLATTENED_SECTIONS,
-  findSectionIndex,
-  findSectionBySubcategory,
-  findSectionByDuaId
+  CATEGORY_THEMES, 
+  FLATTENED_SECTIONS, 
+  findSectionIndex
 } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
 
-// Active audio tracker so only one audio plays at any time,
-// while allowing audio to continue normally across page navigation/swiping.
-let globalActiveAudioStop = null;
-
-// --- REAL AUDIO PLAYER COMPONENT ---
-const AudioPlayer = ({ url }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const audioRef = useRef(null);
-
-  const fullUrl = url ? (url.startsWith('http') ? url : `${AUDIO_BASE}${url}.mp3`) : null;
-
-  const stopPlayback = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    setIsPlaying(false);
-  }, []);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-      }
-      if (globalActiveAudioStop === stopPlayback) {
-        globalActiveAudioStop = null;
-      }
-    };
-  }, [stopPlayback]);
-
-  const togglePlay = (e) => {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault?.();
-    }
-    if (!fullUrl) return;
-
-    if (isPlaying) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      setIsPlaying(false);
-      if (globalActiveAudioStop === stopPlayback) {
-        globalActiveAudioStop = null;
-      }
-    } else {
-      // Pause any previously playing audio in other cards
-      if (globalActiveAudioStop && globalActiveAudioStop !== stopPlayback) {
-        globalActiveAudioStop();
-      }
-      globalActiveAudioStop = stopPlayback;
-
-      if (!audioRef.current) {
-        audioRef.current = new Audio(fullUrl);
-
-        audioRef.current.addEventListener('timeupdate', () => {
-          if (audioRef.current && audioRef.current.duration) {
-            const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-            setProgress(pct);
-          }
-        });
-
-        audioRef.current.addEventListener('ended', () => {
-          setIsPlaying(false);
-          setProgress(0);
-          if (globalActiveAudioStop === stopPlayback) {
-            globalActiveAudioStop = null;
-          }
-        });
-
-        audioRef.current.addEventListener('error', () => {
-          setIsPlaying(false);
-          if (globalActiveAudioStop === stopPlayback) {
-            globalActiveAudioStop = null;
-          }
-        });
-      }
-
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch(() => {
-        setIsPlaying(false);
-        if (globalActiveAudioStop === stopPlayback) {
-          globalActiveAudioStop = null;
-        }
-      });
-    }
-  };
-
-  const handleSeek = (e) => {
-    e.stopPropagation();
-    if (!audioRef.current || !audioRef.current.duration) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const pct = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
-    audioRef.current.currentTime = (pct / 100) * audioRef.current.duration;
-    setProgress(pct);
-  };
-
-  return (
-    <div 
-      className="cdr-audio-pill"
-      onTouchStart={(e) => e.stopPropagation()}
-      onTouchMove={(e) => e.stopPropagation()}
-      onTouchEnd={(e) => e.stopPropagation()}
-      onMouseDown={(e) => e.stopPropagation()}
-    >
-      <button 
-        type="button"
-        onClick={togglePlay}
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-        className="cdr-audio-circle-btn"
-        aria-label={isPlaying ? 'Pause' : 'Play'}
-        title={isPlaying ? 'Pause' : 'Play'}
-      >
-        {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" style={{ marginLeft: '2px' }} />}
-      </button>
-      <div 
-        className="cdr-audio-track-wrap" 
-        onClick={handleSeek}
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-        role="progressbar"
-      >
-        <div className="cdr-audio-track">
-          <div 
-            className="cdr-audio-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-      <button 
-        type="button"
-        className="cdr-audio-vol-btn"
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (audioRef.current) {
-            audioRef.current.currentTime = 0;
-            setProgress(0);
-          }
-        }}
-        title="Replay"
-        aria-label="Replay audio"
-      >
-        <Volume2 size={20} />
-      </button>
-    </div>
-  );
-};
-
 // --- MULTI-CARD DUA DISPLAY COMPONENT ---
 const DuaMultiCard = ({ 
   dua, 
   duaNumber,
-  isCurrentSlide,
+  isCurrentSlide: _isCurrentSlide,
   isBookmarked,
   onToggleBookmark
 }) => {
@@ -294,7 +130,7 @@ const DuaMultiCard = ({
           title: `${duaNumber || dua.id}`,
           text
         });
-      } catch (err) {
+      } catch {
         // Ignored
       }
     } else {
@@ -569,7 +405,7 @@ export default function CategoryDuaReader({
   const [durationSec, setDurationSec] = useState(0);
   const [audioProgress, setAudioProgress] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
-  const [audioVolume, setAudioVolume] = useState(85);
+  const audioVolume = 85;
   const [isRepeat, setIsRepeat] = useState(false);
   const isRepeatRef = useRef(false);
   const stickyAudioRef = useRef(null);
@@ -793,13 +629,6 @@ export default function CategoryDuaReader({
     }
   };
 
-  const handleVolumeChange = (newVal) => {
-    setAudioVolume(newVal);
-    if (stickyAudioRef.current) {
-      stickyAudioRef.current.volume = newVal / 100;
-    }
-  };
-
   // Continuous Navigation across Duas, Subcategories, and Categories
   const changeDua = (dir) => {
     if (dir === 'next') {
@@ -958,7 +787,7 @@ export default function CategoryDuaReader({
           readyToRelease: true
         }));
         if (window.navigator?.vibrate) {
-          try { window.navigator.vibrate(18); } catch (_) {}
+          try { window.navigator.vibrate(18); } catch {}
         }
       } else {
         setBoundaryTransition(prev => ({

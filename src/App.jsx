@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Toast from './components/Toast';
 import SplashScreen from './components/SplashScreen';
@@ -33,7 +32,6 @@ export default function App() {
   const [bookmarks, setBookmarks] = useState(() => getStoredBookmarks());
   const [settings, setSettings] = useState(() => getStoredSettings());
   const [theme, setTheme] = useState(() => getStoredSettings().theme || 'light');
-  const [isFullWidth, setIsFullWidth] = useState(false);
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
   const [isReadingActive, setIsReadingActive] = useState(false);
@@ -128,12 +126,6 @@ export default function App() {
     setSettings(updatedSettings);
     saveStoredSettings(updatedSettings);
     showToast(newTheme === 'dark' ? 'Dark Mode Enabled' : 'Light Mode Enabled');
-  };
-
-  // Toggle Responsive Width (Mobile viewport 440px vs Full Desktop Width)
-  const handleToggleWidth = () => {
-    setIsFullWidth(prev => !prev);
-    showToast(isFullWidth ? 'Switched to Mobile View' : 'Switched to Full-Width View');
   };
 
   // Update Settings
@@ -234,7 +226,7 @@ export default function App() {
   const currentCategoryDuas = selectedDua ? (selectedDua.subCategoryId ? DUAS.filter(d => d.subCategoryId === selectedDua.subCategoryId) : (selectedCategoryId ? DUAS.filter(d => d.categoryId === selectedCategoryId) : DUAS.filter(d => d.categoryId === selectedDua.categoryId))) : [];
 
   return (
-    <div className={`device-viewport ${isFullWidth ? 'full-width' : ''}`}>
+    <div className="device-viewport">
       {/* Animated Splash Screen */}
       {showSplash && (
         <SplashScreen onFinish={() => setShowSplash(false)} />

@@ -223,7 +223,7 @@ export default function FavoritesScreen({
           title: dua.titleMl || dua.titleEn || 'Dua',
           text: shareText
         });
-      } catch (err) {
+      } catch {
         // User cancelled share
       }
     } else {
@@ -380,7 +380,7 @@ export default function FavoritesScreen({
                             className={`fav-card-action-btn ${isPlaying ? 'playing' : ''}`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              onTogglePlay && onTogglePlay(dua);
+                              onTogglePlay?.(dua);
                             }}
                             title={isPlaying ? "Pause Audio" : "Play Audio"}
                             aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
@@ -427,7 +427,7 @@ export default function FavoritesScreen({
                           className="fav-card-action-btn fav-heart-btn"
                           onClick={(e) => {
                             e.stopPropagation();
-                            onToggleFavorite && onToggleFavorite(dua);
+                            onToggleFavorite?.(dua);
                           }}
                           title="Remove Bookmark"
                           aria-label="Remove Bookmark"

@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
-import { UI_TEXT } from '../../utils/translations';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
@@ -53,9 +52,9 @@ export default function DuasScreen({
   selectedCategoryId, 
   onSelectCategory, 
   favorites = [], 
-  playingDuaId, 
+  playingDuaId: _playingDuaId, 
   onToggleFavorite, 
-  onTogglePlay, 
+  onTogglePlay: _onTogglePlay, 
   onSelectDua, 
   settings, 
   onNavigateTab,
@@ -93,7 +92,6 @@ export default function DuasScreen({
   }, [selectedCategoryId, onSelectCategory]);
 
   const lang = settings?.language || 'ml';
-  const t = UI_TEXT[lang] || UI_TEXT.ml;
   const isEnglish = lang === 'en';
 
   // Awraad comprehensive category match (daily life, prayer, etc.)
@@ -322,10 +320,6 @@ export default function DuasScreen({
                   accent: '#059669', 
                   nameEn: '' 
                 };
-                const totalDuas = cat.subcategories.reduce(
-                  (sum, sub) => sum + (sub.duas ? sub.duas.length : 0), 
-                  0
-                );
 
                 return (
                   <div 
@@ -372,11 +366,6 @@ export default function DuasScreen({
                               <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
                             )}
                           </div>
-                          {/* <div className="cdr-cat-meta-sub">
-                            <span>{cat.subcategories.length} {isEnglish ? "sections" : "ഉപവിഭാഗങ്ങൾ"}</span>
-                            <span className="cdr-cat-meta-dot">•</span>
-                            <span>{totalDuas} {isEnglish ? "Duas" : "പ്രാർത്ഥനകൾ"}</span>
-                          </div> */}
                         </div>
                       </div>
 

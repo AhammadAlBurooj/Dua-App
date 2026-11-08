@@ -4,7 +4,7 @@ import './TopSlidingBanner.css';
 
 export default function TopSlidingBanner({
   onSelectCategory,
-  onNavigateTab,
+  onNavigateTab: _onNavigateTab,
   onOpenAsmaulHusna,
   searchQuery = '',
   onSearchChange,
@@ -175,7 +175,7 @@ export default function TopSlidingBanner({
                     className={`top-banner-action-btn ${slide.buttonClass}`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      slide.action && slide.action();
+                      slide.action?.();
                     }}
                   >
                     <span>കാണുക</span>
