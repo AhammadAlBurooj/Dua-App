@@ -161,13 +161,13 @@ export default function App() {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       });
-      showToast('Removed from favorites');
+      showToast('Removed from Bookmarks');
     } else {
       updated = [targetId, ...favorites.filter(f => {
         const fId = typeof f === 'object' && f !== null ? String(f.id) : String(f);
         return fId !== targetId && (origId ? fId !== origId : true);
       })];
-      showToast('Added to favorites');
+      showToast('Added to Bookmarks');
       audioService.playChime(520, 0.04);
     }
     setFavorites(updated);

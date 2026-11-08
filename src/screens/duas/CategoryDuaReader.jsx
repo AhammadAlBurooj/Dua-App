@@ -23,7 +23,10 @@ import {
   CheckCircle2,
   CheckCircle,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Headphones,
+  Repeat,
+  RotateCcw
 } from 'lucide-react';
 import { 
   CATEGORIES_DATA, 
@@ -205,6 +208,69 @@ const DuaMultiCard = ({
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
+  const [virtueOpen, setVirtueOpen] = useState(false);
+  const [arabicZoom, setArabicZoom] = useState(1);
+  const [isPinching, setIsPinching] = useState(false);
+  const pinchRef = useRef({ initialDist: 0, initialZoom: 1, isPinching: false });
+
+  const handleArabicTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      e.stopPropagation();
+      const x1 = e.touches[0].clientX;
+      const y1 = e.touches[0].clientY;
+      const x2 = e.touches[1].clientX;
+      const y2 = e.touches[1].clientY;
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      pinchRef.current = {
+        initialDist: dist,
+        initialZoom: arabicZoom,
+        isPinching: true
+      };
+      setIsPinching(true);
+    }
+  };
+
+  const handleArabicTouchMove = (e) => {
+    if (e.touches.length === 2 && pinchRef.current.isPinching) {
+      e.stopPropagation();
+      if (e.cancelable) e.preventDefault();
+      const x1 = e.touches[0].clientX;
+      const y1 = e.touches[0].clientY;
+      const x2 = e.touches[1].clientX;
+      const y2 = e.touches[1].clientY;
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      if (pinchRef.current.initialDist > 0) {
+        const factor = dist / pinchRef.current.initialDist;
+        const newZoom = Math.min(Math.max(pinchRef.current.initialZoom * factor, 0.75), 2.2);
+        setArabicZoom(parseFloat(newZoom.toFixed(2)));
+      }
+    }
+  };
+
+  const handleArabicTouchEnd = (e) => {
+    if (pinchRef.current.isPinching) {
+      if (e.touches.length < 2) {
+        pinchRef.current.isPinching = false;
+        setIsPinching(false);
+      }
+    }
+  };
+
+  const handleArabicWheel = (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      const delta = e.deltaY < 0 ? 0.08 : -0.08;
+      setArabicZoom((prev) => {
+        const next = Math.min(Math.max(prev + delta, 0.75), 2.2);
+        return parseFloat(next.toFixed(2));
+      });
+    }
+  };
+
+  useEffect(() => {
+    setVirtueOpen(false);
+  }, [dua?.id]);
 
   if (!dua) return null;
 
@@ -248,20 +314,66 @@ const DuaMultiCard = ({
     <div className="cdr-cards-column">
       {/* ═══════ CARD 1: Main Dua (Arabic + Audio Player) ═══════ */}
       <div className="cdr-card-main-glass">
+       
         <div className="cdr-card-shine-top"></div>
         
         <div className="cdr-card-relative-content">
-          {/* Header: Badge & Icons */}
+          
+          {/* Header: Info, Count Pill, Copy, Bookmark, Share in a single row */}
           <div className="cdr-card-top-row">
-            <div className="cdr-card-dua-badge">
-              {duaNumber ? `${duaNumber}` : (dua.id ? `DUA #${dua.id}` : 'DUA')}
+            <div className="cdr-card-top-left-group">
+              {dua.desc && dua.desc.trim().length > 0 && (
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setVirtueOpen(!virtueOpen);
+                  }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                  className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
+                  aria-expanded={virtueOpen}
+                  title={virtueOpen ? "Collapse Info" : "Expand Info"}
+                >
+                  <div className="cdr-virtue-toggle-left">
+                    <Info size={14} className="cdr-virtue-toggle-icon" />
+                    <span className="cdr-virtue-toggle-label">Info</span>
+                  </div>
+                  <ChevronDown 
+                    size={14} 
+                    className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
+                  />
+                </button>
+              )}
+
+              {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
+                <div className="cdr-card-hint-pill">
+                  <Sparkles size={13} className="cdr-hint-sparkle" />
+                  <span>{dua.hint.trim()}</span>
+                </div>
+              )}
             </div>
+
             <div 
               className="cdr-card-action-group"
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
             >
+              {/* Subtle Chrome-style Reset Zoom button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setArabicZoom(1);
+                }}
+                className={`cdr-icon-btn cdr-zoom-reset-btn ${arabicZoom !== 1 ? 'is-active' : ''}`}
+                title={arabicZoom !== 1 ? `Reset Zoom (${Math.round(arabicZoom * 100)}%)` : "Reset Zoom"}
+                aria-label="Reset Arabic font zoom"
+              >
+                <RotateCcw size={17} />
+              </button>
+
               <button 
                 onClick={handleCopy} 
                 className="cdr-icon-btn" 
@@ -294,42 +406,34 @@ const DuaMultiCard = ({
             </div>
           </div>
 
-          {/* Malayalam Instruction / Occasion Text */}
-          {dua.desc && dua.desc.trim().length > 0 && (
-            <div className="cdr-card-desc-text">
-              {dua.desc.trim()}
+          {/* Expanded Info Content (Directly below top row across full card width) */}
+          {dua.desc && dua.desc.trim().length > 0 && virtueOpen && (
+            <div className="cdr-virtue-expanded-box">
+              <p className="cdr-virtue-body-text">
+                {dua.desc.trim()}
+              </p>
             </div>
           )}
 
-          {/* Short hint badge if exists */}
-          {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
-            <div className="cdr-card-hint-pill">
-              <Sparkles size={14} className="cdr-hint-sparkle" />
-              <span>{dua.hint.trim()}</span>
-            </div>
-          )}
-
-          {/* Detailed instruction callout if hint > 40 chars */}
-          {dua.hint && dua.hint.trim().length > 40 && (
-            <div className="cdr-card-callout">
-              <div className="cdr-callout-icon-wrap">
-                <Sparkles size={16} />
-              </div>
-              <div className="cdr-callout-body">
-                <span className="cdr-callout-label">
-                  സമയം & നിർദ്ദേശം
-                </span>
-                <p className="cdr-callout-text">
-                  {dua.hint.trim()}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Arabic Dua */}
+          {/* Arabic Dua with Pinch-to-Zoom & Pan support */}
           {dua.dua && (
-            <div className="cdr-card-arabic" dir="rtl">
-              {dua.dua}
+            <div 
+              className="cdr-card-arabic-wrap"
+              onTouchStart={handleArabicTouchStart}
+              onTouchMove={handleArabicTouchMove}
+              onTouchEnd={handleArabicTouchEnd}
+              onTouchCancel={handleArabicTouchEnd}
+              onWheel={handleArabicWheel}
+            >
+              <div 
+                className={`cdr-card-arabic ${isPinching ? 'is-pinching' : ''}`} 
+                dir="rtl"
+                style={{
+                  fontSize: `calc(34px * ${arabicZoom})`
+                }}
+              >
+                {dua.dua}
+              </div>
             </div>
           )}
         </div>
@@ -387,11 +491,11 @@ const DuaMultiCard = ({
           </div>
 
           {wbwOpen && (
-            <div className="cdr-wbw-grid-box">
+            <div className="cdr-wbw-grid-box" dir="rtl">
               {dua.word_by_word.map((word, idx) => (
                 <div key={idx} className="cdr-wbw-word-tile">
                   <span className="cdr-wbw-ar-text" dir="rtl">{word?.ar || ''}</span>
-                  <span className="cdr-wbw-ml-text">{word?.ml || ''}</span>
+                  <span className="cdr-wbw-ml-text" dir="ltr">{word?.ml || ''}</span>
                 </div>
               ))}
             </div>
@@ -399,29 +503,20 @@ const DuaMultiCard = ({
         </div>
       )}
 
-      {/* ═══════ CARD 5: Reference ═══════ */}
-      {dua.ref && dua.ref.trim().length > 0 && (
-        <div className="cdr-card-ref-glass">
-          <div className="cdr-ref-header-row">
-            <BookOpen size={20} />
-            <h3 className="cdr-ref-heading">Reference</h3>
+      {/* ═══════ CARD 6: Samayam & Nirdhesham (for detailed instructions) ═══════ */}
+      {dua.hint && dua.hint.trim().length > 40 && (
+        <div className="cdr-card-callout">
+          <div className="cdr-callout-icon-wrap">
+            <Sparkles size={16} />
           </div>
-          <p className="cdr-ref-body-text" dir="rtl">
-            {dua.ref}
-          </p>
-        </div>
-      )}
-
-      {/* ═══════ CARD 6: Virtue / Info ═══════ */}
-      {dua.desc && dua.desc.trim().length > 0 && (
-        <div className="cdr-card-virtue-glass">
-          <div className="cdr-virtue-header-row">
-            <Info size={20} />
-            <h3 className="cdr-virtue-heading">Virtue / Info</h3>
+          <div className="cdr-callout-body">
+            <span className="cdr-callout-label">
+              സമയം & നിർദ്ദേശം
+            </span>
+            <p className="cdr-callout-text">
+              {dua.hint.trim()}
+            </p>
           </div>
-          <p className="cdr-virtue-body-text">
-            {dua.desc}
-          </p>
         </div>
       )}
 
@@ -429,7 +524,7 @@ const DuaMultiCard = ({
       {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
-            <BookOpen size={20} />
+            <BookOpen size={20} className="cdr-ref-icon" />
             <h3 className="cdr-ref-heading">{h.title || "ഹദീസ് വിവരണം"}</h3>
           </div>
           <p className="cdr-ref-body-text">
@@ -437,6 +532,19 @@ const DuaMultiCard = ({
           </p>
         </div>
       ))}
+
+      {/* ═══════ Reference (At the very bottom of Dua content) ═══════ */}
+      {dua.ref && dua.ref.trim().length > 0 && (
+        <div className="cdr-card-ref-glass">
+          <div className="cdr-ref-header-row">
+            <BookOpen size={20} className="cdr-ref-icon" />
+            <h3 className="cdr-ref-heading">Reference</h3>
+          </div>
+          <p className="cdr-ref-body-text" dir="rtl">
+            {dua.ref}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
@@ -462,6 +570,8 @@ export default function CategoryDuaReader({
   const [audioProgress, setAudioProgress] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [audioVolume, setAudioVolume] = useState(85);
+  const [isRepeat, setIsRepeat] = useState(false);
+  const isRepeatRef = useRef(false);
   const stickyAudioRef = useRef(null);
   const lastReportedViewRef = useRef('');
 
@@ -543,6 +653,7 @@ export default function CategoryDuaReader({
 
     const wasPlaying = isPlaying;
     stickyAudioRef.current.src = currentAudioUrl;
+    stickyAudioRef.current.loop = isRepeatRef.current;
     stickyAudioRef.current.playbackRate = playbackSpeed;
     stickyAudioRef.current.volume = audioVolume / 100;
     setAudioProgress(0);
@@ -564,6 +675,21 @@ export default function CategoryDuaReader({
     };
   }, []);
 
+  const toggleRepeat = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
+    setIsRepeat(prev => {
+      const next = !prev;
+      isRepeatRef.current = next;
+      if (stickyAudioRef.current) {
+        stickyAudioRef.current.loop = next;
+      }
+      return next;
+    });
+  };
+
   const toggleStickyPlay = (e) => {
     if (e) {
       e.stopPropagation();
@@ -573,6 +699,7 @@ export default function CategoryDuaReader({
 
     if (!stickyAudioRef.current) {
       const audio = new Audio(currentAudioUrl);
+      audio.loop = isRepeatRef.current;
       audio.playbackRate = playbackSpeed;
       audio.volume = audioVolume / 100;
 
@@ -590,9 +717,22 @@ export default function CategoryDuaReader({
       });
 
       audio.addEventListener('ended', () => {
+        if (isRepeatRef.current) {
+          if (stickyAudioRef.current) {
+            stickyAudioRef.current.currentTime = 0;
+            stickyAudioRef.current.play().catch(() => {});
+          }
+          return;
+        }
         setIsPlaying(false);
         setAudioProgress(0);
         setCurrentTimeSec(0);
+        setIsPlayerExpanded(false);
+      });
+
+      audio.addEventListener('error', () => {
+        setIsPlaying(false);
+        setIsPlayerExpanded(false);
       });
 
       stickyAudioRef.current = audio;
@@ -601,10 +741,32 @@ export default function CategoryDuaReader({
     if (isPlaying) {
       stickyAudioRef.current.pause();
       setIsPlaying(false);
+      setIsPlayerExpanded(false);
     } else {
+      setIsPlayerExpanded(true);
       stickyAudioRef.current.play()
         .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false));
+        .catch(() => {
+          setIsPlaying(false);
+          setIsPlayerExpanded(false);
+        });
+    }
+  };
+
+  const handleCollapsedButtonClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault?.();
+    }
+    if (isPlaying) {
+      if (stickyAudioRef.current) {
+        stickyAudioRef.current.pause();
+      }
+      setIsPlaying(false);
+      setIsPlayerExpanded(false);
+    } else {
+      setIsPlayerExpanded(true);
+      toggleStickyPlay(e);
     }
   };
 
@@ -747,11 +909,12 @@ export default function CategoryDuaReader({
   });
 
   const holdProgressIntervalRef = useRef(null);
+  const lastSwipeTimeRef = useRef(0);
 
   const isInteractiveElement = (target) => {
     if (!target) return false;
     return !!target.closest(
-      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player, .cdr-swipe-indicator-card'
+      'button, [role="button"], input, [role="progressbar"], .cdr-audio-pill, audio, .cdr-icon-btn, a, select, textarea, .no-swipe, .sticky-player, .cdr-swipe-indicator-card, .audio-player-expanded-dock, .audio-player-collapsed-wrapper'
     );
   };
 
@@ -919,10 +1082,20 @@ export default function CategoryDuaReader({
     const isReady = gestureRef.current.readyToRelease;
     const direction = gestureRef.current.direction;
 
+    // Reset gesture flags immediately to prevent duplicate triggers
+    gestureRef.current.isSwipingHorizontal = false;
+    gestureRef.current.startX = 0;
+    gestureRef.current.currentX = 0;
+    gestureRef.current.currentY = 0;
+    gestureRef.current.isIgnored = true;
+
+    const now = Date.now();
+
     // Case 1: Boundary Release
     if (wasBoundaryActive) {
-      if (isReady) {
-        // Released after 1-second hold was completed: perform navigation!
+      if (isReady && now - lastSwipeTimeRef.current > 350) {
+        lastSwipeTimeRef.current = now;
+        // Released after hold was completed: perform navigation!
         if (direction === 'next' && nextSection) {
           setCurrentSectionIndex(prev => prev + 1);
           setCurrentIndex(0);
@@ -936,14 +1109,16 @@ export default function CategoryDuaReader({
       return;
     }
 
-    // Case 2: Standard within-subcategory Dua navigation
-    if (wasHorizontal) {
-      if (diffX < -50 && currentIndex < activeDuas.length - 1) {
-        // Swipe left -> Next Dua
-        setCurrentIndex(prev => prev + 1);
-      } else if (diffX > 50 && currentIndex > 0) {
-        // Swipe right -> Prev Dua
-        setCurrentIndex(prev => prev - 1);
+    // Case 2: Standard within-subcategory Dua navigation (strictly one step)
+    if (wasHorizontal && now - lastSwipeTimeRef.current > 350) {
+      if (diffX < -45 && currentIndex < activeDuas.length - 1) {
+        // Swipe left -> strictly next Dua (+1)
+        lastSwipeTimeRef.current = now;
+        setCurrentIndex(prev => Math.min(activeDuas.length - 1, prev + 1));
+      } else if (diffX > 45 && currentIndex > 0) {
+        // Swipe right -> strictly previous Dua (-1)
+        lastSwipeTimeRef.current = now;
+        setCurrentIndex(prev => Math.max(0, prev - 1));
       }
     }
   };
@@ -1215,7 +1390,14 @@ export default function CategoryDuaReader({
                 <ArrowLeft size={20} strokeWidth={2.5} />
               </button>
               <div className="cdr-glass-nav-titles">
-                <h1 className="cdr-glass-nav-title">{subcategoryTitle}</h1>
+                <h1 className="cdr-glass-nav-title" title={subcategoryTitle}>
+                  <span className="cdr-glass-nav-marquee-track">
+                    <span className="cdr-glass-nav-marquee-item">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                    <span className="cdr-glass-nav-marquee-item" aria-hidden="true">{subcategoryTitle}</span>
+                  </span>
+                </h1>
                 <p className="cdr-glass-nav-subtitle">{categoryTitle}</p>
               </div>
             </div>
@@ -1253,15 +1435,21 @@ export default function CategoryDuaReader({
             onTouchEnd={handleGestureEnd}
             onTouchCancel={handleGestureCancel}
             onPointerDown={(e) => {
-              if (e.pointerType === 'mouse' && e.button !== 0) return;
+              if (e.pointerType !== 'mouse' || e.button !== 0) return;
               handleGestureStart(e.clientX, e.clientY, e.target);
             }}
             onPointerMove={(e) => {
-              if (e.pointerType === 'mouse' && e.buttons !== 1) return;
+              if (e.pointerType !== 'mouse' || e.buttons !== 1) return;
               handleGestureMove(e.clientX, e.clientY);
             }}
-            onPointerUp={handleGestureEnd}
-            onPointerCancel={handleGestureCancel}
+            onPointerUp={(e) => {
+              if (e.pointerType !== 'mouse') return;
+              handleGestureEnd();
+            }}
+            onPointerCancel={(e) => {
+              if (e.pointerType !== 'mouse') return;
+              handleGestureCancel();
+            }}
           >
             {activeDuas[currentIndex] && (
               <div 
@@ -1390,320 +1578,146 @@ export default function CategoryDuaReader({
             </div>
           )}
 
-          {/* Backdrop Dimmer when Audio Player is Expanded */}
-          {isPlayerExpanded && (
-            <div 
-              style={{
-                position: 'fixed',
-                inset: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
-                zIndex: 45,
-                transition: 'opacity 0.25s ease'
-              }}
-              onClick={() => setIsPlayerExpanded(false)}
-            />
-          )}
-
           {/* ========================================================
-              STICKY CURVED BOTTOM AUDIO PLAYER SHEET
-              Matches Reference Image: media_1794030845933_94d9d71c.png
-              Glassmorphism + clean curved edges
+              AUDIO PLAYER COMPONENT (COLLAPSED & EXPANDED)
+              Matches Reference Image: media_1794068274071_28e30207.jpg
               ======================================================== */}
-          <div 
-            className="sticky-player"
-            style={{
-              position: 'fixed',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '100%',
-              maxWidth: '540px',
-              zIndex: 50,
-              borderTopLeftRadius: '2.25rem',
-              borderTopRightRadius: '2.25rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              borderTop: '1px solid rgba(255, 255, 255, 0.95)',
-              borderLeft: '1px solid rgba(255, 255, 255, 0.85)',
-              borderRight: '1px solid rgba(255, 255, 255, 0.85)',
-              borderBottom: 'none',
-              boxShadow: '0 -10px 32px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-              height: isPlayerExpanded ? '280px' : '76px',
-              transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))',
-              userSelect: 'none'
-            }}
-          >
-            {/* Drag Handle Pill */}
-            <div 
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                paddingTop: '12px',
-                paddingBottom: '4px',
-                cursor: 'pointer'
-              }}
-              onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}
-              title={isPlayerExpanded ? "Collapse" : "Expand"}
-            >
-              <div 
-                style={{
-                  width: '44px',
-                  height: '5px',
-                  backgroundColor: '#CBD5E1',
-                  borderRadius: '9999px'
-                }}
-              />
-            </div>
-
-            {/* CASE A: COLLAPSED VIEW (Sticky Bottom Docked Bar) */}
-            {!isPlayerExpanded && (
-              <div 
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '2px 24px 8px',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-                onClick={() => setIsPlayerExpanded(true)}
+          {!isPlayerExpanded ? (
+            /* 1. COLLAPSED VIEW: Minimal centered circular emerald Play button */
+            <div className="audio-player-collapsed-wrapper">
+              <button 
+                type="button"
+                onClick={handleCollapsedButtonClick}
+                className="audio-player-collapsed-btn"
+                aria-label={isPlaying ? "Pause Audio" : "Play Audio & Expand Player"}
+                title={isPlaying ? "Pause" : "Play Audio"}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1, marginRight: '12px' }}>
-                  <span style={{ fontWeight: 800, color: '#1E293B', fontSize: '14px', lineHeight: 1.2 }}>
-                    Dua {currentIndex + 1}
-                  </span>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#0D9488', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>
-                    {subcategoryTitle}
-                  </span>
-                </div>
-
+                {isPlaying ? (
+                  <Pause size={24} fill="#FFFFFF" color="#FFFFFF" />
+                ) : (
+                  <Play size={24} fill="#FFFFFF" color="#FFFFFF" style={{ marginLeft: '3px' }} />
+                )}
+              </button>
+            </div>
+          ) : (
+            /* 2. EXPANDED VIEW: Exact match to user reference screenshot */
+            <div 
+              className="audio-player-expanded-dock"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              role="region"
+              aria-label="Audio Player"
+            >
+              {/* Top Row: Title on Left, Collapse Chevron on Right */}
+              {/* Middle Row: Previous, Big Center Play/Pause, Next, Divider, Speed Selector */}
+              <div className="audio-player-controls-row">
+                {/* Previous Button */}
                 <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDua('prev');
+                  }}
+                  disabled={currentIndex === 0 && !prevSection}
+                  className="audio-player-track-btn"
+                  title="Previous Dua"
+                  aria-label="Previous Dua"
+                >
+                  <SkipBack size={19} strokeWidth={2.4} />
+                </button>
+
+                {/* Large Center Play / Pause Button */}
+                <button 
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleStickyPlay(e);
                   }}
-                  style={{
-                    width: '46px',
-                    height: '46px',
-                    backgroundColor: '#0D9488',
-                    borderRadius: '50%',
-                    color: '#FFFFFF',
-                    boxShadow: '0 6px 16px -2px rgba(13, 148, 136, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: 'none',
-                    cursor: 'pointer',
-                    flexShrink: 0
-                  }}
+                  className="audio-player-main-play-btn"
                   aria-label={isPlaying ? "Pause" : "Play"}
+                  title={isPlaying ? "Pause" : "Play"}
                 >
                   {isPlaying ? (
-                    <Pause size={20} fill="currentColor" />
+                    <Pause size={24} fill="#FFFFFF" color="#FFFFFF" />
                   ) : (
-                    <Play size={20} fill="currentColor" style={{ marginLeft: '2px' }} />
+                    <Play size={24} fill="#FFFFFF" color="#FFFFFF" style={{ marginLeft: '3px' }} />
                   )}
                 </button>
+
+                {/* Next Button */}
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDua('next');
+                  }}
+                  disabled={currentIndex === activeDuas.length - 1 && !nextSection}
+                  className="audio-player-track-btn"
+                  title="Next Dua"
+                  aria-label="Next Dua"
+                >
+                  <SkipForward size={19} strokeWidth={2.4} />
+                </button>
+
+                {/* Vertical Divider Line */}
+                <div className="audio-player-divider" />
+
+                {/* Repeat Button */}
+                <button 
+                  type="button"
+                  onClick={toggleRepeat}
+                  className={`audio-player-repeat-btn ${isRepeat ? 'active' : ''}`}
+                  title={isRepeat ? "Repeat is ON" : "Repeat is OFF"}
+                  aria-label={isRepeat ? "Turn Repeat Off" : "Turn Repeat On"}
+                  aria-pressed={isRepeat}
+                >
+                  <Repeat size={16} strokeWidth={2.4} />
+                </button>
+
+                {/* Playback Speed Pill (1x, 1.25x, 1.5x, 2x) */}
+                <button 
+                  type="button"
+                  onClick={toggleSpeed}
+                  className="audio-player-speed-btn"
+                  title="Playback Speed"
+                  aria-label="Change Playback Speed"
+                >
+                  <span>{playbackSpeed}x</span>
+                  <ChevronDown size={14} strokeWidth={2.4} />
+                </button>
               </div>
-            )}
 
-            {/* CASE B: EXPANDED VIEW (Exact Match to User Reference Screenshot) */}
-            {isPlayerExpanded && (
-              <div 
-                style={{
-                  padding: '0 24px 12px',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between'
-                }}
-              >
-                {/* Header Title & Subtitle */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: '2px' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.2 }}>
-                    Dua {currentIndex + 1}
-                  </h3>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0D9488', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '2px', marginBottom: 0 }}>
-                    {subcategoryTitle}
-                  </p>
-                </div>
+              {/* Bottom Row: Current Time, Progress Slider with Knob, Total Duration */}
+              <div className="audio-player-timeline-row">
+                <span className="audio-player-time-text">
+                  {formatTime(currentTimeSec)}
+                </span>
 
-                {/* Time Stamps and Interactive Progress Bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', margin: '8px 0' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'left' }}>
-                    {formatTime(currentTimeSec)}
-                  </span>
-                  
-                  <div 
-                    style={{
-                      flex: 1,
-                      height: '8px',
-                      backgroundColor: '#F1F5F9',
-                      borderRadius: '9999px',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                    onClick={handleSeek}
-                    role="progressbar"
-                    aria-valuenow={Math.round(audioProgress)}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  >
+                <div 
+                  className="audio-player-slider-wrap"
+                  onClick={handleSeek}
+                  role="progressbar"
+                  aria-valuenow={Math.round(audioProgress)}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div className="audio-player-slider-track">
                     <div 
-                      style={{
-                        height: '6px',
-                        borderRadius: '9999px',
-                        backgroundColor: '#0D9488',
-                        width: `${audioProgress}%`,
-                        position: 'relative',
-                        transition: 'width 0.05s linear'
-                      }}
+                      className="audio-player-slider-fill"
+                      style={{ width: `${audioProgress}%` }}
                     >
-                      {/* Circular Thumb with white fill and teal border */}
-                      <div 
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                          top: '50%',
-                          transform: 'translate(50%, -50%)',
-                          width: '14px',
-                          height: '14px',
-                          backgroundColor: '#FFFFFF',
-                          border: '3px solid #0D9488',
-                          borderRadius: '50%',
-                          boxShadow: '0 1px 4px rgba(0,0,0,0.25)'
-                        }}
-                      />
+                      <div className="audio-player-slider-thumb" />
                     </div>
                   </div>
-
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', minWidth: '32px', textAlign: 'right' }}>
-                    {formatTime(durationSec || 45)}
-                  </span>
                 </div>
 
-                {/* Main Controls: Previous, Big Play/Pause, Next */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '36px', margin: '2px 0' }}>
-                  <button 
-                    onClick={() => changeDua('prev')}
-                    disabled={currentIndex === 0 && !prevSection}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: '8px',
-                      cursor: (currentIndex === 0 && !prevSection) ? 'not-allowed' : 'pointer',
-                      color: (currentIndex === 0 && !prevSection) ? '#CBD5E1' : '#64748B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'color 0.15s ease'
-                    }}
-                    title="Previous Dua"
-                    aria-label="Previous Dua"
-                  >
-                    <SkipBack size={26} strokeWidth={2} />
-                  </button>
-
-                  <button 
-                    onClick={toggleStickyPlay}
-                    style={{
-                      width: '64px',
-                      height: '64px',
-                      backgroundColor: '#0D9488',
-                      borderRadius: '50%',
-                      color: '#FFFFFF',
-                      boxShadow: '0 10px 25px -4px rgba(13, 148, 136, 0.45)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'transform 0.1s active'
-                    }}
-                    aria-label={isPlaying ? "Pause" : "Play"}
-                  >
-                    {isPlaying ? (
-                      <Pause size={28} fill="currentColor" />
-                    ) : (
-                      <Play size={28} fill="currentColor" style={{ marginLeft: '3px' }} />
-                    )}
-                  </button>
-
-                  <button 
-                    onClick={() => changeDua('next')}
-                    disabled={currentIndex === activeDuas.length - 1 && !nextSection}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: '8px',
-                      cursor: (currentIndex === activeDuas.length - 1 && !nextSection) ? 'not-allowed' : 'pointer',
-                      color: (currentIndex === activeDuas.length - 1 && !nextSection) ? '#CBD5E1' : '#64748B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'color 0.15s ease'
-                    }}
-                    title="Next Dua"
-                    aria-label="Next Dua"
-                  >
-                    <SkipForward size={26} strokeWidth={2} />
-                  </button>
-                </div>
-
-                {/* Bottom Controls: Speed Pill & Volume Slider */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: '6px', padding: '0 4px' }}>
-                  <button 
-                    onClick={toggleSpeed}
-                    style={{
-                      backgroundColor: '#ECFDF5',
-                      color: '#0D9488',
-                      borderRadius: '9999px',
-                      fontSize: '11px',
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      padding: '6px 14px',
-                      border: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {playbackSpeed}x SPEED
-                  </button>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Volume2 size={16} style={{ color: '#94A3B8', flexShrink: 0 }} />
-                    <input 
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={audioVolume}
-                      onChange={(e) => handleVolumeChange(Number(e.target.value))}
-                      style={{
-                        width: '96px',
-                        height: '4px',
-                        backgroundColor: '#E2E8F0',
-                        borderRadius: '9999px',
-                        accentColor: '#0D9488',
-                        cursor: 'pointer'
-                      }}
-                      aria-label="Volume"
-                    />
-                  </div>
-                </div>
-
+                <span className="audio-player-time-text" style={{ textAlign: 'right' }}>
+                  {formatTime(durationSec || 0)}
+                </span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
