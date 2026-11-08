@@ -418,13 +418,22 @@
 }
 
 .fav-heart-btn {
-  color: #EF4444;
+  color: #059669;
 }
 
 .fav-heart-btn:hover {
-  color: #DC2626;
-  background: #FEE2E2;
-  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.2);
+  color: #047857;
+  background: #ECFDF5;
+  box-shadow: 0 3px 10px rgba(5, 150, 105, 0.2);
+}
+
+[data-theme="dark"] .fav-heart-btn {
+  color: #34D399;
+}
+
+[data-theme="dark"] .fav-heart-btn:hover {
+  background: rgba(5, 150, 105, 0.2);
+  color: #34D399;
 }
 
 .fav-copied-tooltip {

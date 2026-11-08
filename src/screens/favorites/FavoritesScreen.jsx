@@ -3,7 +3,6 @@ import {
   Bookmark, 
   Play, 
   Pause, 
-  Heart, 
   Sparkles, 
   Moon, 
   Sun,
@@ -328,11 +327,7 @@ export default function FavoritesScreen({
           <div className="fav-empty-glass-container">
             <div className="fav-empty-glass-card">
               <div className="fav-empty-icon-glow-wrap">
-                {isBookmarkView ? (
-                  <Bookmark size={42} className="fav-empty-icon-svg" />
-                ) : (
-                  <Heart size={42} className="fav-empty-icon-svg" fill="#10B981" color="#10B981" />
-                )}
+                <Bookmark size={42} className="fav-empty-icon-svg" fill="#10B981" color="#10B981" />
               </div>
               <h2 className="fav-empty-glass-title">
                 {isBookmarkView 
@@ -427,21 +422,17 @@ export default function FavoritesScreen({
                           <Share2 size={17} />
                         </button>
 
-                        {/* Heart / Favorite Button */}
+                        {/* Bookmarked Icon Button */}
                         <button
                           className="fav-card-action-btn fav-heart-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             onToggleFavorite && onToggleFavorite(dua);
                           }}
-                          title={isBookmarkView ? "Remove Bookmark" : "Remove from favorites"}
-                          aria-label={isBookmarkView ? "Remove Bookmark" : "Remove from favorites"}
+                          title="Remove Bookmark"
+                          aria-label="Remove Bookmark"
                         >
-                          {isBookmarkView ? (
-                            <Bookmark size={18} fill="#10B981" color="#10B981" />
-                          ) : (
-                            <Heart size={18} fill="#EF4444" color="#EF4444" />
-                          )}
+                          <Bookmark size={18} fill="currentColor" color="#059669" />
                         </button>
                       </div>
                     </div>
