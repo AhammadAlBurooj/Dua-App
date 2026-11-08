@@ -260,31 +260,40 @@ const DuaMultiCard = ({
         
         <div className="cdr-card-relative-content">
           
-          {/* Header: Info Button on the Left, Action Icons on the Right */}
+          {/* Header: Info, Count Pill, Copy, Bookmark, Share in a single row */}
           <div className="cdr-card-top-row">
-            {dua.desc && dua.desc.trim().length > 0 ? (
-              <button 
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setVirtueOpen(!virtueOpen);
-                }}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => e.stopPropagation()}
-                className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
-                aria-expanded={virtueOpen}
-                title={virtueOpen ? "Collapse Info" : "Expand Info"}
-              >
-                <div className="cdr-virtue-toggle-left">
-                  <Info size={14} className="cdr-virtue-toggle-icon" />
-                  <span className="cdr-virtue-toggle-label">Info</span>
+            <div className="cdr-card-top-left-group">
+              {dua.desc && dua.desc.trim().length > 0 && (
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setVirtueOpen(!virtueOpen);
+                  }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                  className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
+                  aria-expanded={virtueOpen}
+                  title={virtueOpen ? "Collapse Info" : "Expand Info"}
+                >
+                  <div className="cdr-virtue-toggle-left">
+                    <Info size={14} className="cdr-virtue-toggle-icon" />
+                    <span className="cdr-virtue-toggle-label">Info</span>
+                  </div>
+                  <ChevronDown 
+                    size={14} 
+                    className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
+                  />
+                </button>
+              )}
+
+              {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
+                <div className="cdr-card-hint-pill">
+                  <Sparkles size={13} className="cdr-hint-sparkle" />
+                  <span>{dua.hint.trim()}</span>
                 </div>
-                <ChevronDown 
-                  size={14} 
-                  className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
-                />
-              </button>
-            ) : <div />}
+              )}
+            </div>
 
             <div 
               className="cdr-card-action-group"
@@ -421,14 +430,7 @@ const DuaMultiCard = ({
         </div>
       )}
 
-      {/* ═══════ CARD 6: Samayam & Nirdhesham (Below Reference Section) ═══════ */}
-      {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
-        <div className="cdr-card-hint-pill">
-          <Sparkles size={14} className="cdr-hint-sparkle" />
-          <span>{dua.hint.trim()}</span>
-        </div>
-      )}
-
+      {/* ═══════ CARD 6: Samayam & Nirdhesham (Below Reference Section for detailed instructions) ═══════ */}
       {dua.hint && dua.hint.trim().length > 40 && (
         <div className="cdr-card-callout">
           <div className="cdr-callout-icon-wrap">

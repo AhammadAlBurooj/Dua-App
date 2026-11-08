@@ -1220,7 +1220,7 @@
   border-radius: 26px;
   border: 1.5px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  padding: 20px;
+  padding: clamp(14px, 4vw, 20px);
   position: relative;
   overflow: hidden;
 }
@@ -1247,19 +1247,51 @@
   justify-content: space-between;
   width: 100%;
   margin-bottom: 16px;
+  gap: 8px;
+}
+
+.cdr-card-top-left-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.cdr-card-top-left-group .cdr-card-hint-pill {
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  box-sizing: border-box;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.cdr-card-top-left-group .cdr-card-hint-pill span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cdr-virtue-toggle-btn {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
   background: rgba(254, 243, 199, 0.85);
   border: 1px solid rgba(245, 158, 11, 0.4);
   color: #B45309;
-  padding: 5px 12px;
+  padding: 4px 10px;
+  height: 28px;
+  box-sizing: border-box;
   border-radius: 9999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   outline: none;
@@ -1268,6 +1300,7 @@
   -webkit-tap-highlight-color: transparent;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .cdr-virtue-toggle-btn:hover {
@@ -1354,7 +1387,9 @@
 .cdr-card-action-group {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .cdr-icon-btn {
@@ -1369,6 +1404,100 @@
   justify-content: center;
   position: relative;
   transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+/* ═══════ MOBILE 360px OPTIMIZED ALIGNMENT FOR TOP ROW ═══════ */
+@media (max-width: 400px) {
+  .cdr-card-main-glass {
+    padding: 15px 12px;
+  }
+
+  .cdr-card-top-row {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .cdr-card-top-left-group {
+    gap: 5px;
+  }
+
+  .cdr-virtue-toggle-btn {
+    height: 26px;
+    padding: 2px 7px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .cdr-virtue-toggle-left {
+    gap: 4px;
+  }
+
+  .cdr-virtue-toggle-icon,
+  .cdr-virtue-toggle-chevron {
+    width: 12px;
+    height: 12px;
+  }
+
+  .cdr-card-top-left-group .cdr-card-hint-pill {
+    height: 26px;
+    padding: 2px 7px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .cdr-card-top-left-group .cdr-card-hint-pill .cdr-hint-sparkle {
+    width: 12px;
+    height: 12px;
+  }
+
+  .cdr-card-action-group {
+    gap: 7px;
+  }
+
+  .cdr-icon-btn {
+    padding: 2px;
+  }
+
+  .cdr-icon-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 340px) {
+  .cdr-card-main-glass {
+    padding: 12px 10px;
+  }
+
+  .cdr-card-top-row {
+    gap: 4px;
+  }
+
+  .cdr-card-top-left-group {
+    gap: 4px;
+  }
+
+  .cdr-virtue-toggle-btn {
+    padding: 2px 5px;
+    font-size: 10px;
+    gap: 3px;
+  }
+
+  .cdr-card-top-left-group .cdr-card-hint-pill {
+    padding: 2px 5px;
+    font-size: 10px;
+    gap: 3px;
+  }
+
+  .cdr-card-action-group {
+    gap: 5px;
+  }
+
+  .cdr-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .cdr-icon-btn:hover {
