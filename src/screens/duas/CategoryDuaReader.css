@@ -1999,10 +1999,20 @@
   color: #047857;
 }
 
+.cdr-ref-header-row svg,
+.cdr-ref-icon {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
 .cdr-ref-heading {
   font-size: 14px;
   font-weight: 800;
   margin: 0;
+  min-width: 0;
 }
 
 .cdr-ref-body-text {

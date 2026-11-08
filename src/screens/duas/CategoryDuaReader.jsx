@@ -524,7 +524,7 @@ const DuaMultiCard = ({
       {Array.isArray(dua.dua_hadith) && dua.dua_hadith.filter(h => h && h.hadith && h.hadith.trim() !== "").map((h, hIdx) => (
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
-            <BookOpen size={20} />
+            <BookOpen size={20} className="cdr-ref-icon" />
             <h3 className="cdr-ref-heading">{h.title || "ഹദീസ് വിവരണം"}</h3>
           </div>
           <p className="cdr-ref-body-text">
@@ -537,7 +537,7 @@ const DuaMultiCard = ({
       {dua.ref && dua.ref.trim().length > 0 && (
         <div className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
-            <BookOpen size={20} />
+            <BookOpen size={20} className="cdr-ref-icon" />
             <h3 className="cdr-ref-heading">Reference</h3>
           </div>
           <p className="cdr-ref-body-text" dir="rtl">
