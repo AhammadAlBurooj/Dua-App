@@ -260,8 +260,8 @@ export default function FavoritesScreen({
             <div className="fav-glass-nav-titles">
               <h1 className="fav-glass-nav-title">
                 {isBookmarkView 
-                  ? (isEnglish ? 'Bookmarks' : 'ബുക്ക്മാർക്കുകൾ') 
-                  : (isEnglish ? 'Favorites' : 'Favourites')}
+                  ? (isEnglish ? 'Bookmarks' : 'Bookmarks') 
+                  : (isEnglish ? 'Bookmarks' : 'Bookmarks')}
               </h1>
               <p className="fav-glass-nav-subtitle">
                 {isBookmarkView 
@@ -301,7 +301,7 @@ export default function FavoritesScreen({
             ════════════════════════════════════════════════════════════ */}
         {filterPills.length > 0 && (
           <div className="fav-pills-glass-wrapper">
-            <div className="fav-pills-glass-bar fav-no-scrollbar" role="tablist" aria-label="Favorites Categories">
+            <div className="fav-pills-glass-bar fav-no-scrollbar" role="tablist" aria-label="Bookmarks Categories">
               {filterPills.map(pill => {
                 const isActive = selectedFilter === pill.id;
                 return (
@@ -332,7 +332,7 @@ export default function FavoritesScreen({
               <h2 className="fav-empty-glass-title">
                 {isBookmarkView 
                   ? (isEnglish ? 'No Bookmarks Yet' : 'No Bookmarks Yet')
-                  : (isEnglish ? 'No Favorites Yet' : 'No Favorites Yet')}
+                  : (isEnglish ? 'No Bookmarks Yet' : 'No Bookmarks Yet')}
               </h2>
               <p className="fav-empty-glass-desc">
                 {isBookmarkView 

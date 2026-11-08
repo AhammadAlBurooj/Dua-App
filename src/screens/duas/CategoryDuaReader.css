@@ -2062,7 +2062,7 @@
 /* ═══════ COPIED FLOATING PILL ═══════ */
 .cdr-copied-pill {
   position: absolute;
-  top: -30px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   background: #064E3B;
