@@ -255,11 +255,37 @@ const DuaMultiCard = ({
     <div className="cdr-cards-column">
       {/* ═══════ CARD 1: Main Dua (Arabic + Audio Player) ═══════ */}
       <div className="cdr-card-main-glass">
+       
         <div className="cdr-card-shine-top"></div>
         
         <div className="cdr-card-relative-content">
-          {/* Header: Action Icons */}
+          
+          {/* Header: Info Button on the Left, Action Icons on the Right */}
           <div className="cdr-card-top-row">
+            {dua.desc && dua.desc.trim().length > 0 ? (
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setVirtueOpen(!virtueOpen);
+                }}
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchEnd={(e) => e.stopPropagation()}
+                className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
+                aria-expanded={virtueOpen}
+                title={virtueOpen ? "Collapse Info" : "Expand Info"}
+              >
+                <div className="cdr-virtue-toggle-left">
+                  <Info size={14} className="cdr-virtue-toggle-icon" />
+                  <span className="cdr-virtue-toggle-label">Info</span>
+                </div>
+                <ChevronDown 
+                  size={14} 
+                  className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
+                />
+              </button>
+            ) : <div />}
+
             <div 
               className="cdr-card-action-group"
               onTouchStart={(e) => e.stopPropagation()}
@@ -298,40 +324,16 @@ const DuaMultiCard = ({
             </div>
           </div>
 
-          {/* Expandable Virtue / Info Section (Replaces removed instruction) */}
-          {dua.desc && dua.desc.trim().length > 0 && (
-            <div className="cdr-virtue-accordion">
-              <button 
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setVirtueOpen(!virtueOpen);
-                }}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => e.stopPropagation()}
-                className={`cdr-virtue-toggle-btn ${virtueOpen ? 'open' : ''}`}
-                aria-expanded={virtueOpen}
-                title={virtueOpen ? "Collapse Virtue / Info" : "Expand Virtue / Info"}
-              >
-                <div className="cdr-virtue-toggle-left">
-                  <Info size={14} className="cdr-virtue-toggle-icon" />
-                  <span className="cdr-virtue-toggle-label">Info</span>
-                </div>
-                <ChevronDown 
-                  size={14} 
-                  className={`cdr-virtue-toggle-chevron ${virtueOpen ? 'rotated' : ''}`} 
-                />
-              </button>
-
-              {virtueOpen && (
-                <div className="cdr-virtue-expanded-box">
-                  <p className="cdr-virtue-body-text">
-                    {dua.desc.trim()}
-                  </p>
-                </div>
-              )}
+          {/* Expanded Info Content (Directly below top row across full card width) */}
+          {dua.desc && dua.desc.trim().length > 0 && virtueOpen && (
+            <div className="cdr-virtue-expanded-box">
+              <p className="cdr-virtue-body-text">
+                {dua.desc.trim()}
+              </p>
             </div>
           )}
+
+          
 
           {/* Arabic Dua */}
           {dua.dua && (
