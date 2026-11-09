@@ -294,7 +294,7 @@ export const UI_TEXT = {
     navFavorites: 'Bookmarks',
     navSettings: 'Settings',
     searchPlaceholder: 'Search any Dua in English, Malayalam or Arabic...',
-    searchDuasPlaceholder: 'Search Duas, Adhkar...',
+    searchDuasPlaceholder: 'Search',
     searchResults: 'Search Results',
     noDuasFound: 'No Duas Found',
     noDuasFoundDesc: 'No supplications match your search term.',

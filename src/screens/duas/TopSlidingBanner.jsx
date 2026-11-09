@@ -210,7 +210,7 @@ export default function TopSlidingBanner({
             <input 
               type="text"
               className="top-banner-search-input"
-              placeholder={isEnglish ? "Search Duas, Adhkar..." : "ദുആകൾ, ദിക്റുകൾ തിരയുക..."}
+              placeholder={isEnglish ? "Search" : "Search"}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               aria-label="Search"
