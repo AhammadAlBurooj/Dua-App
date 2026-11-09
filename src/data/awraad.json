@@ -1303,8 +1303,8 @@
           "en": "For the intelligent"
         }
       ],
-      "trans_en": "Surely in the creation of the heavens and the earth, and in the alternation of the night and the day, there are signs for men of understanding, who remember Allah standing, sitting, and lying down, and reflect on the creation of the heavens and the earth. (They will say:) Our Rabb! You did not create this in vain. How holy You are! So protect us from the punishment of hell. (191)",
-      "transli_en": "(quran)",
+      "trans_en": "Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding. Who remember Allah while standing or sitting or [lying] on their sides and give thought to the creation of the heavens and the earth, [saying], 'Our Lord, You did not create this aimlessly; exalted are You [above such a thing]; then protect us from the punishment of the Fire. Our Lord, indeed whoever You admit to the Fire - You have disgraced him, and for the wrongdoers there are no helpers. Our Lord, indeed we have heard a caller calling to faith, [saying], 'Believe in your Lord,' and we have believed. Our Lord, so forgive us our sins and remove from us our misdeeds and cause us to die with the righteous. Our Lord, and grant us what You promised us through Your messengers and do not disgrace us on the Day of Resurrection. Indeed, You do not fail in [Your] promise.' (Aal 'Imran: 190-194)",
+      "transli_en": "Inna fee khalqis-samawati wal-ardi wakhtilafil-layli wan-nahari la'ayatil-li'ulil-albab. Alladhina yadhkurunallaha qiyaman wa qu'udan wa 'ala junubihim wa yatafakkaruna fee khalqis-samawati wal-ard, Rabbana ma khalaqta hadha batilan subhanaka faqina 'adhaban-nar. Rabbana innaka man tudkhilin-nara faqad akhzaytah, wa ma liz-zalimina min ansar. Rabbana innana sami'na munadiyan yunadee lil-eemani an aminu bi-Rabbikum fa-amanna, Rabbana faghfir lana dhunubana wa kaffir 'anna sayyi'atina wa tawaffana ma'al-abrar. Rabbana wa atina ma wa'adtana 'ala rusulika wa la tukhzina yawmal-qiyamah, innaka la tukhliful-mee'ad.",
       "desc_en": "The Prophet ﷺ used to recite the following verse when he woke up from sleep",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -1827,8 +1827,8 @@
           "en": "Except by Allah"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, I place my trust in Allah; there is no power and no might except by Allah.",
+      "transli_en": "Bismillahi, tawakkaltu 'alallahi, wa la hawla wa la quwwata illa billah.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -2130,8 +2130,8 @@
           "en": "The gates of Thy mercy"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, and prayers and peace be upon the Messenger of Allah. O Allah, open the gates of Your mercy for me.",
+      "transli_en": "Bismillahi, was-salatu was-salamu 'ala Rasulillah. Allahumma-ftah li abwaba rahmatik.",
       "desc_en": "Bring your right foot forward and say:",
       "trans_ar": "اللهم يسر لي أبواب فضلك ورحمتك ومغفرتك وأعني على عبادتك في بيتك الحرام."
     },
@@ -2275,8 +2275,8 @@
           "en": "The gates of Thy bounty"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, and prayers and peace be upon the Messenger of Allah. O Allah, open the gates of Your bounty for me.",
+      "transli_en": "Bismillahi, was-salatu was-salamu 'ala Rasulillah. Allahumma-ftah li abwaba fadlik.",
       "desc_en": "Step forward with your left foot and say:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -2666,7 +2666,7 @@
       "id": 33,
       "ref": "صححه الألباني في سنن أبي داود: 521،  وفي سنن الترمذي: 212",
       "trans": " قَالَ رَسُولُ اللهِ ﷺ : الدُّعَاءُ لَا يُرَدُّ بَيْنَ الْأَذَانِ وَالْإِقَامَةِ  \n\nന‌ബി ﷺ പറഞ്ഞു: ബാങ്കിന്റെയും ഇഖാമത്തിന്റെയും ഇടയിലുള്ള പ്രാർത്ഥന തിരസ്കരിക്കപ്പെടുകയില്ല.",
-      "transli": "(hadees)",
+      "transli": "",
       "word_by_word": [
         {
           "ar": "الدُّعَاءُ",
@@ -2690,7 +2690,7 @@
         }
       ],
       "trans_en": "﻿: The قَالَ رَسُولُ اللهِ الدُّعَاءُ لَا يُرَدُّ بَيْنَ الْأَذَانِ وَالْإِقَامَةِ Prophet said: The prayer between the bank and the Iqamah will not be rejected.",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "desc_en": "A time when prayer is answered",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -5939,8 +5939,8 @@
           "en": "No one is equal"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "I seek refuge in Allah from Satan the accursed. In the name of Allah, the Entirely Merciful, the Especially Merciful. Say: He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim. Bismillahir-Rahmanir-Rahim. Qul Huwallahu Ahad. Allahus-Samad. Lam yalid wa lam yulad. Wa lam yakun lahu kufuwan ahad.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -6010,8 +6010,8 @@
           "en": "When he is jealous"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. Say: I seek refuge in the Lord of daybreak, from the evil of that which He created, and from the evil of darkness when it settles, and from the evil of the blowers in knots, and from the evil of an envier when he envies.",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin idha waqab. Wa min sharrin-naffathati fil-'uqad. Wa min sharri hasidin idha hasad.",
       "trans_ar": "أعتصم وألتجئ برب الصبح وفالقه من شر جميع المخلوقات، ومن شر الليل إذا أظلم، ومن شر السواحر النفاثات، ومن شر كل حاسد إذا حسد."
     },
     {
@@ -6082,8 +6082,8 @@
           "en": "Even if they belong to humans"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. Say: I seek refuge in the Lord of mankind, the Sovereign of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers into the breasts of mankind, from among the jinn and mankind.",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbin-nas. Malikin-nas. Ilahin-nas. Min sharril-waswasil-khannas. Alladhi yuwaswisu fi sudurin-nas. Minal-jinnati wan-nas.",
       "trans_ar": "ألتجئ وأعتصم برب الناس ومالكهم وإلههم الحق من شر الشيطان الوسواس الخناس الذي يوسوس في صدور الناس من الجنة والناس."
     },
     {
@@ -6827,8 +6827,8 @@
           "en": "Those of jinn and men"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "I seek refuge in Allah from Satan the accursed. In the name of Allah, the Entirely Merciful, the Especially Merciful. [Surah Al-Ikhlas]: Say: He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent. [Surah Al-Falaq]: Say: I seek refuge in the Lord of daybreak, from the evil of that which He created, from the evil of darkness when it settles, from the evil of the blowers in knots, and from the evil of an envier when he envies. [Surah An-Nas]: Say: I seek refuge in the Lord of mankind, the Sovereign of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers into the breasts of mankind, from among the jinn and mankind.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim. Bismillahir-Rahmanir-Rahim. Qul Huwallahu Ahad. Allahus-Samad. Lam yalid wa lam yulad. Wa lam yakun lahu kufuwan ahad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin idha waqab. Wa min sharrin-naffathati fil-'uqad. Wa min sharri hasidin idha hasad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbin-nas. Malikin-nas. Ilahin-nas. Min sharril-waswasil-khannas. Alladhi yuwaswisu fi sudurin-nas. Minal-jinnati wan-nas.",
       "hint_en": "3 times",
       "trans_ar": "أعتصم وألتجئ برب الصبح وفالقه من شر جميع المخلوقات، ومن شر الليل إذا أظلم، ومن شر السواحر النفاثات، ومن شر كل حاسد إذا حسد."
     },
@@ -8308,8 +8308,8 @@
           "en": "Those of jinn and men"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "I seek refuge in Allah from Satan the accursed. In the name of Allah, the Entirely Merciful, the Especially Merciful. [Surah Al-Ikhlas]: Say: He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent. [Surah Al-Falaq]: Say: I seek refuge in the Lord of daybreak, from the evil of that which He created, from the evil of darkness when it settles, from the evil of the blowers in knots, and from the evil of an envier when he envies. [Surah An-Nas]: Say: I seek refuge in the Lord of mankind, the Sovereign of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers into the breasts of mankind, from among the jinn and mankind.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim. Bismillahir-Rahmanir-Rahim. Qul Huwallahu Ahad. Allahus-Samad. Lam yalid wa lam yulad. Wa lam yakun lahu kufuwan ahad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin idha waqab. Wa min sharrin-naffathati fil-'uqad. Wa min sharri hasidin idha hasad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbin-nas. Malikin-nas. Ilahin-nas. Min sharril-waswasil-khannas. Alladhi yuwaswisu fi sudurin-nas. Minal-jinnati wan-nas.",
       "desc_en": "Take vloo when you are ready to sleep. (Bukhari: 6311, Muslim: 2710) Steal the rug. (Bukhari: 6320, Muslim: 2714) Then recite Surah Ikhlasw, Falaq, Naas and blow on the hands and rub the whole body:",
       "trans_ar": "أعتصم وألتجئ برب الصبح وفالقه من شر جميع المخلوقات، ومن شر الليل إذا أظلم، ومن شر السواحر النفاثات، ومن شر كل حاسد إذا حسد."
     },
@@ -8629,8 +8629,8 @@
           "en": "Against the disbelieving people"
         }
       ],
-      "trans_en": "I ask You (Allah) for forgiveness.",
-      "transli_en": "Ghufranak.",
+      "trans_en": "The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers. All of them have believed in Allah and His angels and His books and His messengers, [saying], 'We make no distinction between any of His messengers.' And they say, 'We hear and we obey. [We seek] Your forgiveness, our Lord, and to You is the [final] destination.' Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained, and it will bear [the consequence of] what [evil] it has earned. 'Our Lord, do not impose blame upon us if we have forgotten or erred. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and burden us not with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us. You are our protector, so give us victory over the disbelieving people.' (Al-Baqarah: 285-286)",
+      "transli_en": "Amanar-Rasulu bima unzila ilayhi mir-Rabbihi wal-mu'minun, kullun amana billahi wa mala'ikatihi wa kutubihi wa rusulih, la nufarriqu bayna ahadim-mir-rusulih, wa qalu sami'na wa ata'na ghufranaka Rabbana wa ilaykal-masir. La yukallifullahu nafsan illa wus'aha, laha ma kasabat wa 'alayha maktasabat, Rabbana la tu'akhidhna in nasina aw akhta'na, Rabbana wa la tahmil 'alayna isran kama hamaltahu 'alal-ladhina min qablina, Rabbana wa la tuhammilna ma la taqata lana bih, wa'fu 'anna waghfir lana warhamna, Anta mawlana fansurna 'alal-qawmil-kafirin.",
       "desc_en": "Amanar Rasool",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -9254,8 +9254,8 @@
           "en": "From your Lord"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. Say: O disbelievers, I do not worship what you worship. Nor are you worshippers of what I worship. Nor will I be a worshipper of what you worship. Nor will you be worshippers of what I worship. For you is your religion, and for me is my religion.",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Qul ya ayyuhal-kafirun. La a'budu ma ta'budun. Wa la antum 'abiduna ma a'bud. Wa la ana 'abidum-ma 'abattum. Wa la antum 'abiduna ma a'bud. Lakum dinukum wa liya din.",
       "hint_en": "1 time",
       "desc_en": "Surah Sajda",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
@@ -9322,8 +9322,8 @@
           "en": "He is Glorious and Forgiving"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. Blessed is He in whose hand is dominion, and He is over all things omnipotent - [He] who created death and life to test you [as to] which of you is best in deed - and He is the Exalted in Might, the Forgiving. (Surah Al-Mulk)",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Tabarakal-ladhi bi-yadihil-mulku wa Huwa 'ala kulli shay'in qadir. Alladhi khalaqal-mawta wal-hayata li-yabluwakum ayyukum ahsanu 'amala, wa Huwal-'Azizul-Ghafur.",
       "hint_en": "1 time",
       "desc_en": "Surah Mulk",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
@@ -9504,8 +9504,8 @@
           "en": "I have my religion"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. Alif, Lam, Meem. [This is] the revelation of the Book about which there is no doubt from the Lord of the worlds. (Surah As-Sajdah)",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Alif-Lam-Meem. Tanzilul-Kitabi la rayba fihi mir-Rabbil-'alamin.",
       "hint_en": "1 time",
       "desc_en": "Surah Kafirun",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
@@ -9690,8 +9690,8 @@
           "en": "Let him move away from the side he is lying on"
         }
       ],
-      "trans_en": "[((Spit on your left three times)(Spit: A form of spitting comprising mainly of air with little spittle)) - (Seek refuge in Allah from shaytan and the evil of what you saw (Three Times)) - (Do not relate it to anyone) - (Turn and sleep on the opposite side to which you were sleeping on previously.) - (Get up and pray if you so desire.) ]",
-      "transli_en": "(hadees)",
+      "trans_en": "The Prophet (ﷺ) said: Spit dryly on your left three times, seek refuge with Allah from Satan and from the evil of what you saw three times, do not speak of it to anyone, and turn over to the other side.",
+      "transli_en": "Qalan-Nabiyyu ﷺ: Yanfuthu 'an yasarihi thalathan, yasta'idhu billahi minash-shaytani wa min sharri ma ra'a thalatha marrat, la yuhaddithu biha ahada, yatahawwalu 'an janbihil-ladhi kana 'alayh.",
       "desc_en": "If you see good or bad dreams",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -10829,8 +10829,8 @@
           "en": "from the accursed Satan"
         }
       ],
-      "trans_en": "I take refuge with Allah from the accursed Shaytan.",
-      "transli_en": "aAAoothu billahi minash-shaytanir-rajeem.",
+      "trans_en": "I seek refuge with Allah from Satan the accursed.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim.",
       "desc_en": "Seek refuge in God (like this) immediately if you feel weak in Eman (faith):",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -11043,8 +11043,8 @@
           "en": "from the accursed Satan"
         }
       ],
-      "trans_en": "I take refuge with Allah from the accursed Shaytan.",
-      "transli_en": "aAAoothu billahi minash-shaytanir-rajeem.",
+      "trans_en": "I seek refuge with Allah from Satan the accursed.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -11109,9 +11109,9 @@
       "id": 173,
       "ref": "",
       "trans": "ഒ‌രു അ‌ടി‌മ തെറ്റ് ചെ‌യ്‌‌താൽ, ശ‌രി‌യാ‌യി വു‌ളൂ ചെ‌യ്യു‌ക‌യും, ശേ‌ഷം ര‌ണ്ടു റ‌ക്‌‌അ‌ത്ത്‌ നമസ്കരി‌ക്കു‌ക‌യും, തുടർന്ന് അല്ലാഹുവിനോട്‌ പാ‌പം പൊ‌റു‌ക്കു‌വാൻ തേ‌ടു‌ക‌യും ചെ‌യ്‌‌താൽ അ‌വ‌ന്‌ അ‌ല്ലാ‌ഹു പൊ‌റു‌ത്തു‌കൊ‌ടു‌ക്കാ‌തി‌രി‌ക്കില്ല!",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "When a servant commits a sin, performs ablution properly, prays two rak'ahs, and then asks Allah for forgiveness, Allah will surely forgive him.",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "desc_en": "In case of error:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -11137,8 +11137,8 @@
           "en": "Seek refuge with Allah (constantly) from Shaytan."
         }
       ],
-      "trans_en": "Seeking refuge from him.",
-      "transli_en": "(hadees)",
+      "trans_en": "Seeking refuge with Allah from him (Satan).",
+      "transli_en": "Al-Isti'adhatu billahi minh.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -11163,8 +11163,8 @@
           "en": "Call the bank."
         }
       ],
-      "trans_en": "The Adhaan [call to prayer].",
-      "transli_en": "(hadees)",
+      "trans_en": "Calling the Adhan.",
+      "transli_en": "Al-Adhan.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -11190,8 +11190,8 @@
           "en": "Recite Quran and recite Dhikrs."
         }
       ],
-      "trans_en": "Recitation of the Quran and the authentic texts of remembrance and supplications.)(e.g. ‘Do not make your homes like the graveyards, indeed the devils flee from the house in which soorat Al-Baqarah has been read’ related by Muslim 1/539, also supplication and remembrance for the morning & evening, before sleep, when getting up, entering and leaving the toilet, entering and leaving the mosque, the recitation of ayat Al-kursiyy and the last two verses of soorat Al-Baqarah before sleeping, the athan…etc.",
-      "transli_en": "(hadees)",
+      "trans_en": "Reciting Dhikr and reading the Quran.",
+      "transli_en": "Al-Adhkaru wa qira'atul-Qur'an.",
       "desc_en": "The Shaytan and his sihr (ill-treatment and sicknesses) are to be kept away: dictatorships, prayers in the morning and in the evening, prayers in bed and when waking up, prayers when entering and leaving the house and the mosque… etc.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -11372,8 +11372,8 @@
           "en": "Against the disbelieving people"
         }
       ],
-      "trans_en": "I ask You (Allah) for forgiveness.",
-      "transli_en": "Ghufranak.",
+      "trans_en": "The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers. All of them have believed in Allah and His angels and His books and His messengers, [saying], 'We make no distinction between any of His messengers.' And they say, 'We hear and we obey. [We seek] Your forgiveness, our Lord, and to You is the [final] destination.' Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained, and it will bear [the consequence of] what [evil] it has earned. 'Our Lord, do not impose blame upon us if we have forgotten or erred. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and burden us not with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us. You are our protector, so give us victory over the disbelieving people.' (Al-Baqarah: 285-286)",
+      "transli_en": "Amanar-Rasulu bima unzila ilayhi mir-Rabbihi wal-mu'minun, kullun amana billahi wa mala'ikatihi wa kutubihi wa rusulih, la nufarriqu bayna ahadim-mir-rusulih, wa qalu sami'na wa ata'na ghufranaka Rabbana wa ilaykal-masir. La yukallifullahu nafsan illa wus'aha, laha ma kasabat wa 'alayha maktasabat, Rabbana la tu'akhidhna in nasina aw akhta'na, Rabbana wa la tahmil 'alayna isran kama hamaltahu 'alal-ladhina min qablina, Rabbana wa la tuhammilna ma la taqata lana bih, wa'fu 'anna waghfir lana warhamna, Anta mawlana fansurna 'alal-qawmil-kafirin.",
       "desc_en": "Recite Surah Al-Baqara: 255, 285-286 while sleeping",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -11531,7 +11531,7 @@
         }
       ],
       "trans_en": "Shaykh al-Islam Ibn Taymiyyah said: 'You are a Qadari when obeying, and a Jabari when sinning; whichever doctrine agrees with your desires, you adhere to it!'",
-      "transli_en": "(hadees)",
+      "transli_en": "Anta 'indat-ta'ati qadariyyun wa 'indal-ma'siyati jabriyyun, ayyu madh-habin wafaqa hawaka tadamhath.",
       "desc_en": "Imam Ibn Taymiyyah (rahi) 's warning to those who sin by blaming destiny:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -12024,7 +12024,7 @@
         }
       ],
       "trans_en": "The Prophet ﷺ said: 'When a man visits his sick Muslim brother, he walks among the fruits of Paradise until he sits down; and when he sits, mercy envelops him. If it is morning, seventy thousand angels send blessings upon him until evening, and if it is evening, seventy thousand angels send blessings upon him until morning.'",
-      "transli_en": "(hadees)",
+      "transli_en": "Qalan-Nabiyyu ﷺ: Idha 'adar-rajulu akhahul-muslima masha fee khurfatil-jannati hatta yajlis, fa-idha jalasa ghamarathur-rahmah, fa-in kana ghudwatan salla 'alayhi sab'una alfa malakin hatta yumsi, wa in kana masa'an salla 'alayhi sab'una alfa malakin hatta yusbih.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -14252,8 +14252,8 @@
           "en": "From what you give us"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah. O Allah, keep Satan away from us, and keep Satan away from what You provide for us.",
+      "transli_en": "Bismillahi, Allahumma jannibnash-shaytana wa jannibish-shaytana ma razaqtana.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -14284,8 +14284,8 @@
           "en": "from the accursed Satan"
         }
       ],
-      "trans_en": "I take refuge with Allah from the accursed Shaytan.",
-      "transli_en": "aAAoothu billahi minash-shaytanir-rajeem.",
+      "trans_en": "I seek refuge with Allah from Satan the accursed.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -14539,9 +14539,9 @@
       "id": 249,
       "ref": "",
       "trans": "നമസ്കാരത്തിൽ അവസാനത്തെ അത്തഹിയ്യാത്തിനു ശേഷം ദജ്ജാലിൽ നിന്ന് രക്ഷതേടിക്കൊണ്ടുള്ള പ്രാർത്ഥനയും ചൊല്ലുക.",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "In the prayer, after the final tashahhud, recite the supplication seeking refuge with Allah from the trial of the Dajjal.",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -14870,8 +14870,8 @@
           "en": "Returning"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah and all praise is for Allah. Glory be to Him Who has subjected this to us, and we could never have achieved it by ourselves. And indeed, to our Lord we will return.",
+      "transli_en": "Bismillahi wal-hamdu lillah, subhanalladhi sakh-khara lana hadha wa ma kunna lahu muqrinin, wa inna ila Rabbina lamunqalibun.",
       "desc_en": "Then pray like this:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -15757,8 +15757,8 @@
           "en": "Upon the Prophet ﷺ"
         }
       ],
-      "trans_en": "Every supplication is veiled until prayers and blessings are sent upon the Prophet ﷺ.",
-      "transli_en": "(hadees)",
+      "trans_en": "The Messenger of Allah ﷺ said: 'Every supplication is veiled until prayers are sent upon the Prophet ﷺ.'",
+      "transli_en": "'An Anas qala: Qala Rasulullahi ﷺ: Kullu du'a'in mahjubun hatta yusalla 'alan-Nabi ﷺ.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -15891,8 +15891,8 @@
           "en": "from the accursed Satan"
         }
       ],
-      "trans_en": "I take refuge with Allah from the accursed Shaytan.",
-      "transli_en": "aAAoothu billahi minash-shaytanir-rajeem.",
+      "trans_en": "I seek refuge with Allah from Satan the accursed.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim.",
       "desc_en": "If you hear a donkey braying:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -16116,8 +16116,8 @@
           "en": "You have no partners"
         }
       ],
-      "trans_en": "May Allah bless you.",
-      "transli_en": "Labbaykallaahumma labbayk, labbayka laashareeka laka labbayk, innal hamda, wannai'mata, lakawalmulk, laashareeka laka.",
+      "trans_en": "Here I am at Your service, O Allah, here I am. Here I am, You have no partner, here I am. Indeed, all praise, grace, and sovereignty belong to You. You have no partner.",
+      "transli_en": "Labbayk Allahumma labbayk, labbayka la sharika laka labbayk, innal-hamda wan-ni'mata laka wal-mulk, la sharika lak.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -16279,8 +16279,8 @@
           "en": "That is why Allah started it"
         }
       ],
-      "trans_en": "I also begin with what Allah has begun.",
-      "transli_en": "(hadees)",
+      "trans_en": "I begin with that which Allah began with.",
+      "transli_en": "Abda'u bima bada'allahu bih.",
       "desc_en": "After that the Prophet ﷺ said:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -16549,8 +16549,8 @@
           "en": "O Allah, this is from You and belongs to You"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, and Allah is the Greatest. O Allah, from You and to You.",
+      "transli_en": "Bismillahi wallahu Akbar, Allahumma minka wa lak.",
       "desc_en": "Dhikr at Hajj etc. when making araw (sacrifice):",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -16638,8 +16638,8 @@
           "en": "Blessed and Exalted is He"
         }
       ],
-      "trans_en": "Abu Bakrah narrated: When something pleasing or good news reached the Prophet ﷺ, he would fall down prostrating in gratitude to Allah.",
-      "transli_en": "(hadees)",
+      "trans_en": "Narrated Abu Bakrah: When anything pleasing or glad tidings reached the Prophet ﷺ, he would fall down prostrating in gratitude to Allah.",
+      "transli_en": "'An Abi Bakrata annan-Nabiyya ﷺ kana idha atahu amrun yasurruhu aw bushira bihi kharra sajidan shukran lillah.",
       "desc_en": "When you are happy, prostrate and offer praise and thanks to Allah:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -16683,7 +16683,7 @@
         }
       ],
       "trans_en": "Allah says: 'If you are grateful, I will surely increase you [in favor]; but if you deny, indeed, My punishment is severe.' (Ibrahim: 7)",
-      "transli_en": "(quran)",
+      "transli_en": "La'in shakartum la'azidannakum wa la'in kafartum inna 'adhabi lashadid.",
       "desc_en": "The virtues of increasing praise and gratitude to Allah:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -16952,8 +16952,8 @@
           "en": "Those of jinn and men"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "I seek refuge in Allah from Satan the accursed. In the name of Allah, the Entirely Merciful, the Especially Merciful. [Surah Al-Ikhlas]: Say: He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent. [Surah Al-Falaq]: Say: I seek refuge in the Lord of daybreak, from the evil of that which He created, from the evil of darkness when it settles, from the evil of the blowers in knots, and from the evil of an envier when he envies. [Surah An-Nas]: Say: I seek refuge in the Lord of mankind, the Sovereign of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers into the breasts of mankind, from among the jinn and mankind.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim. Bismillahir-Rahmanir-Rahim. Qul Huwallahu Ahad. Allahus-Samad. Lam yalid wa lam yulad. Wa lam yakun lahu kufuwan ahad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin idha waqab. Wa min sharrin-naffathati fil-'uqad. Wa min sharri hasidin idha hasad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbin-nas. Malikin-nas. Ilahin-nas. Min sharril-waswasil-khannas. Alladhi yuwaswisu fi sudurin-nas. Minal-jinnati wan-nas.",
       "trans_ar": "أعتصم وألتجئ برب الصبح وفالقه من شر جميع المخلوقات، ومن شر الليل إذا أظلم، ومن شر السواحر النفاثات، ومن شر كل حاسد إذا حسد."
     },
     {
@@ -17015,8 +17015,8 @@
           "en": "O Allah, this is from You and belongs to You"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, and Allah is the Greatest. O Allah, from You and to You.",
+      "transli_en": "Bismillahi wallahu Akbar, Allahumma minka wa lak.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -17272,8 +17272,8 @@
           "en": "I whisper to you in the name of Allah"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah I perform Ruqyah for you, from everything that harms you, from the evil of every soul or envious eye. May Allah heal you; in the name of Allah I perform Ruqyah for you.",
+      "transli_en": "Bismillahi arqika, min kulli shay'in yu'dhika, wa min sharri kulli nafsin aw 'ayni hasid, Allahu yashfika, bismillahi arqik.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -17355,8 +17355,8 @@
           "en": "Say: I seek protection from the Lord of mankind"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "I seek refuge in Allah from Satan the accursed. In the name of Allah, the Entirely Merciful, the Especially Merciful. [Surah Al-Ikhlas]: Say: He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent. [Surah Al-Falaq]: Say: I seek refuge in the Lord of daybreak, from the evil of that which He created, from the evil of darkness when it settles, from the evil of the blowers in knots, and from the evil of an envier when he envies. [Surah An-Nas]: Say: I seek refuge in the Lord of mankind, the Sovereign of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers into the breasts of mankind, from among the jinn and mankind.",
+      "transli_en": "A'udhu billahi minash-shaytanir-rajim. Bismillahir-Rahmanir-Rahim. Qul Huwallahu Ahad. Allahus-Samad. Lam yalid wa lam yulad. Wa lam yakun lahu kufuwan ahad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin idha waqab. Wa min sharrin-naffathati fil-'uqad. Wa min sharri hasidin idha hasad. Bismillahir-Rahmanir-Rahim. Qul a'udhu bi-Rabbin-nas. Malikin-nas. Ilahin-nas. Min sharril-waswasil-khannas. Alladhi yuwaswisu fi sudurin-nas. Minal-jinnati wan-nas.",
       "desc_en": "Recite these (by rubbing the saliva) and blow it on the hands so that the whole body is covered.",
       "trans_ar": "أعتصم وألتجئ برب الصبح وفالقه من شر جميع المخلوقات، ومن شر الليل إذا أظلم، ومن شر السواحر النفاثات، ومن شر كل حاسد إذا حسد."
     },
@@ -17439,8 +17439,8 @@
           "en": "And of the misguided (not the way)"
         }
       ],
-      "trans_en": "In the name of God, the Lord of Mercy, the Giver of Mercy Praise belongs to God, Lord of the Worlds the Lord of Mercy, the Giver of Mercy Master of the Day of Judgement It is You we worship; it is You we ask for help Guide us to the straight path the path of those You have blessed, those who incur no anger and who have not gone astray",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. [All] praise is [due] to Allah, Lord of the worlds. The Entirely Merciful, the Especially Merciful. Sovereign of the Day of Recompense. It is You we worship and You we ask for help. Guide us to the straight path. The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Al-hamdu lillahi Rabbil-'alamin. Ar-Rahmanir-Rahim. Maliki Yawmid-Din. Iyyaka na'budu wa iyyaka nasta'in. Ihdinas-siratal-mustaqim. Siratal-ladhina an'amta 'alayhim, ghayril-maghdubi 'alayhim wa lad-dallin.",
       "desc_en": "Mantra for being poisoned or bitten by toxins:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -17979,8 +17979,8 @@
           "en": "Praise be to Allah"
         }
       ],
-      "trans_en": "None has the right to be worshipped except Allah.",
-      "transli_en": "La ilaha illal-lah.",
+      "trans_en": "There is no deity worthy of worship except Allah, and all praise is for Allah.",
+      "transli_en": "La ilaha illallahu, wal-hamdu lillah.",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18050,9 +18050,9 @@
       "id": 328,
       "ref": "",
       "trans": "അ‌ബ്‌‌ദു‌ല്ലാ‌ഹി‌ബ്‌‌നു അം‌റ്‌ ؓ  നി‌വേ‌ദ‌നം: “ന‌ബി ﷺ ദി‌ക്‌‌റു‌കൾ ത‌ന്റെ വ‌ല‌ത്‌ കൈ കൊ‌ണ്ട്‌ എ‌ണ്ണം പി‌ടി‌ക്കു‌ന്ന‌ത്‌ ഞാൻ ക‌ണ്ടു.” (സുനനു അബൂദാവൂദ്: 1502)",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "'Abdullah ibn 'Amr narrated: 'I saw the Prophet ﷺ counting the praises (tasbih) on his right hand.' (Sunan Abi Dawud: 1502)",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18069,9 +18069,9 @@
       "id": 329,
       "ref": "",
       "trans": "ന‌ബി ﷺ‌ പ‌റ‌ഞ്ഞു: “സ‌ന്ധ്യ‌യാ‌യാൽ കു‌ട്ടി‌കൾ പു‌റ‌ത്തി‌റ‌ങ്ങു‌ന്ന‌ത്‌ നി‌ങ്ങൾ ത‌ട‌യു‌ക. കാ‌ര‌ണം പി‌ശാ‌ചു‌ക്കൾ വ്യാ‌പി‌ക്കു‌ന്ന സ‌മ‌യ‌മാ‌ണ‌ത്‌. രാ‌ത്രി‌യിൽ ഒ‌രു‌വേ‌ള  ക‌ഴി‌ഞ്ഞാൽ നി‌ങ്ങ‌ള‌വ‌രെ വി‌ട്ടേ‌ക്കു‌ക. (സ‌ന്ധ്യ‌യാ‌യാൽ) വാ‌തി‌ലു‌കൾ അ‌ട‌ക്കു‌ക‌യും, അ‌ല്ലാ‌ഹു‌വി‌ന്റെ നാ‌മം (ബി‌സ്‌‌മി‌ല്ലാ‌ഹ്‌) ചൊ‌ല്ലു‌ക‌യും ചെ‌യ്യു‌ക. കാ‌ര‌ണം ‘ബി‌സ്‌‌മി‌’ ചൊ‌ല്ലി ബ‌ന്ധി‌ക്കപ്പെ‌ട്ട വാ‌തി‌ലു‌കൾ പി‌ശാ‌ച്‌ തു‌റ‌ക്കു‌ക‌യി‌ല്ല! നി‌ങ്ങ‌ളു‌ടെ വി‌ളക്കു‌കൾ അ‌ണ‌ക്കു‌ക‌യും, അ‌ല്ലാ‌ഹു‌വി‌ന്റെ നാ‌മം ‘ബി‌സ്‌‌മി‌ല്ലാ‌ഹ്‌’ പ‌റ‌യു‌ക‌യും ചെ‌യ്യു‌ക, നി‌ങ്ങ‌ളു‌ടെ ഭ‌ക്ഷ‌ണ പാ‌ത്ര‌ങ്ങൾ അ‌ട‌ക്കു‌ക. അ‌ല്ലാ‌ഹു‌വി‌ന്റെ നാ‌മം (ബി‌സ്‌‌മി‌) പ‌റ‌യു‌ക‌യും ചെ‌യ്യു‌ക. ....അ‌തി‌ന്റെ മേൽ വി‌ല‌ങ്ങ‌നെ വ‌ല്ല‌തും (ഒ‌രു ക‌നം) വെ‌ക്കു‌ക‌യെ‌ങ്കി‌ലും വേ‌ണം... ബി‌സ്‌‌മി ചൊ‌ല്ലി തു‌ട‌ങ്ങി‌യ കാ‌ര്യ‌ങ്ങ‌ളെ പി‌ശാ‌ചി‌ന്‌ ആ‌ക്ര‌മി‌ക്കാൻ ക‌ഴി‌യി‌ല്ല!” (മുസ്‌ലിം: 2012)",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "The Prophet ﷺ said: 'When night falls, keep your children indoors, for the devils spread out at that hour. When part of the night has passed, you may let them go. Close your doors and mention the name of Allah, for Satan does not open a closed door. Extinguish your lamps and mention Allah's name. Cover your vessels and mention Allah's name, even if you only place something across them. Indeed, Satan cannot harm what has been started with the name of Allah!' (Sahih Muslim: 2012)",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18088,9 +18088,9 @@
       "id": 330,
       "ref": "",
       "trans": "സുന്നത്തിൽ സ്ഥിരപ്പെട്ട ഒരു ചികിത്സയാണ് ഹിജാമ അഥവാ കൊമ്പ്‌വെക്കൽ. ഇത് പ‌ല രോ‌ഗ‌ങ്ങൾ‌ക്കു‌മു‌ള്ള (പൈ‌ശാ‌ചി‌ക രോ‌ഗ‌ങ്ങൾ‌ക്കു‌വ‌രെ) ശ‌മ‌ന‌മാ‌ണ്‌.\nശ്ര‌ദ്ധി‌ക്കു‌ക: ഹി‌ജാ‌മ എ‌ന്നു പ‌റ‌ഞ്ഞാൽ ശ‌രീ‌ര‌ത്തിൽ സൂ‌ചി‌മു‌ന‌കൊ‌ണ്ടോ സർ‌ജ‌റി ബ്ലേ‌ഡു‌കൊണ്ടോ അ‌ടു‌ത്ത‌ടു‌ത്ത്‌ (സൂ‌ചി‌മു‌ന‌യു‌ടെ‌യ‌ത്ര) ചെ‌റി‌യ ദ്വാ‌ര‌ങ്ങ‌ളുണ്ടാ‌ക്കി അ‌തി‌ലൂ‌ടെ ഒ‌രു സി‌റി‌ഞ്ച്‌ തൊ‌ലി‌യു‌ടെ പു‌റ‌ത്തുവെ‌ച്ച്‌ ര‌ക്തം അൽ‌പാൽ‌പ‌മാ‌യി വ‌ലി‌ച്ചെടു‌ത്ത്‌ പു‌റ‌ത്തു‌ക‌ള‌യ‌ലാ‌ണ്‌. കൊ‌മ്പ്‌വെ‌ക്കു‌ന്ന ആ‌ധു‌നി‌ക ഉ‌പ‌ക‌ര‌ണങ്ങൾ ചി‌ല മെ‌ഡി‌ക്കൽ സ്‌‌റ്റോ‌റു‌ക‌ളിൽ ല‌ഭ്യ‌മാ‌ണ്‌. കൊ‌മ്പ്‌‌വെ‌ക്കൽ കാരണമായി ര‌ക്ത‌ത്തി‌ലൂ‌ടെ സ‌ഞ്ച‌രി‌ക്കു‌ന്ന പി‌ശാ‌ച്‌ പു‌റ‌ത്തു പോ‌യി രോ‌ഗ‌ശ‌മ‌നം ല‌ഭി‌ക്കു‌ന്നു!. \n(ബു‌ഖാ‌രി: 7171, മുസ്‌ലിം: 2174)  (“The Jinn and the Human Sickness”, page 223-227, Darussalam published in 2005, നോ‌ക്കു‌ക).\n\nന‌ബി ﷺ പ‌റ‌ഞ്ഞു:\n قَالَ النَّبِيِّ ﷺ: إِنْ كَانَ فِي شَيْءٍ مِمَّا تَدَاوَوْنَ بِهِ خَيْرٌ فَالْحِجَامَةُ \nഅബൂഹുറയ്റ ؓ  നിവേദനം - നബി ﷺ  പറഞ്ഞു: “നിങ്ങള്‍ ചികിത്സിക്കുന്നവയില്‍ ഏതിലെങ്കിലും വല്ല ഗുണവുമുണ്ടെങ്കില്‍ അത് ഹിജാമ ചെയ്യുന്നതിലാണ്.” \nقَالَ ﷺ مَنِ احْتَجَمَ لِسَبْعَ عَشْرَةَ وَتِسْعَ عَشْرَةَ وَإِحْدَى وَعِشْرِينَ كَانَ شِفَاءً مِنْ كُلِّ دَاءٍ \n“ന‌ബി ﷺ പ‌റ‌ഞ്ഞു: ആ‌രെ‌ങ്കി‌ലും (അറബിമാസം) 17, 19, 21 തി‌യ്യ‌തി‌ക‌ളിൽ ഹി‌ജാ‌മ ചെ‌യ്‌‌താൽ അ‌തി‌ലൂ‌ടെ സ‌ക‌ല രോ‌ഗ‌ത്തി‌നും ശ‌മ‌നം ല‌ഭി‌ക്കും!”\nസൽ‌മ (റ) നി‌വേ‌ദ‌നം:“ത‌ല‌യിൽ എ‌ന്തെ‌ങ്കി‌ലും വേ‌ദ‌ന‌യോ ന്യൂ‌ന‌ത‌യോ ഉള്ളതായി ആരെങ്കിലും ആ‌വ‌ലാ‌തി പ‌റ‌ഞ്ഞാൽ ന‌ബി ﷺ അ‌യാ‌ളോ‌ടു കൊ‌മ്പ്‌‌വെക്കാൻ പ‌റ‌യാ‌തെ വി‌ട്ടി‌രു‌ന്നി‌ല്ല.” (സുനനു അബൂദാവൂദ് : 3858)\n\nحسنه الألباني في سنن أبي داود: 3359، مسند أحمد: 8513\nحسنه الألباني في سنن أبي داود: 3858",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "Hijama (cupping) is an established prophetic medicine and a cure for various ailments. The Prophet ﷺ said: 'If there is any healing in your medicines, it is in cupping.' Abu Hurairah narrated that the Prophet ﷺ said: 'Whoever is cupped on the 17th, 19th, or 21st (of the lunar month), it will be a cure for every disease.' Salma reported: 'No one complained to the Prophet ﷺ of a headache except that he told them: Go and get cupped.' (Sunan Abi Dawud: 3858)",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18107,9 +18107,9 @@
       "id": 331,
       "ref": "",
       "trans": "ഇന്ന് ഭൂമിയിൽ ലഭിക്കുന്ന എല്ലാ വെള്ളങ്ങളിൽ നിന്നും വ്യത്യസ്തമായി നിരവധി പ്രത്യേകതകളുള്ള ഒരു പുണ്യജലമാണ് സംസം. നബി ﷺ അത് ധാരാളമായി കുടിക്കുകയും മറ്റുള്ളവരോട് കുടിക്കാൻ ആവശ്യപ്പെടുകയും ചെയ്തിരിന്നു. അവിടുന്ന്‌ ﷺ പ‌റ‌ഞ്ഞു: \nاشْرَبْ مَاءَ زَمْزَم \n“സം‌സം വെ‌ള്ളം (അല്ലാഹുവിനോടു രോ‌ഗ‌ശ‌മ‌നം തേ‌ടി) കു‌ടി‌ക്കു‌ക. ”\nعَنْ أَبِي ذَرٍّ قَالَ : قَالَ رَسُولُ اللهِ  ﷺ : «زَمْزَمُ طَعَامُ طُعْمٍ وَشِفَاءُ سُقْمٍ» \nഅ‌ബൂ‌ദർ‌റ്‌ ؓ  നിവേദനം: നബി ﷺ പ‌റ‌ഞ്ഞു: “സം‌സം വെ‌ള്ളം വിശക്കുന്നവർക്ക് ഭ‌ക്ഷ‌ണവും (അല്ലാഹുവിനോട് രോ‌ഗ‌ശ‌മ‌നം തേ‌ടി കു‌ടി‌ച്ചാൽ അ‌ത്‌) രോ‌ഗ‌ത്തി‌നു‌ള്ള ശ‌മ‌ന‌വു‌മാ‌ണ്‌.” \n\nالطَّبراني في «الصغير» : 296وصححه الألباني في «الترهيب»: 1162\nالطَّبراني في «الصغير» : 296وصححه الألباني في «الترهيب»: 1162",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "Zamzam water is blessed water with unique virtues. The Prophet ﷺ drank it abundantly and encouraged others to do so. Abu Dharr narrated that the Messenger of Allah ﷺ said: 'Zamzam is food that satisfies and a cure for illness.' (Tabarani; Sahih at-Targhib: 1162)",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18126,9 +18126,9 @@
       "id": 332,
       "ref": "",
       "trans": "അനുഗ്രഹത്തിന്റെ  വിത്ത് എന്ന് അറിയപ്പെടുന്ന കരിഞ്ചീരകം എല്ലാ  കാലത്തും ഒരു ഉത്തമ ശമനൌഷധമായി ഉപയോഗിച്ചു വരുന്നു. ദശലക്ഷക്കണക്കിന് മനുഷ്യര്‍  ഈ ദിവ്യ ഔഷധത്തിലൂടെ വിവിധ രോഗങ്ങളിള്‍ നിന്ന് മുക്തി നേടിയിട്ടുണ്ട്. നബി ﷺ പറഞ്ഞു:\n\nإِنَّ فِي الْحَبَّةِ السَّوْدَاءِ شِفَاءً مِنْ كُلِّ دَاءٍ إِلَّا السَّامَ وَالسَّامُ الْمَوْتُ\n\"നിങ്ങള്‍ കരിഞ്ചീരകം ഉപയോഗിക്കുക. മരണം ഒഴികെ എല്ലാ രോഗത്തിനും അതില്‍ ശമനമുണ്ട്\"",
-      "transli": "(hadees)",
+      "transli": "",
       "trans_en": "The black seed, known as the blessed seed, has always been used as an excellent healing remedy. The Prophet ﷺ said: 'Use the black seed, for indeed in it is a cure for every disease except death.' (Sahih al-Bukhari: 5688, Sahih Muslim: 2215)",
-      "transli_en": "(hadees)",
+      "transli_en": "",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
     {
@@ -18188,8 +18188,8 @@
           "en": "For flank pain"
         }
       ],
-      "trans_en": "Umm Qays bint Mihsan said: I heard the Prophet ﷺ saying: 'Use this Indian costus (Ood al-Hindi), for in it are seven cures...' (Sahih al-Bukhari: 5692, Sahih Muslim: 2214)",
-      "transli_en": "(hadees)",
+      "trans_en": "Umm Qays bint Mihsan said: I heard the Prophet ﷺ saying: 'Use this Indian costus (Ood al-Hindi), for in it are seven cures...'",
+      "transli_en": "'An Ummi Qays binti Mihsanin qalat: Sami'tun-Nabiyya ﷺ yaqul: 'Alaykum bi-hadhal-'Udil-Hindi fa-inna feehi sab'ata ashfiyah...",
       "desc_en": "Khushtul Hindi is another well-known and valiant aphrodisiac in prophetic medicine. In our country it is known as Kottam. Regarding this, the Prophet said:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -18230,8 +18230,8 @@
           "en": "blessed"
         }
       ],
-      "trans_en": "The Prophet ﷺ said: 'Eat olive oil and use it as an ointment, for it comes from a blessed tree.' (Sunan at-Tirmidhi: 1851, Ibn Majah: 3319)",
-      "transli_en": "(hadees)",
+      "trans_en": "The Prophet ﷺ said: 'Eat olive oil and use it as an ointment, for it comes from a blessed tree.'",
+      "transli_en": "Kumuz-zayta waddahinu bihi fa-innahu min shajaratim-mubarakah.",
       "desc_en": "Olive oil is another great remedy for health and healing. The Prophet said:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -18887,8 +18887,8 @@
           "en": "Guide us to the right path"
         }
       ],
-      "trans_en": "In the name of Allah.",
-      "transli_en": "Bismil-lah.",
+      "trans_en": "In the name of Allah, the Entirely Merciful, the Especially Merciful. [All] praise is [due] to Allah, Lord of the worlds. The Entirely Merciful, the Especially Merciful. Sovereign of the Day of Recompense. It is You we worship and You we ask for help. Guide us to the straight path. The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.",
+      "transli_en": "Bismillahir-Rahmanir-Rahim. Al-hamdu lillahi Rabbil-'alamin. Ar-Rahmanir-Rahim. Maliki Yawmid-Din. Iyyaka na'budu wa iyyaka nasta'in. Ihdinas-siratal-mustaqim. Siratal-ladhina an'amta 'alayhim, ghayril-maghdubi 'alayhim wa lad-dallin.",
       "desc_en": "Prayer for God to forsake the way of those who are angry and turn to the way of those who are satisfied:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },
@@ -26587,7 +26587,7 @@
         }
       ],
       "trans_en": "My Lord, forgive me my sin on the Day of Judgment.",
-      "transli_en": "Rabbigfirlee khateeattee yaumaddeeni",
+      "transli_en": "Rabbi-ghfir li khati'ati yawmad-din.",
       "desc_en": "Reparation Prayer for those who do not pray for Salvation in the Hereafter:",
       "trans_ar": "معنى الدعاء والذكر المبارك: التوجه إلى الله تعالى بالتضرع والرجاء، وإخلاص العبادة والتوكل عليه، وطلب الخير والبركة والمغفرة والنجاة من الشرور والفتن."
     },

@@ -292,7 +292,7 @@ const DuaMultiCard = ({
       )}
 
       {/* ═══════ CARD 3: Transliteration (Separate Glass Card) ═══════ */}
-      {dua.transli && dua.transli.trim().length > 0 && (
+      {dua.transli && dua.transli.trim().length > 0 && !dua.transli.includes('(hadees)') && !dua.transli.includes('(quran)') && (!isEnglish || (dua.transli_en && dua.transli_en.trim().length > 0 && !dua.transli_en.includes('(hadees)') && !dua.transli_en.includes('(quran)'))) && (
         <div className="cdr-card-transli-glass">
           <h3 className="cdr-transli-heading">TRANSLITERATION</h3>
           <p className="cdr-transli-body">
