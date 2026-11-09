@@ -1162,22 +1162,6 @@ export default function CategoryDuaReader({
                     {/* Smooth CSS Grid Accordion */}
                     <div className={`cdr-accordion-wrapper ${isOpen ? 'open' : ''}`}>
                       <div className="cdr-accordion-inner">
-                        {totalDuas > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => openAllDuas(cat)}
-                            className="cdr-read-all-btn"
-                          >
-                            <div className="cdr-read-all-icon-wrap">
-                              <Sparkles size={18} />
-                            </div>
-                            <div className="cdr-read-all-text">
-                              <span className="cdr-read-all-title">{isEnglish ? "Read All Supplications" : "എല്ലാ പ്രാർത്ഥനകളും വായിക്കുക"}</span>
-                              <span className="cdr-read-all-sub">{isEnglish ? `Read all ${totalDuas} duas together` : `${totalDuas} പ്രാർത്ഥനകൾ ഒരുമിച്ച് വായിക്കാം`}</span>
-                            </div>
-                            <ChevronRight size={18} className="cdr-read-all-arrow" />
-                          </button>
-                        )}
                         {cat.subcategories.length > 0 ? (
                           <div className="cdr-cat-sublist">
                             {cat.subcategories.map((sub, sIdx) => (
