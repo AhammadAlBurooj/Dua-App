@@ -29,6 +29,8 @@ import {
   findSectionIndex
 } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
+import { translateCategory, translateSubcategory, translateHint } from '../../utils/translations';
+import { getStoredSettings } from '../../utils/storage';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
@@ -39,8 +41,11 @@ const DuaMultiCard = ({
   duaNumber,
   isCurrentSlide: _isCurrentSlide,
   isBookmarked,
-  onToggleBookmark
+  onToggleBookmark,
+  settings = {}
 }) => {
+  const lang = settings?.language || getStoredSettings().language || 'ml';
+  const isEnglish = lang === 'en';
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
@@ -185,7 +190,7 @@ const DuaMultiCard = ({
               {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
                 <div className="cdr-card-hint-pill">
                   <Sparkles size={13} className="cdr-hint-sparkle" />
-                  <span>{dua.hint.trim()}</span>
+                  <span>{translateHint(dua.hint.trim(), lang)}</span>
                 </div>
               )}
             </div>
@@ -313,12 +318,12 @@ const DuaMultiCard = ({
               </div>
               <div className="cdr-wbw-text-wrap">
                 <span className="cdr-wbw-main-title">Word by Word Meaning</span>
-                <span className="cdr-wbw-sub-title">(പദാനുപദ അർത്ഥം)</span>
+                <span className="cdr-wbw-sub-title">{isEnglish ? "(Word by Word Meaning)" : "(പദാനുപദ അർത്ഥം)"}</span>
               </div>
             </div>
             <div className="cdr-wbw-right-info">
               <span className="cdr-wbw-pill-badge">
-                {dua.word_by_word.length} പദങ്ങൾ
+                {dua.word_by_word.length} {isEnglish ? "Words" : "പദങ്ങൾ"}
               </span>
               <div className="cdr-wbw-chevron-wrap">
                 {wbwOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -347,7 +352,7 @@ const DuaMultiCard = ({
           </div>
           <div className="cdr-callout-body">
             <span className="cdr-callout-label">
-              സമയം & നിർദ്ദേശം
+              {isEnglish ? "Time & Instruction" : "സമയം & നിർദ്ദേശം"}
             </span>
             <p className="cdr-callout-text">
               {dua.hint.trim()}
@@ -361,7 +366,7 @@ const DuaMultiCard = ({
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
             <BookOpen size={20} className="cdr-ref-icon" />
-            <h3 className="cdr-ref-heading">{h.title || "ഹദീസ് വിവരണം"}</h3>
+            <h3 className="cdr-ref-heading">{h.title || (isEnglish ? "Hadith Commentary" : "ഹദീസ് വിവരണം")}</h3>
           </div>
           <p className="cdr-ref-body-text">
             {h.hadith}
@@ -394,9 +399,12 @@ export default function CategoryDuaReader({
   onBackToHome = null,
   favorites = [],
   onToggleFavorite = null,
-  onViewChange = null
+  onViewChange = null,
+  settings = {}
 }) {
   const [view, setView] = useState(initialView);
+  const lang = settings?.language || getStoredSettings().language || 'ml';
+  const isEnglish = lang === 'en';
   
   // Sticky Curved Bottom Audio Player State
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(false);
@@ -458,8 +466,13 @@ export default function CategoryDuaReader({
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const [expandedCatId, setExpandedCatId] = useState(initialCategory?.id || CATEGORIES_DATA[0]?.id || null);
 
-  const categoryTitle = currentSection?.categoryName || initialCategory?.name || "നമസ്കാരം";
-  const subcategoryTitle = currentSection?.subcategoryName || initialSubcategory?.name || "പ്രാർത്ഥന";
+  const categoryTitle = isEnglish
+    ? (translateCategory(currentSection?.category || currentSection?.categoryOriginalId || initialCategory, 'en') || "Prayer")
+    : (currentSection?.categoryName || initialCategory?.name || "നമസ്കാരം");
+
+  const subcategoryTitle = isEnglish
+    ? (translateSubcategory(currentSection?.subcategory || currentSection?.subcategoryOriginalId || initialSubcategory, 'en') || "Supplication")
+    : (currentSection?.subcategoryName || initialSubcategory?.name || "പ്രാർത്ഥന");
 
   // Format seconds into mm:ss
   const formatTime = (seconds) => {
@@ -756,9 +769,9 @@ export default function CategoryDuaReader({
     setBoundaryTransition({
       active: true,
       direction,
-      currentSubcategoryName: currentSection?.subcategoryName || subcategoryTitle || '',
-      targetSubcategoryName: targetSec?.subcategoryName || '',
-      targetCategoryName: targetSec?.categoryName || '',
+      currentSubcategoryName: subcategoryTitle || '',
+      targetSubcategoryName: targetSec ? (isEnglish ? (translateSubcategory(targetSec.subcategory || targetSec.subcategoryOriginalId, 'en') || targetSec.subcategoryName) : targetSec.subcategoryName) : '',
+      targetCategoryName: targetSec ? (isEnglish ? (translateCategory(targetSec.category || targetSec.categoryOriginalId, 'en') || targetSec.categoryName) : targetSec.categoryName) : '',
       isCategoryChange: isCatChange,
       isEnd,
       isBeginning,
@@ -1053,19 +1066,19 @@ export default function CategoryDuaReader({
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
-                title="തിരികെ പോവുക"
+                title={isEnglish ? "Go Back" : "തിരികെ പോവുക"}
                 aria-label="Back"
               >
                 <ArrowLeft size={20} />
               </button>
             )}
             <h1 className="text-xl sm:text-2xl font-bold">
-              {initialCategory ? initialCategory.name : "مناجاة"}
+              {initialCategory ? (isEnglish ? translateCategory(initialCategory, 'en') : initialCategory.name) : "مناجاة"}
             </h1>
             <p className="text-emerald-200 text-sm mt-1">
               {initialCategory 
-                ? (initialCategory.nameArabic || "വിഭാഗത്തിലെ പ്രാർത്ഥനകൾ") 
-                : "Select a category to begin reading"}
+                ? (isEnglish ? (CATEGORY_THEMES[initialCategory.originalId]?.nameEn || "Category Supplications") : (initialCategory.nameArabic || "വിഭാഗത്തിലെ പ്രാർത്ഥനകൾ")) 
+                : (isEnglish ? "Select a category to begin reading" : "ഒരു വിഭാഗം തിരഞ്ഞെടുക്കുക")}
             </p>
           </header>
 
@@ -1124,15 +1137,15 @@ export default function CategoryDuaReader({
 
                         <div className="cdr-cat-title-group">
                           <div className="cdr-cat-name-row">
-                            <span className="cdr-cat-name">{cat.name}</span>
+                            <span className="cdr-cat-name">{translateCategory(cat, lang)}</span>
                             {cat.nameArabic && (
                               <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
                             )}
                           </div>
                           <div className="cdr-cat-meta-sub">
-                            <span>{cat.subcategories.length} ഉപവിഭാഗങ്ങൾ</span>
+                            <span>{cat.subcategories.length} {isEnglish ? "sections" : "ഉപവിഭാഗങ്ങൾ"}</span>
                             <span className="cdr-cat-meta-dot">•</span>
-                            <span>{totalDuas} പ്രാർത്ഥനകൾ</span>
+                            <span>{totalDuas} {isEnglish ? "Duas" : "പ്രാർത്ഥനകൾ"}</span>
                           </div>
                         </div>
                       </div>
@@ -1155,8 +1168,8 @@ export default function CategoryDuaReader({
                               <Sparkles size={18} />
                             </div>
                             <div className="cdr-read-all-text">
-                              <span className="cdr-read-all-title">എല്ലാ പ്രാർത്ഥനകളും വായിക്കുക</span>
-                              <span className="cdr-read-all-sub">{totalDuas} പ്രാർത്ഥനകൾ ഒരുമിച്ച് വായിക്കാം</span>
+                              <span className="cdr-read-all-title">{isEnglish ? "Read All Supplications" : "എല്ലാ പ്രാർത്ഥനകളും വായിക്കുക"}</span>
+                              <span className="cdr-read-all-sub">{isEnglish ? `Read all ${totalDuas} duas together` : `${totalDuas} പ്രാർത്ഥനകൾ ഒരുമിച്ച് വായിക്കാം`}</span>
                             </div>
                             <ChevronRight size={18} className="cdr-read-all-arrow" />
                           </button>
@@ -1171,11 +1184,11 @@ export default function CategoryDuaReader({
                               >
                                 <div className="cdr-subcat-left">
                                   <span className="cdr-subcat-num">{sIdx + 1}</span>
-                                  <span className="cdr-subcat-name">{sub.name}</span>
+                                  <span className="cdr-subcat-name">{translateSubcategory(sub, lang)}</span>
                                 </div>
                                 <div className="cdr-subcat-meta">
                                   <span className="cdr-subcat-badge">
-                                    {sub.duas.length} ദുആകൾ
+                                    {sub.duas.length} {isEnglish ? "Duas" : "ദുആകൾ"}
                                   </span>
                                   <ChevronRight size={16} className="cdr-subcat-chevron" />
                                 </div>
@@ -1184,7 +1197,7 @@ export default function CategoryDuaReader({
                           </div>
                         ) : (
                           <div className="cdr-empty-subcat">
-                            ഉപവിഭാഗങ്ങൾ ലഭ്യമല്ല.
+                            {isEnglish ? "No subcategories available." : "ഉപവിഭാഗങ്ങൾ ലഭ്യമല്ല."}
                           </div>
                         )}
                       </div>
@@ -1214,7 +1227,7 @@ export default function CategoryDuaReader({
                 onClick={handleBackToHomeOrCategories}
                 className="cdr-glass-back-btn"
                 aria-label={onBackToHome ? "Back to Home" : "Back to Categories"}
-                title={onBackToHome ? "ഹോം പേജിലേക്ക് മടങ്ങുക" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക"}
+                title={onBackToHome ? (isEnglish ? "Back to Home" : "ഹോം പേജിലേക്ക് മടങ്ങുക") : (isEnglish ? "Back to Categories" : "വിഭാഗങ്ങളിലേക്ക് മടങ്ങുക")}
               >
                 <ArrowLeft size={20} strokeWidth={2.5} />
               </button>
@@ -1298,6 +1311,7 @@ export default function CategoryDuaReader({
                     return fId === String(d.id) || (d.originalId !== undefined && fId === String(d.originalId));
                   })}
                   onToggleBookmark={onToggleFavorite}
+                  settings={settings}
                 />
               </div>
             )}
@@ -1331,7 +1345,7 @@ export default function CategoryDuaReader({
                 {boundaryTransition.isEnd ? (
                   <div className="cdr-indicator-end-box">
                     <CheckCircle2 size={36} style={{ color: '#0D9488', margin: '4px 0 8px' }} />
-                    <p className="cdr-indicator-end-title">അവസാന ദുആയിൽ എത്തിച്ചേർന്നു</p>
+                    <p className="cdr-indicator-end-title">{isEnglish ? "Reached the Last Dua" : "അവസാന ദുആയിൽ എത്തിച്ചേർന്നു"}</p>
                     <p className="cdr-indicator-end-desc">You've reached the end of all Duas & Adhkar in the app</p>
                     <button 
                       className="cdr-indicator-close-btn"
@@ -1343,7 +1357,7 @@ export default function CategoryDuaReader({
                 ) : boundaryTransition.isBeginning ? (
                   <div className="cdr-indicator-end-box">
                     <Sparkles size={36} style={{ color: '#0D9488', margin: '4px 0 8px' }} />
-                    <p className="cdr-indicator-end-title">ആദ്യ ദുആയിലാണ് താങ്കൾ</p>
+                    <p className="cdr-indicator-end-title">{isEnglish ? "You are at the First Dua" : "ആദ്യ ദുആയിലാണ് താങ്കൾ"}</p>
                     <p className="cdr-indicator-end-desc">You are at the beginning of the Dua collection</p>
                     <button 
                       className="cdr-indicator-close-btn"

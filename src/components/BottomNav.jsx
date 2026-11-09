@@ -12,7 +12,7 @@ export default function BottomNav({ activeTab, onSelectTab, favoritesCount = 0, 
     },
     { 
       id: 'favorites', 
-      label: language === 'en' ? 'Bookmarks' : 'Bookmarks', 
+      label: language === 'en' ? 'Bookmarks' : 'ബുക്ക്മാർക്ക്', 
       icon: Bookmark, 
       badge: favoritesCount,
       isBookmarked: isBookmarked

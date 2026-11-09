@@ -25,6 +25,7 @@ import {
 import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
+import { translateCategory, translateSubcategory } from '../../utils/translations';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
 import CategoryDuaReader from './CategoryDuaReader';
@@ -145,6 +146,7 @@ export default function DuasScreen({
           }}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
+          settings={settings}
           onViewChange={(v) => onReadingStateChange && onReadingStateChange(v === 'reading')}
         />
       ) : isAsmaulHusnaOpen ? (
@@ -168,6 +170,7 @@ export default function DuasScreen({
           }}
           favorites={favorites}
           onToggleFavorite={onToggleFavorite}
+          settings={settings}
           onViewChange={(v) => onReadingStateChange && onReadingStateChange(v === 'reading')}
         />
       ) : searchQuery.trim() !== '' ? (
@@ -361,7 +364,7 @@ export default function DuasScreen({
 
                         <div className="cdr-cat-title-group">
                           <div className="cdr-cat-name-row">
-                            <span className="cdr-cat-name">{cat.name}</span>
+                            <span className="cdr-cat-name">{translateCategory(cat, lang)}</span>
                             {cat.nameArabic && (
                               <span className="cdr-cat-arabic-name">{cat.nameArabic}</span>
                             )}
@@ -387,7 +390,7 @@ export default function DuasScreen({
                               >
                                 <div className="cdr-subcat-left">
                                   <span className="cdr-subcat-num">{sIdx + 1}</span>
-                                  <span className="cdr-subcat-name">{sub.name}</span>
+                                  <span className="cdr-subcat-name">{translateSubcategory(sub, lang)}</span>
                                 </div>
                                 <div className="cdr-subcat-meta">
                                   <span className="cdr-subcat-badge">

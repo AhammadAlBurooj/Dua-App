@@ -46,7 +46,9 @@ export default function SettingsScreen({
       dailyReminder: nextState
     });
     if (onShowToast) {
-      onShowToast(nextState ? 'ദൈനംദിന അറിയിപ്പുകൾ ഓണാക്കി 🔔' : 'അറിയിപ്പുകൾ ഓഫാക്കി');
+      onShowToast(nextState 
+        ? (isEnglish ? 'Daily notifications turned ON 🔔' : 'ദൈനംദിന അറിയിപ്പുകൾ ഓണാക്കി 🔔') 
+        : (isEnglish ? 'Notifications turned OFF' : 'അറിയിപ്പുകൾ ഓഫാക്കി'));
     }
   };
 
@@ -67,7 +69,7 @@ export default function SettingsScreen({
     } else {
       try {
         await navigator.clipboard.writeText(shareData.url);
-        if (onShowToast) onShowToast('ആപ്പ് ലിങ്ക് കോപ്പി ചെയ്തു! 📋');
+        if (onShowToast) onShowToast(isEnglish ? 'App link copied! 📋' : 'ആപ്പ് ലിങ്ക് കോപ്പി ചെയ്തു! 📋');
       } catch {
         if (onShowToast) onShowToast('Munajat Dua App v2.0.1');
       }
@@ -82,7 +84,7 @@ export default function SettingsScreen({
       window.open('https://play.google.com/store/apps/details?id=com.burooj.munajat', '_blank');
     }
     if (onShowToast) {
-      onShowToast('പ്ലേസ്റ്റോറിലേക്ക് സ്വാഗതം ⭐');
+      onShowToast(isEnglish ? 'Welcome to Play Store ⭐' : 'പ്ലേസ്റ്റോറിലേക്ക് സ്വാഗതം ⭐');
     }
   };
 

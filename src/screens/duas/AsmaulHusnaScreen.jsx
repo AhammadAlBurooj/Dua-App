@@ -319,7 +319,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                 setViewMode(viewMode === 'slide' ? 'grid' : 'slide');
               }}
               aria-label={viewMode === 'slide' ? "View Grid" : "View Slide"}
-              title={viewMode === 'slide' ? "എല്ലാ നാമങ്ങളും കാണുക (Grid View)" : "സ്ലൈഡ് വ്യൂ"}
+              title={viewMode === 'slide' ? (isEnglish ? "View all names (Grid View)" : "എല്ലാ നാമങ്ങളും കാണുക (Grid View)") : (isEnglish ? "Slide View" : "സ്ലൈഡ് വ്യൂ")}
               style={{
                 width: '40px',
                 height: '40px',
@@ -561,7 +561,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                       margin: '0 0 8px 0'
                     }}
                   >
-                    {isEnglish ? "Malayalam Meaning" : "മലയാളം അർത്ഥം"}
+                    {isEnglish ? "English Meaning" : "മലയാളം അർത്ഥം"}
                   </h4>
                   <p 
                     style={{
@@ -571,7 +571,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
                       margin: 0
                     }}
                   >
-                    {currentName.meaningMl}
+                    {isEnglish ? (currentName.meaningEn || currentName.meaningMl) : currentName.meaningMl}
                   </p>
                 </div>
 

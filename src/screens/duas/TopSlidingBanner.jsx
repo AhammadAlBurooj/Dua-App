@@ -35,7 +35,7 @@ export default function TopSlidingBanner({
       id: 2,
       tag: '99 NAMES',
       tagDot: 'dot-emerald',
-      title: 'അസ്മാഉൽ ഹുസ്ന',
+      title: isEnglish ? 'Asmaul Husna' : 'അസ്മാഉൽ ഹുസ്ന',
       subtitle: isEnglish ? '99 Beautiful Names of Allah' : 'അല്ലാഹുവിന്റെ 99 വിശുദ്ധ നാമങ്ങൾ',
       image: '/asmaul_husna.jpg',
       fallbackImage: 'https://images.unsplash.com/photo-1582298960012-706d860d5b12?q=80&w=400&auto=format&fit=crop',
@@ -178,7 +178,7 @@ export default function TopSlidingBanner({
                       slide.action?.();
                     }}
                   >
-                    <span>കാണുക</span>
+                    <span>{isEnglish ? 'View' : 'കാണുക'}</span>
                     <svg className="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -210,7 +210,7 @@ export default function TopSlidingBanner({
             <input 
               type="text"
               className="top-banner-search-input"
-              placeholder={isEnglish ? "Search" : "Search"}
+              placeholder={isEnglish ? "Search Duas, Adhkar..." : "ദുആകൾ, ദിക്റുകൾ തിരയുക..."}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               aria-label="Search"
