@@ -44,6 +44,7 @@ export default function DuaDetailModal({
 
   const lang = settings?.language || 'ml';
   const isEnglish = lang === 'en';
+  const isArabic = lang === 'ar';
 
   // Listen to audio service updates
   useEffect(() => {
@@ -300,24 +301,12 @@ export default function DuaDetailModal({
         {/* Meaning / Translation Section */}
         <div className="ref-section-block">
           <h3 className="ref-section-title">
-            {isEnglish ? "Translation" : "മലയാളം അർത്ഥം"}
+            {isArabic ? "المعنى والشرح" : (isEnglish ? "Translation" : "മലയാളം അർത്ഥം")}
           </h3>
-          <p className="ref-section-text ref-meaning-ml-text">
-            {isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl}
+          <p className="ref-section-text ref-meaning-ml-text" dir={isArabic ? "rtl" : "ltr"} style={isArabic ? { fontFamily: 'Amiri, Traditional Arabic, serif', fontSize: '1.2rem', lineHeight: '1.8' } : {}}>
+            {isArabic ? (dua.trans_ar || dua.meaningAr || dua.meaningMl) : (isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl)}
           </p>
         </div>
-
-        {/* English Translation Section (when Malayalam mode is active and English meaning exists) */}
-        {!isEnglish && dua.meaningEn && (
-          <div className="ref-section-block">
-            <h3 className="ref-section-title">
-              English Translation
-            </h3>
-            <p className="ref-section-text ref-meaning-en-text">
-              {dua.meaningEn}
-            </p>
-          </div>
-        )}
 
         {/* Hadith / Quran Reference Section: ഹദീസ് റഫറൻസ് */}
         <div className="ref-reference-card">

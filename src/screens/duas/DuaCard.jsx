@@ -13,11 +13,14 @@ export default function DuaCard({
 }) {
   const category = CATEGORIES.find(c => c.id === dua.categoryId);
   const isEnglish = settings?.language === 'en';
+  const isArabic = settings?.language === 'ar';
 
-  const categoryTitle = category ? (isEnglish ? category.titleEn : category.titleMl) : (isEnglish ? 'Dua' : 'ദുആ');
-  const mainTitle = isEnglish ? dua.titleEn : dua.titleMl;
-  const subTitle = isEnglish ? dua.titleMl : dua.titleEn;
-  const meaningText = isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl;
+  const categoryTitle = category ? (isArabic ? (category.nameArabic || category.titleEn) : (isEnglish ? category.titleEn : category.titleMl)) : (isArabic ? 'دعاء' : (isEnglish ? 'Dua' : 'ദുആ'));
+  const mainTitle = isArabic ? (dua.arabic ? dua.arabic.slice(0, 30) + '...' : dua.titleEn) : (isEnglish ? dua.titleEn : dua.titleMl);
+  const subTitle = isArabic ? dua.titleEn : (isEnglish ? dua.titleMl : dua.titleEn);
+  const meaningText = isArabic 
+    ? (dua.trans_ar || dua.meaningAr || dua.meaningMl)
+    : (isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl);
   const countText = isEnglish ? `${dua.recommendedCount} times` : `${dua.recommendedCount} തവണ`;
   const hasAudio = Boolean(dua.audioUrl);
 

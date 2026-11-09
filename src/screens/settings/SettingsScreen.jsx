@@ -25,16 +25,23 @@ export default function SettingsScreen({
   const [showAboutModal, setShowAboutModal] = useState(false);
   const lang = settings.language || 'ml';
   const isEnglish = lang === 'en';
+  const isArabic = lang === 'ar';
 
-  // Toggle Language between Malayalam & English
+  // Toggle Language between Malayalam, English & Arabic
   const handleToggleLanguage = () => {
-    const nextLang = lang === 'ml' ? 'en' : 'ml';
+    let nextLang = 'en';
+    if (lang === 'ml') nextLang = 'en';
+    else if (lang === 'en') nextLang = 'ar';
+    else nextLang = 'ml';
+
     onUpdateSettings({
       ...settings,
       language: nextLang
     });
     if (onShowToast) {
-      onShowToast(nextLang === 'ml' ? 'ഭാഷ മലയാളമാക്കി മാറ്റി' : 'Language set to English');
+      if (nextLang === 'ar') onShowToast('تم اختيار اللغة العربية (Arabic)');
+      else if (nextLang === 'en') onShowToast('Language set to English');
+      else onShowToast('ഭാഷ മലയാളമാക്കി മാറ്റി');
     }
   };
 
@@ -110,7 +117,7 @@ export default function SettingsScreen({
             <div className="settings-item-text">
               <h3 className="settings-item-title">Translation Language</h3>
               <p className="settings-item-sub">
-                Currently selected: {isEnglish ? 'English' : 'Malayalam'}
+                Currently selected: {isArabic ? 'Arabic' : (isEnglish ? 'English' : 'Malayalam')}
               </p>
             </div>
           </div>
@@ -121,7 +128,7 @@ export default function SettingsScreen({
             title="Change translation language"
             aria-label="Change translation language"
           >
-            <span>{isEnglish ? 'English' : 'Malayalam'}</span>
+            <span>{isArabic ? 'Arabic' : (isEnglish ? 'English' : 'Malayalam')}</span>
             <ChevronDown size={15} />
           </button>
         </div>
