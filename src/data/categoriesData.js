@@ -174,8 +174,9 @@ export const NORMALIZED_AWRAAD_DUAS = (awraadData?.duas || []).map(d => {
     titleEn: d.hint ? `Dua #${d.id} • ${d.hint}` : `Dua #${d.id}`,
     arabic: d.dua || '',
     meaningMl: d.trans || '',
-    meaningEn: '',
+    meaningEn: d.trans_en || '',
     transliteration: d.transli || '',
+    transli_en: d.transli_en || '',
     reference: (d.ref || '').replace(/—?\s*Shared via Munajat App/gi, '').trim(),
     audioUrl: audioFullUrl,
     recommendedCount: 1

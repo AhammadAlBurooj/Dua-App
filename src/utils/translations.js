@@ -416,13 +416,19 @@ export const translateSubcategory = (sub, lang = 'ml') => {
 export const translateHint = (hint, lang = 'ml') => {
   if (lang !== 'en' || !hint || typeof hint !== 'string') return hint;
   return hint
-    .replace(/(d+)s*പ്രാവശ്യംs*പറയുക/g, 'Recite  times')
-    .replace(/(d+)s*പ്രാവശ്യംs*ചൊല്ലുക/g, 'Recite  times')
-    .replace(/(d+)s*പ്രാവശ്യം/g, ' times')
-    .replace(/[‘']s*1s*['’]s*പ്രാവശ്യം/g, '1 time')
-    .replace(/1s+times/g, '1 time')
-    .replace(/മൂന്നുs*പ്രാവശ്യംs*പറയുക/g, 'Recite 3 times')
-    .replace(/മൂന്ന്s*പ്രാവശ്യംs*ചൊല്ലുക/g, 'Recite 3 times')
+    .replace(/(\d+)\s*പ്രാവശ്യം\s*പറയുക/g, 'Recite $1 times')
+    .replace(/(\d+)\s*പ്രാവശ്യം\s*ചൊല്ലുക/g, 'Recite $1 times')
+    .replace(/(\d+)\s*പ്രാവശ്യം/g, ' $1 times')
+    .replace(/[‘'’]\s*1\s*[‘'’]\s*പ്രാവശ്യം/g, '1 time')
+    .replace(/\b1\s+times\b/g, '1 time')
+    .replace(/മൂന്നു\s*പ്രാവശ്യം\s*പറയുക/g, 'Recite 3 times')
+    .replace(/മൂന്ന്\s*പ്രാവശ്യം\s*ചൊല്ലുക/g, 'Recite 3 times')
+    .replace(/മൂന്ന്\s*പ്രാവശ്യം/g, '3 times')
+    .replace(/ഒരു\s*പ്രാവശ്യം/g, '1 time')
+    .replace(/നൂറ്\s*പ്രാവശ്യം/g, '100 times')
+    .replace(/പത്ത്\s*പ്രാവശ്യം/g, '10 times')
+    .replace(/ഏഴ്\s*പ്രാവശ്യം/g, '7 times')
+    .replace(/നാല്\s*പ്രാവശ്യം/g, '4 times')
     .replace(/ഇബ്രാഹീമിയ സ്വലാത്ത്/g, 'Salawat Ibrahimiyyah');
 };
 

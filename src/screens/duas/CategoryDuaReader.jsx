@@ -118,7 +118,7 @@ const DuaMultiCard = ({
   const bookmarkedStatus = isBookmarked !== undefined ? isBookmarked : localBookmarked;
 
   const handleCopy = () => {
-    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    const textParts = [dua.dua, isEnglish ? (dua.trans_en || dua.trans) : dua.trans, dua.ref].filter(Boolean);
     if (navigator.clipboard) {
       navigator.clipboard.writeText(textParts.join('\n\n'));
     }
@@ -127,7 +127,7 @@ const DuaMultiCard = ({
   };
 
   const handleShare = async () => {
-    const textParts = [dua.dua, dua.trans, dua.ref].filter(Boolean);
+    const textParts = [dua.dua, isEnglish ? (dua.trans_en || dua.trans) : dua.trans, dua.ref].filter(Boolean);
     const text = textParts.join('\n\n');
     if (navigator.share) {
       try {
@@ -190,7 +190,7 @@ const DuaMultiCard = ({
               {dua.hint && dua.hint.trim().length > 0 && dua.hint.trim().length <= 40 && (
                 <div className="cdr-card-hint-pill">
                   <Sparkles size={13} className="cdr-hint-sparkle" />
-                  <span>{translateHint(dua.hint.trim(), lang)}</span>
+                  <span>{isEnglish ? (dua.hint_en || translateHint(dua.hint.trim(), lang)) : dua.hint.trim()}</span>
                 </div>
               )}
             </div>
@@ -251,7 +251,7 @@ const DuaMultiCard = ({
           {dua.desc && dua.desc.trim().length > 0 && virtueOpen && (
             <div className="cdr-virtue-expanded-box">
               <p className="cdr-virtue-body-text">
-                {dua.desc.trim()}
+                {isEnglish ? (dua.desc_en || dua.desc.trim()) : dua.desc.trim()}
               </p>
             </div>
           )}
@@ -285,7 +285,7 @@ const DuaMultiCard = ({
         <div className="cdr-card-trans-glass">
           <h3 className="cdr-trans-heading">TRANSLATION</h3>
           <p className="cdr-trans-body">
-            {dua.trans}
+            {isEnglish ? (dua.trans_en || dua.trans) : dua.trans}
           </p>
         </div>
       )}
@@ -295,7 +295,7 @@ const DuaMultiCard = ({
         <div className="cdr-card-transli-glass">
           <h3 className="cdr-transli-heading">TRANSLITERATION</h3>
           <p className="cdr-transli-body">
-            "{dua.transli}"
+            "{isEnglish ? (dua.transli_en || dua.transli) : dua.transli}"
           </p>
         </div>
       )}
@@ -336,7 +336,7 @@ const DuaMultiCard = ({
               {dua.word_by_word.map((word, idx) => (
                 <div key={idx} className="cdr-wbw-word-tile">
                   <span className="cdr-wbw-ar-text" dir="rtl">{word?.ar || ''}</span>
-                  <span className="cdr-wbw-ml-text" dir="ltr">{word?.ml || ''}</span>
+                  <span className="cdr-wbw-ml-text" dir="ltr">{isEnglish ? (word?.en || word?.ml || '') : (word?.ml || '')}</span>
                 </div>
               ))}
             </div>
@@ -355,7 +355,7 @@ const DuaMultiCard = ({
               {isEnglish ? "Time & Instruction" : "സമയം & നിർദ്ദേശം"}
             </span>
             <p className="cdr-callout-text">
-              {dua.hint.trim()}
+              {isEnglish ? (dua.hint_en || translateHint(dua.hint.trim(), 'en')) : dua.hint.trim()}
             </p>
           </div>
         </div>
@@ -366,10 +366,14 @@ const DuaMultiCard = ({
         <div key={hIdx} className="cdr-card-ref-glass">
           <div className="cdr-ref-header-row">
             <BookOpen size={20} className="cdr-ref-icon" />
-            <h3 className="cdr-ref-heading">{h.title || (isEnglish ? "Hadith Commentary" : "ഹദീസ് വിവരണം")}</h3>
+            <h3 className="cdr-ref-heading">
+              {isEnglish 
+                ? (h.title_en || (h.title ? h.title_en || "Hadith Commentary" : "Hadith Commentary"))
+                : (h.title || "ഹദീസ് വിവരണം")}
+            </h3>
           </div>
           <p className="cdr-ref-body-text">
-            {h.hadith}
+            {isEnglish ? (h.hadith_en || h.hadith) : h.hadith}
           </p>
         </div>
       ))}

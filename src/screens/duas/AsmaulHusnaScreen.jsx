@@ -51,7 +51,7 @@ export default function AsmaulHusnaScreen({ onBack, settings }) {
         audioUrl: name.audioUrl,
         titleMl: name.meaningMl,
         titleEn: name.meaningEn,
-        reciter: 'യഥാർത്ഥ പാരായണം (Authentic Recitation)'
+        reciter: isEnglish ? 'Authentic Recitation' : 'യഥാർത്ഥ പാരായണം'
       });
     }
   };

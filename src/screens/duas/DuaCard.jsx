@@ -17,7 +17,7 @@ export default function DuaCard({
   const categoryTitle = category ? (isEnglish ? category.titleEn : category.titleMl) : (isEnglish ? 'Dua' : 'ദുആ');
   const mainTitle = isEnglish ? dua.titleEn : dua.titleMl;
   const subTitle = isEnglish ? dua.titleMl : dua.titleEn;
-  const meaningText = isEnglish && dua.meaningEn ? dua.meaningEn : dua.meaningMl;
+  const meaningText = isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl;
   const countText = isEnglish ? `${dua.recommendedCount} times` : `${dua.recommendedCount} തവണ`;
   const hasAudio = Boolean(dua.audioUrl);
 

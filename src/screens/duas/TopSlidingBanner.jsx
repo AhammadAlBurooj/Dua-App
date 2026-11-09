@@ -21,7 +21,7 @@ export default function TopSlidingBanner({
   const slides = [
     {
       id: 1,
-      tag: 'DAILY AAR',
+      tag: 'DAILY ADHKAR',
       tagDot: 'dot-emerald',
       title: isEnglish ? 'Daily Adhkar' : 'നിത്യജീവിത ദുആകൾ',
       subtitle: isEnglish ? 'Morning & Evening Supplications' : 'പ്രഭാത & സായാഹ്ന പ്രാർത്ഥനകൾ',
@@ -178,7 +178,7 @@ export default function TopSlidingBanner({
                       slide.action?.();
                     }}
                   >
-                    <span>{isEnglish ? 'View' : 'കാണുക'}</span>
+                    <span>{isEnglish ? 'Explore Now!' : 'കാണുക'}</span>
                     <svg className="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M9 5l7 7-7 7" />
                     </svg>
