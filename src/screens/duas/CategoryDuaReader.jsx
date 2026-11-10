@@ -46,7 +46,6 @@ const DuaMultiCard = ({
 }) => {
   const lang = settings?.language || getStoredSettings().language || 'ml';
   const isEnglish = lang === 'en';
-  const isArabic = lang === 'ar';
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wbwOpen, setWbwOpen] = useState(false);
@@ -282,11 +281,11 @@ const DuaMultiCard = ({
       </div>
 
       {/* ═══════ CARD 2: Translation ═══════ */}
-      {((isArabic && (dua.trans_ar || dua.meaning_ar)) || (!isArabic && dua.trans && dua.trans.trim().length > 0)) && (
+      {dua.trans && dua.trans.trim().length > 0 && (
         <div className="cdr-card-trans-glass">
-          <h3 className="cdr-trans-heading">{isArabic ? "المعنى والشرح" : "TRANSLATION"}</h3>
-          <p className="cdr-trans-body" dir={isArabic ? "rtl" : "ltr"} style={isArabic ? { fontFamily: 'Amiri, Traditional Arabic, serif', fontSize: '1.2rem', lineHeight: '1.8' } : {}}>
-            {isArabic ? (dua.trans_ar || dua.meaning_ar) : (isEnglish ? (dua.trans_en || dua.trans) : dua.trans)}
+          <h3 className="cdr-trans-heading">TRANSLATION</h3>
+          <p className="cdr-trans-body">
+            {isEnglish ? (dua.trans_en || dua.trans) : dua.trans}
           </p>
         </div>
       )}
@@ -368,26 +367,14 @@ const DuaMultiCard = ({
           <div className="cdr-ref-header-row">
             <BookOpen size={20} className="cdr-ref-icon" />
             <h3 className="cdr-ref-heading">
-              {isArabic 
-                ? (h.title_ar || h.title || "الحديث النبوي الشريف")
-                : (isEnglish 
-                  ? (h.title_en || (h.title ? h.title_en || "Hadith Commentary" : "Hadith Commentary"))
-                  : (h.title || "ഹദീസ് വിവരണം"))}
+              {isEnglish 
+                ? (h.title_en || (h.title ? h.title_en || "Hadith Commentary" : "Hadith Commentary"))
+                : (h.title || "ഹദീസ് വിവരണം")}
             </h3>
           </div>
-          <p className="cdr-ref-body-text" dir={isArabic ? "rtl" : "ltr"} style={isArabic ? { fontFamily: 'Amiri, Traditional Arabic, serif', fontSize: '1.18rem', lineHeight: '1.8' } : {}}>
-            {isArabic ? (h.hadith_ar || h.hadith || "") : (isEnglish ? (h.hadith_en || h.hadith) : h.hadith)}
+          <p className="cdr-ref-body-text">
+            {isEnglish ? (h.hadith_en || h.hadith) : h.hadith}
           </p>
-          {isArabic && (h.meaning_ar || (hIdx === 0 && dua.trans_ar)) && (
-            <div className="cdr-hadith-arabic-meaning" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px dashed rgba(255,255,255,0.15)' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--cdr-accent, #10B981)', display: 'block', marginBottom: '4px' }}>
-                المعنى والشرح:
-              </span>
-              <p style={{ margin: 0, fontFamily: 'Amiri, Traditional Arabic, serif', fontSize: '1.1rem', lineHeight: '1.7', color: 'inherit' }} dir="rtl">
-                {h.meaning_ar || dua.trans_ar}
-              </p>
-            </div>
-          )}
         </div>
       ))}
 
@@ -422,7 +409,6 @@ export default function CategoryDuaReader({
   const [view, setView] = useState(initialView);
   const lang = settings?.language || getStoredSettings().language || 'ml';
   const isEnglish = lang === 'en';
-  const isArabic = lang === 'ar';
   
   // Sticky Curved Bottom Audio Player State
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(false);

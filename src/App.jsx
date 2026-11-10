@@ -30,7 +30,14 @@ export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [favorites, setFavorites] = useState(() => getStoredFavorites());
   const [bookmarks, setBookmarks] = useState(() => getStoredBookmarks());
-  const [settings, setSettings] = useState(() => getStoredSettings());
+  const [settings, setSettings] = useState(() => {
+    const s = getStoredSettings();
+    if (s.language && s.language !== 'en' && s.language !== 'ml') {
+      s.language = 'ml';
+      saveStoredSettings(s);
+    }
+    return s;
+  });
   const [theme, setTheme] = useState(() => getStoredSettings().theme || 'light');
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
