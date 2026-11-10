@@ -30,7 +30,14 @@ export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [favorites, setFavorites] = useState(() => getStoredFavorites());
   const [bookmarks, setBookmarks] = useState(() => getStoredBookmarks());
-  const [settings, setSettings] = useState(() => getStoredSettings());
+  const [settings, setSettings] = useState(() => {
+    const s = getStoredSettings();
+    if (s.language && s.language !== 'en' && s.language !== 'ml') {
+      s.language = 'ml';
+      saveStoredSettings(s);
+    }
+    return s;
+  });
   const [theme, setTheme] = useState(() => getStoredSettings().theme || 'light');
   const [toast, setToast] = useState({ message: '', visible: false });
   const [audioState, setAudioState] = useState(audioService.getState());
@@ -182,13 +189,13 @@ export default function App() {
         const bId = typeof b === 'object' && b !== null ? String(b.id) : String(b);
         return bId !== targetId && (origId ? bId !== origId : true);
       });
-      showToast('ബുക്ക്മാർക്കിൽ നിന്ന് നീക്കം ചെയ്തു');
+      showToast(settings.language === 'en' ? 'Removed from bookmarks' : 'ബുക്ക്മാർക്കിൽ നിന്ന് നീക്കം ചെയ്തു');
     } else {
       updated = [targetId, ...bookmarks.filter(b => {
         const bId = typeof b === 'object' && b !== null ? String(b.id) : String(b);
         return bId !== targetId && (origId ? bId !== origId : true);
       })];
-      showToast('ബുക്ക്മാർക്കിൽ ചേർത്തു 🔖');
+      showToast(settings.language === 'en' ? 'Added to bookmarks 🔖' : 'ബുക്ക്മാർക്കിൽ ചേർത്തു 🔖');
       audioService.playChime(640, 0.04);
     }
     setBookmarks(updated);
@@ -204,7 +211,7 @@ export default function App() {
   // Toggle audio playback
   const handleTogglePlay = (dua) => {
     if (!dua.audioUrl) {
-      showToast('ഈ ദുആയ്ക്കുള്ള യഥാർത്ഥ സ്റ്റുഡിയോ ഓഡിയോ ഉടൻ ലഭ്യമാകും');
+      showToast(settings.language === 'en' ? 'Authentic studio audio coming soon for this Dua' : 'ഈ ദുആയ്ക്കുള്ള യഥാർത്ഥ സ്റ്റുഡിയോ ഓഡിയോ ഉടൻ ലഭ്യമാകും');
       return;
     }
     if (audioState.isPlaying && audioState.currentDuaId === dua.id) {
@@ -369,6 +376,7 @@ export default function App() {
                 onBackToHome={() => setSelectedDua(null)}
                 favorites={favorites}
                 onToggleFavorite={handleToggleFavorite}
+                settings={settings}
               />
             </div>
           );

@@ -286,38 +286,26 @@ export default function DuaDetailModal({
         </div>
 
         {/* Pronunciation Section: ഉച്ചാരണം (മലയാളത്തിൽ) */}
-        {dua.transliteration && (
+        {(dua.transliteration || dua.transli_en) && (
           <div className="ref-section-block">
             <h3 className="ref-section-title">
               {isEnglish ? "Pronunciation (Transliteration)" : "ഉച്ചാരണം (മലയാളത്തിൽ)"}
             </h3>
             <p className="ref-section-text ref-transliteration-text">
-              {dua.transliteration}
+              {isEnglish ? (dua.transli_en || dua.transliteration) : dua.transliteration}
             </p>
           </div>
         )}
 
-        {/* Malayalam Meaning Section: മലയാളം അർത്ഥം */}
+        {/* Meaning / Translation Section */}
         <div className="ref-section-block">
           <h3 className="ref-section-title">
-            {isEnglish ? "Malayalam Meaning" : "മലയാളം അർത്ഥം"}
+            {isEnglish ? "Translation" : "മലയാളം അർത്ഥം"}
           </h3>
           <p className="ref-section-text ref-meaning-ml-text">
-            {dua.meaningMl}
+            {isEnglish ? (dua.meaningEn || dua.trans_en || dua.meaningMl) : dua.meaningMl}
           </p>
         </div>
-
-        {/* English Translation Section */}
-        {dua.meaningEn && (
-          <div className="ref-section-block">
-            <h3 className="ref-section-title">
-              English Translation
-            </h3>
-            <p className="ref-section-text ref-meaning-en-text">
-              {dua.meaningEn}
-            </p>
-          </div>
-        )}
 
         {/* Hadith / Quran Reference Section: ഹദീസ് റഫറൻസ് */}
         <div className="ref-reference-card">
