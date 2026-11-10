@@ -107,16 +107,22 @@ export default function SettingsScreen({
             <div className="settings-icon-badge">
               <Languages size={20} />
             </div>
-            <div className="settings-item-text">
+            {/* <div className="settings-item-text">
               <h3 className="settings-item-title">Translation Language</h3>
               <p className="settings-item-sub">
                 Currently selected: {isEnglish ? 'English' : 'Malayalam'}
               </p>
-            </div>
+            </div> */}
+
+            <div className="settings-item-text disabled"> {/* disabled */}
+  <h3 className="settings-item-title">Translation Language</h3>
+  <p className="settings-item-sub">(Beta)</p>
+</div>
           </div>
+          
 
           <button 
-            className="settings-lang-select-btn" 
+            className="settings-lang-select-btn" // disabled 
             onClick={handleToggleLanguage}
             title="Change translation language"
             aria-label="Change translation language"
@@ -183,10 +189,9 @@ export default function SettingsScreen({
       <div className="settings-card">
         {/* Share App */}
         <div 
-          className="settings-item-row is-clickable"
-          onClick={handleShareApp}
-          role="button"
-          tabIndex={0}
+          className="settings-item-row disabled"
+          style={{ opacity: 0.5, pointerEvents: 'none', cursor: 'not-allowed' }}
+          aria-disabled="true"
         >
           <div className="settings-item-left">
             <div className="settings-icon-badge">
@@ -194,6 +199,7 @@ export default function SettingsScreen({
             </div>
             <div className="settings-item-text">
               <h3 className="settings-item-title">Share App</h3>
+               <p className="settings-item-sub">(Beta)</p>
             </div>
           </div>
           <ChevronRight size={18} className="settings-chevron" />
@@ -203,10 +209,9 @@ export default function SettingsScreen({
 
         {/* Rate Us on Play Store */}
         <div 
-          className="settings-item-row is-clickable"
-          onClick={handleRateApp}
-          role="button"
-          tabIndex={0}
+          className="settings-item-row disabled"
+          style={{ opacity: 0.5, pointerEvents: 'none', cursor: 'not-allowed' }}
+          aria-disabled="true"
         >
           <div className="settings-item-left">
             <div className="settings-icon-badge">
@@ -214,6 +219,8 @@ export default function SettingsScreen({
             </div>
             <div className="settings-item-text">
               <h3 className="settings-item-title">Rate Us on Play Store</h3>
+               <p className="settings-item-sub">(Beta)</p>
+
             </div>
           </div>
           <ChevronRight size={18} className="settings-chevron" />
@@ -241,7 +248,7 @@ export default function SettingsScreen({
       </div>
 
       {/* 5. Version Info */}
-      <p className="settings-version-text">Burooj 4 Tech Version 2.0.1</p>
+      <p className="settings-version-text">Munajat Version 2.0.1</p>
 
       {/* About App Dialog Modal */}
       {showAboutModal && (

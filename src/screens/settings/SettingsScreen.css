@@ -154,6 +154,17 @@
 [data-theme="dark"] .settings-item-title {
   color: #F8FAFC;
 }
+.settings-item-row.disabled,
+.settings-item-text.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.settings-lang-select-btn{
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 
 .settings-item-sub {
   font-size: 12px;
