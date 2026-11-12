@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Moon } from 'lucide-react';
 
 export default function SplashScreen({ onFinish }) {
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    // Show splash screen for 2.6s, then smoothly transition into app
+    // Show splash screen for 2.8s, then smoothly transition into app
     const dismissTimer = setTimeout(() => {
       handleDismiss();
-    }, 2600);
+    }, 2300);
 
     return () => {
       clearTimeout(dismissTimer);
@@ -26,15 +25,168 @@ export default function SplashScreen({ onFinish }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Amiri:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
         
         .font-sans { font-family: 'Outfit', sans-serif; }
         .font-arabic { font-family: 'Amiri', serif; }
         
+        /* 1. Arch Draw Animation (Smooth SVG stroke-dash animated entry of golden arch dome) */
+        @keyframes draw-arch-stroke {
+          0% {
+            stroke-dashoffset: 600;
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          100% {
+            stroke-dashoffset: 0;
+            opacity: 1;
+          }
+        }
+
+        .splash-arch-stroke-left,
+        .splash-arch-stroke-right {
+          stroke-dasharray: 600;
+          stroke-dashoffset: 600;
+          animation: draw-arch-stroke 1.1s cubic-bezier(0.35, 0, 0.25, 1) 0.15s forwards;
+        }
+
+        /* Arch texture layer smooth fade-in */
+        @keyframes arch-texture-fade {
+          0% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+            filter: drop-shadow(0 0 8px rgba(231, 176, 76, 0.45));
+          }
+        }
+
+        .splash-arch-img {
+          opacity: 0;
+          animation: arch-texture-fade 0.8s ease-out 0.85s forwards;
+        }
+
+        /* 2. Calligraphy Fade-In (Scale & opacity entrance for central Arabic calligraphy) */
+        @keyframes calligraphy-entrance {
+          0% {
+            opacity: 0;
+            transform: scale(0.92);
+            filter: blur(5px);
+          }
+          60% {
+            filter: blur(0px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0px);
+          }
+        }
+
+        .splash-calligraphy-img {
+          opacity: 0;
+          transform: scale(0.92);
+          animation: calligraphy-entrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+        }
+
+        /* 3. Bottom Diamond Pop (Pulsing gold star/diamond accent entrance) */
+        @keyframes diamond-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0);
+          }
+          65% {
+            opacity: 1;
+            transform: scale(1.35);
+            filter: drop-shadow(0 0 16px rgba(231, 176, 76, 0.95));
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+            filter: drop-shadow(0 0 6px rgba(231, 176, 76, 0.6));
+          }
+        }
+
+        @keyframes diamond-pulse {
+          0%, 100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 5px rgba(231, 176, 76, 0.55));
+          }
+          50% {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 12px rgba(231, 176, 76, 0.9));
+          }
+        }
+
+        .splash-diamond-img {
+          opacity: 0;
+          transform: scale(0);
+          animation: diamond-pop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 1.35s forwards,
+                     diamond-pulse 2.2s ease-in-out 2.0s infinite;
+        }
+
+        /* Title text fade */
+        @keyframes title-fade-in {
+          0% {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .splash-title-text {
+          opacity: 0;
+          animation: title-fade-in 0.7s ease-out 1.1s forwards;
+        }
+
+        /* 4. Bottom Branding & Loading UX Animations */
+        @keyframes branding-fade-in {
+          0% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .splash-branding-wrap {
+          opacity: 0;
+          animation: branding-fade-in 0.8s ease-out 1.25s forwards;
+        }
+
+        @keyframes loading-progress {
+          0% {
+            width: 0%;
+          }
+          25% {
+            width: 35%;
+          }
+          70% {
+            width: 82%;
+          }
+          100% {
+            width: 100%;
+          }
+        }
+
+        .splash-loading-fill {
+          animation: loading-progress 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+        }
+
         /* Sweeping Glare Animation */
         @keyframes sweep-glare {
           0% { transform: translateX(-150%) skewX(-20deg); }
-          20% { transform: translateX(250%) skewX(-20deg); }
+          25% { transform: translateX(250%) skewX(-20deg); }
           100% { transform: translateX(250%) skewX(-20deg); }
         }
         
@@ -43,42 +195,21 @@ export default function SplashScreen({ onFinish }) {
           background: linear-gradient(
             90deg, 
             rgba(255, 255, 255, 0) 0%, 
-            rgba(255, 255, 255, 0.7) 50%, 
+            rgba(255, 255, 255, 0.65) 50%, 
             rgba(255, 255, 255, 0) 100%
           );
-        }
-
-        /* Concentric Pulsing Rings */
-        @keyframes pulse-ring {
-          0% { transform: scale(0.6); opacity: 1; }
-          100% { transform: scale(1.8); opacity: 0; }
-        }
-        
-        .ring-1 {
-          animation: pulse-ring 3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-        .ring-2 {
-          animation: pulse-ring 3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite 1.5s;
-        }
-
-        /* Gentle Float for the core icon */
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
-        }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
         }
 
         /* Background Orb Pulse */
         @keyframes orb-pulse-slow {
           0%, 100% { opacity: 0.5; transform: scale(1); }
-          50% { opacity: 0.75; transform: scale(1.06); }
+          50% { opacity: 0.75; transform: scale(1.08); }
         }
         .animate-pulse-slow {
           animation: orb-pulse-slow 6s ease-in-out infinite;
         }
 
+        /* Full Overlay Dismiss Transition */
         .splash-overlay {
           position: fixed;
           inset: 0;
@@ -88,7 +219,7 @@ export default function SplashScreen({ onFinish }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: #f8fafc;
+          background-color: #FAF9F4;
           overflow: hidden;
           transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), 
                       transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -105,23 +236,23 @@ export default function SplashScreen({ onFinish }) {
         }
       `}</style>
 
-      {/* Main Container - Soft off-white background */}
+      {/* Main Container */}
       <div 
-        className={`splash-overlay relative min-h-screen flex items-center justify-center bg-[#f8fafc] overflow-hidden font-sans ${isFadingOut ? 'fade-out' : ''}`}
+        className={`splash-overlay relative min-h-screen flex items-center justify-center overflow-hidden font-sans ${isFadingOut ? 'fade-out' : ''}`}
         onClick={handleDismiss}
         role="banner"
         aria-label="Munajat App Splash Screen"
       >
-        {/* Background Glowing Orbs for Distortion & Depth */}
+        {/* Background Glowing Ambient Orbs */}
         <div 
           className="animate-pulse-slow"
           style={{
             position: 'absolute',
-            top: 0,
-            left: '-25%',
-            width: '500px',
-            height: '500px',
-            backgroundColor: 'rgba(167, 243, 208, 0.5)', // emerald-200/50
+            top: '-10%',
+            left: '-15%',
+            width: '520px',
+            height: '520px',
+            backgroundColor: 'rgba(167, 243, 208, 0.45)', // emerald-200
             borderRadius: '50%',
             mixBlendMode: 'multiply',
             filter: 'blur(120px)',
@@ -132,37 +263,36 @@ export default function SplashScreen({ onFinish }) {
           className="animate-pulse-slow"
           style={{
             position: 'absolute',
-            bottom: 0,
-            right: '-25%',
-            width: '600px',
-            height: '600px',
-            backgroundColor: 'rgba(153, 246, 228, 0.4)', // teal-200/40
+            bottom: '-10%',
+            right: '-15%',
+            width: '560px',
+            height: '560px',
+            backgroundColor: 'rgba(254, 240, 138, 0.35)', // gold-yellow-200
             borderRadius: '50%',
             mixBlendMode: 'multiply',
-            filter: 'blur(150px)',
-            animationDelay: '1s',
+            filter: 'blur(130px)',
+            animationDelay: '1.2s',
             pointerEvents: 'none'
           }}
         />
         
         {/* Central Glassmorphic Card */}
         <div 
-          className="relative z-10 w-full max-w-[340px] px-8 py-16 flex flex-col items-center justify-center bg-white/40 backdrop-blur-2xl border border-white/60 shadow-xl rounded-[2.5rem] overflow-hidden"
           style={{
             position: 'relative',
             zIndex: 10,
             width: '100%',
-            maxWidth: '340px',
-            padding: '64px 32px',
+            maxWidth: '360px',
+            padding: '48px 28px 40px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.4)',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            border: '1px solid rgba(255, 255, 255, 0.6)',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03)',
+            backgroundColor: 'rgba(255, 255, 255, 0.55)',
+            backdropFilter: 'blur(28px)',
+            WebkitBackdropFilter: 'blur(28px)',
+            border: '1.5px solid rgba(255, 255, 255, 0.75)',
+            boxShadow: '0 25px 45px -10px rgba(15, 65, 40, 0.08), 0 10px 15px -5px rgba(0, 0, 0, 0.02)',
             borderRadius: '2.5rem',
             overflow: 'hidden',
             boxSizing: 'border-box',
@@ -176,16 +306,15 @@ export default function SplashScreen({ onFinish }) {
               position: 'absolute',
               top: 0,
               left: 0,
-              width: '75%',
+              width: '80%',
               height: '100%',
               zIndex: 0,
               pointerEvents: 'none'
             }}
           />
 
-          {/* Content Wrapper (Above Glare) */}
+          {/* Content Wrapper */}
           <div 
-            className="relative z-10 flex flex-col items-center w-full"
             style={{
               position: 'relative',
               zIndex: 10,
@@ -195,135 +324,210 @@ export default function SplashScreen({ onFinish }) {
               width: '100%'
             }}
           >
-            {/* Logo Area with Concentric Rings */}
+            {/* Animated Logo Stage (Arch Draw + Calligraphy Fade-In + Diamond Pop) */}
             <div 
               style={{
                 position: 'relative',
-                width: '128px',
-                height: '128px',
+                width: '260px',
+                height: '260px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: '40px'
+                marginBottom: '10px'
               }}
             >
-              {/* Outer pulsing rings */}
-              <div 
-                className="ring-1"
+              {/* 1. Animated SVG Stroke-Dash Golden Arch */}
+              <svg 
+                viewBox="0 0 1024 1024"
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
-                  pointerEvents: 'none'
-                }}
-              />
-              <div 
-                className="ring-2"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
-                  pointerEvents: 'none'
-                }}
-              />
-              
-              {/* Inner floating logo box */}
-              <div 
-                className="animate-float"
-                style={{
-                  position: 'relative',
-                  zIndex: 10,
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                  border: '1px solid #FFFFFF',
-                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)'
+                  width: '100%',
+                  height: '100%',
+                  pointerEvents: 'none',
+                  zIndex: 4
                 }}
               >
-                <Moon 
-                  className="w-8 h-8 text-emerald-600" 
-                  size={32}
-                  strokeWidth={1.5} 
-                  style={{ color: '#059669' }}
+                <defs>
+                  <linearGradient id="goldArchGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#C59B27" />
+                    <stop offset="45%" stopColor="#F5D77F" />
+                    <stop offset="100%" stopColor="#E7B04C" />
+                  </linearGradient>
+                </defs>
+                {/* Left Pillar & Arch Dome Curve */}
+                <path 
+                  d="M 310 560 L 310 294 C 310 180 410 90 515 84" 
+                  fill="none" 
+                  stroke="url(#goldArchGradient)" 
+                  strokeWidth="7" 
+                  strokeLinecap="round" 
+                  className="splash-arch-stroke-left"
                 />
-              </div>
+                {/* Right Pillar & Arch Dome Curve */}
+                <path 
+                  d="M 714 560 L 714 294 C 714 180 620 90 515 84" 
+                  fill="none" 
+                  stroke="url(#goldArchGradient)" 
+                  strokeWidth="7" 
+                  strokeLinecap="round" 
+                  className="splash-arch-stroke-right"
+                />
+              </svg>
+
+              {/* Arch Layer Texture (Authentic golden dome texture reveal) */}
+              <img 
+                src="/splash_layer_arch.png"
+                alt="Munajat Arch"
+                className="splash-arch-img"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                  zIndex: 3
+                }}
+              />
+
+              {/* 2. Arabic Calligraphy Layer (Elegant scale and opacity entrance) */}
+              <img 
+                src="/splash_layer_calligraphy.png"
+                alt="Munajat Calligraphy"
+                className="splash-calligraphy-img"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                  zIndex: 2,
+                  filter: 'drop-shadow(0 2px 8px rgba(15, 65, 40, 0.12))'
+                }}
+              />
+
+              {/* 3. Bottom Diamond Layer (Pulsing gold star/diamond accent entrance) */}
+              <img 
+                src="/splash_layer_diamond.png"
+                alt="Golden Diamond Star"
+                className="splash-diamond-img"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                  zIndex: 5
+                }}
+              />
             </div>
 
-            {/* Typography */}
-            <h1 
-              className="font-arabic text-7xl font-bold text-emerald-900 mb-3 tracking-wide drop-shadow-sm"
-              style={{
-                fontFamily: "'Amiri', serif",
-                fontSize: '4.5rem',
-                fontWeight: 700,
-                color: '#064E3B', // emerald-900
-                marginBottom: '12px',
-                letterSpacing: '0.025em',
-                filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05))',
-                lineHeight: 1.1,
-                textAlign: 'center'
-              }}
-            >
-              مناجاة
-            </h1>
-            <p 
-              className="text-[11px] font-bold tracking-[0.4em] text-emerald-700/80 mb-14 uppercase"
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.4em',
-                color: 'rgba(4, 120, 87, 0.8)', // emerald-700/80
-                marginBottom: '56px',
-                textTransform: 'uppercase',
-                textAlign: 'center'
-              }}
-            >
-              Munajat
-            </p>
-
-            {/* Burooj 4 Tech Glass Pill */}
-            <div 
-              style={{
-                marginTop: '16px',
-                padding: '10px 24px',
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255, 255, 255, 0.6)',
-                borderRadius: '9999px',
-                boxShadow: 'inset 0 1px 5px rgba(255, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.04)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <span 
-                className="text-[10px] font-bold tracking-[0.2em] text-emerald-800 uppercase"
+            {/* App Subtitle Typography
+            <div className="splash-title-text" style={{ textAlign: 'center', marginBottom: '32px' }}>
+              <p 
                 style={{
-                  fontSize: '10px',
+                  fontSize: '12px',
                   fontWeight: 700,
-                  letterSpacing: '0.2em',
-                  color: '#065F46', // emerald-800
+                  letterSpacing: '0.45em',
+                  color: '#047857', // emerald-700
+                  margin: '0',
                   textTransform: 'uppercase',
-                  whiteSpace: 'nowrap'
+                  paddingLeft: '0.45em' // compensate for wide letter-spacing
                 }}
               >
-                Burooj 4 Tech
-              </span>
+                MUNAJAT
+              </p>
+              <p
+                style={{
+                  fontSize: '10.5px',
+                  fontWeight: 500,
+                  color: '#065F46',
+                  opacity: 0.75,
+                  letterSpacing: '0.08em',
+                  margin: '4px 0 0 0'
+                }}
+              >
+                Daily Duas & Supplications
+              </p>
+            </div> */}
+
+            {/* 4. Bottom Branding & Loading UX */}
+            <div 
+              className="splash-branding-wrap"
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '14px'
+              }}
+            >
+              {/* Developer Branding: Clean, premium typography displaying Burooj 4 Tech */}
+              <div 
+                style={{
+                  padding: '7px 20px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255, 255, 255, 0.85)',
+                  borderRadius: '9999px',
+                  boxShadow: '0 2px 8px rgba(15, 65, 40, 0.05), inset 0 1px 2px rgba(255, 255, 255, 0.8)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <span 
+                  style={{
+                    fontSize: '8.5px',
+                    fontWeight: 600,
+                    letterSpacing: '0.18em',
+                    color: '#6B7280',
+                    textTransform: 'uppercase'
+                  }}
+                >
+               
+                </span>
+                <span 
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: 800,
+                    letterSpacing: '0.12em',
+                    color: '#0F5132',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Burooj 4 Tech
+                </span>
+              </div>
+
+              {/* Loading UX: Sleek minimal progress track */}
+              {/* <div 
+                style={{
+                  width: '110px',
+                  height: '3px',
+                  backgroundColor: 'rgba(15, 65, 40, 0.08)',
+                  borderRadius: '9999px',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+              >
+                <div 
+                  className="splash-loading-fill"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    background: 'linear-gradient(90deg, #059669 0%, #D9A74A 100%)',
+                    borderRadius: '9999px',
+                    width: '0%'
+                  }}
+                />
+              </div> */}
             </div>
             
           </div>
