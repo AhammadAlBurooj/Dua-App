@@ -33,7 +33,7 @@ export default function SplashScreen({ onFinish }) {
         /* 1. Arch Draw Animation (Smooth SVG stroke-dash animated entry of golden arch dome) */
         @keyframes draw-arch-stroke {
           0% {
-            stroke-dashoffset: 450;
+            stroke-dashoffset: 600;
             opacity: 0;
           }
           10% {
@@ -47,8 +47,8 @@ export default function SplashScreen({ onFinish }) {
 
         .splash-arch-stroke-left,
         .splash-arch-stroke-right {
-          stroke-dasharray: 450;
-          stroke-dashoffset: 450;
+          stroke-dasharray: 600;
+          stroke-dashoffset: 600;
           animation: draw-arch-stroke 1.1s cubic-bezier(0.35, 0, 0.25, 1) 0.15s forwards;
         }
 
@@ -357,19 +357,19 @@ export default function SplashScreen({ onFinish }) {
                 </defs>
                 {/* Left Pillar & Arch Dome Curve */}
                 <path 
-                  d="M 376 415 L 376 224 C 376 160 440 94 512 84" 
+                  d="M 310 560 L 310 294 C 310 180 410 90 515 84" 
                   fill="none" 
                   stroke="url(#goldArchGradient)" 
-                  strokeWidth="5" 
+                  strokeWidth="7" 
                   strokeLinecap="round" 
                   className="splash-arch-stroke-left"
                 />
                 {/* Right Pillar & Arch Dome Curve */}
                 <path 
-                  d="M 646 390 L 646 224 C 646 160 584 94 512 84" 
+                  d="M 714 560 L 714 294 C 714 180 620 90 515 84" 
                   fill="none" 
                   stroke="url(#goldArchGradient)" 
-                  strokeWidth="5" 
+                  strokeWidth="7" 
                   strokeLinecap="round" 
                   className="splash-arch-stroke-right"
                 />
