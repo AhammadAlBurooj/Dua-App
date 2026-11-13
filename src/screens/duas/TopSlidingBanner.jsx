@@ -91,6 +91,45 @@ export default function TopSlidingBanner({
     }
   };
 
+  // Smooth scroll listener for animated Munajat header transformation
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const scrollContainer = document.getElementById('main-content') || window;
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = scrollContainer === window 
+            ? window.scrollY 
+            : (scrollContainer.scrollTop || 0);
+          // Transition completes smoothly between 0px and 85px of scroll
+          const p = Math.min(1, Math.max(0, scrollY / 85));
+          setScrollProgress(p);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleHeaderClick = () => {
+    if (scrollProgress > 0.25) {
+      const scrollContainer = document.getElementById('main-content');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <div className="top-sliding-banner-container font-sans">
       {/* 1. Scenic Background Image matching top banner area */}
@@ -103,15 +142,34 @@ export default function TopSlidingBanner({
         <div className="top-banner-green-overlay" />
       </div>
 
-      {/* 2. Top Banner Content Area */}
-      <div className="top-banner-content-wrap">
-        {/* Glassmorphic Top Bar with Mosque Logo & Brand Name */}
-        <div className="top-banner-glass-bar">
-          <svg className="top-banner-logo-svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C12 2 14 5 14 7C14 8.1 13.1 9 12 9C10.9 9 10 8.1 10 7C10 5 12 2 12 2ZM9 10H15V13H9V10ZM4 14H20V22H15V17C15 15.34 13.66 14 12 14C10.34 14 9 15.34 9 17V22H4V14ZM4 11V13H2V22H4V11ZM22 11V13H20V22H22V11Z" />
-          </svg>
-          <span className="top-banner-brand-arabic">مناجاة</span>
+      {/* 2. Scroll-Responsive Animated Sticky Munajat Header */}
+      <header 
+        className={`munajat-sticky-header ${scrollProgress >= 0.85 ? 'is-sticky' : ''}`}
+        style={{
+          '--sp': scrollProgress
+        }}
+        onClick={handleHeaderClick}
+        role="banner"
+        aria-label="Munajat Header"
+      >
+        <div className="munajat-header-branding">
+          <div className="munajat-logo-wrap">
+            <img 
+              src="/munajat_logo.png" 
+              alt="Munajat Logo" 
+              className="munajat-header-logo"
+            />
+          </div>
+          <span className="munajat-header-title">
+            Munajat
+          </span>
         </div>
+      </header>
+
+      {/* 3. Top Banner Content Area */}
+      <div className="top-banner-content-wrap">
+        {/* Placeholder reserving layout space for the prominent initial header */}
+        <div className="munajat-header-placeholder" />
 
         {/* Carousel Container */}
         <div 
