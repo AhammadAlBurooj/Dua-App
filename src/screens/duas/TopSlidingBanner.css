@@ -101,7 +101,7 @@
   width: 100%;
   max-width: var(--app-max-width, 440px);
   margin: 0 auto;
-  height: calc(100px - (46px * var(--sp, 0)) + env(safe-area-inset-top, 0px));
+  height: calc(96px - (50px * var(--sp, 0)) + env(safe-area-inset-top, 0px));
   padding-top: env(safe-area-inset-top, 0px);
   display: flex;
   align-items: center;
@@ -109,11 +109,11 @@
   z-index: 50;
   pointer-events: none;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, calc(0.85 * var(--sp, 0)));
+  background: rgba(255, 255, 255, calc(0.92 * var(--sp, 0)));
   backdrop-filter: blur(calc(16px * var(--sp, 0)));
   -webkit-backdrop-filter: blur(calc(16px * var(--sp, 0)));
   border-bottom: 1px solid rgba(15, 65, 40, calc(0.12 * var(--sp, 0)));
-  box-shadow: 0 4px 20px rgba(0, 0, 0, calc(0.08 * var(--sp, 0)));
+  box-shadow: 0 4px 18px rgba(0, 0, 0, calc(0.08 * var(--sp, 0)));
   transition: background 0.08s linear, border-color 0.08s linear, box-shadow 0.08s linear;
 }
 
@@ -138,7 +138,7 @@
   top: 50%;
   left: 50%;
   transform: translate(
-    calc(-50% - (34px * var(--sp, 0))),
+    calc(-50% - (33px * var(--sp, 0))),
     calc(-50% - (13px * (1 - var(--sp, 0))))
   );
   display: flex;
@@ -148,7 +148,7 @@
 }
 
 .munajat-header-logo {
-  height: calc(60px - (32px * var(--sp, 0)));
+  height: calc(58px - (32px * var(--sp, 0)));
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 6px rgba(15, 65, 40, calc(0.24 * (1 - var(--sp, 0)) + 0.08 * var(--sp, 0))));
@@ -162,11 +162,11 @@
   left: 50%;
   transform: translate(
     calc(-50% + (14px * var(--sp, 0))),
-    calc(-50% + (28px * (1 - var(--sp, 0))))
+    calc(-50% + (27px * (1 - var(--sp, 0))))
   );
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
-  font-size: calc(19px - (5px * var(--sp, 0)));
+  font-size: calc(18.5px - (5px * var(--sp, 0)));
   letter-spacing: calc(0.05em - (0.015em * var(--sp, 0)));
   color: #0f4128;
   line-height: 1;
@@ -175,17 +175,17 @@
   will-change: transform;
 }
 
-/* Layout placeholder reserving space on initial load */
+/* Layout placeholder reserving space on initial load with proper clearance below sticky header */
 .munajat-header-placeholder {
-  height: 96px;
-  margin-bottom: 16px;
+  height: calc(108px + env(safe-area-inset-top, 0px));
+  margin-bottom: 22px;
   width: 100%;
   pointer-events: none;
 }
 
 /* Dark Theme Munajat Header */
 [data-theme='dark'] .munajat-sticky-header {
-  background: rgba(11, 21, 17, calc(0.88 * var(--sp, 0)));
+  background: rgba(11, 21, 17, calc(0.92 * var(--sp, 0)));
   border-bottom: 1px solid rgba(255, 255, 255, calc(0.08 * var(--sp, 0)));
   box-shadow: 0 4px 20px rgba(0, 0, 0, calc(0.35 * var(--sp, 0)));
 }
@@ -202,29 +202,29 @@
 /* Compact Mobile Screens (360px - 380px) */
 @media (max-width: 380px) {
   .munajat-sticky-header {
-    height: calc(94px - (42px * var(--sp, 0)) + env(safe-area-inset-top, 0px));
+    height: calc(90px - (46px * var(--sp, 0)) + env(safe-area-inset-top, 0px));
   }
   .munajat-header-logo {
-    height: calc(54px - (28px * var(--sp, 0)));
+    height: calc(52px - (28px * var(--sp, 0)));
   }
   .munajat-header-title {
-    font-size: calc(17.5px - (4.5px * var(--sp, 0)));
+    font-size: calc(17px - (4.5px * var(--sp, 0)));
   }
   .munajat-logo-wrap {
     transform: translate(
-      calc(-50% - (31px * var(--sp, 0))),
+      calc(-50% - (30px * var(--sp, 0))),
       calc(-50% - (12px * (1 - var(--sp, 0))))
     );
   }
   .munajat-header-title {
     transform: translate(
       calc(-50% + (12px * var(--sp, 0))),
-      calc(-50% + (26px * (1 - var(--sp, 0))))
+      calc(-50% + (25px * (1 - var(--sp, 0))))
     );
   }
   .munajat-header-placeholder {
-    height: 90px;
-    margin-bottom: 14px;
+    height: calc(100px + env(safe-area-inset-top, 0px));
+    margin-bottom: 18px;
   }
 }
 

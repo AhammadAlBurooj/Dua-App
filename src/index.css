@@ -306,6 +306,7 @@ html, body {
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
+  scroll-padding-top: calc(48px + env(safe-area-inset-top, 0px));
 }
 
 /* Custom Scrollbar */

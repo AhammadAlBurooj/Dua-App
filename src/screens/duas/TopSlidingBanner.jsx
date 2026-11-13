@@ -104,8 +104,8 @@ export default function TopSlidingBanner({
           const scrollY = scrollContainer === window 
             ? window.scrollY 
             : (scrollContainer.scrollTop || 0);
-          // Transition completes smoothly between 0px and 85px of scroll
-          const p = Math.min(1, Math.max(0, scrollY / 85));
+          // Transition completes smoothly between 0px and 95px of scroll
+          const p = Math.min(1, Math.max(0, scrollY / 95));
           setScrollProgress(p);
           ticking = false;
         });
