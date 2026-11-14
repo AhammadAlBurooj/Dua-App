@@ -13,7 +13,13 @@ export default function TopSlidingBanner({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
   const touchEndX = useRef(0);
+  const touchStartTime = useRef(0);
+  const isDragging = useRef(false);
+  const lastSwipeTime = useRef(0);
+  const lastActionTime = useRef(0);
+  const autoPlayResumeTimer = useRef(null);
 
   const lang = settings?.language || 'ml';
   const isEnglish = lang === 'en';
@@ -57,6 +63,16 @@ export default function TopSlidingBanner({
     }
   ];
 
+  // Helper to safely schedule auto-play resume after user interaction
+  const scheduleAutoPlayResume = (delayMs = 4000) => {
+    if (autoPlayResumeTimer.current) {
+      clearTimeout(autoPlayResumeTimer.current);
+    }
+    autoPlayResumeTimer.current = setTimeout(() => {
+      setIsPaused(false);
+    }, delayMs);
+  };
+
   // Auto-play functionality (every 3.5 seconds)
   useEffect(() => {
     if (isPaused) return;
@@ -67,20 +83,67 @@ export default function TopSlidingBanner({
     return () => clearInterval(timer);
   }, [isPaused, slides.length]);
 
-  // Touch handlers for smooth swiping on mobile
+  // Clean up autoPlayResumeTimer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoPlayResumeTimer.current) {
+        clearTimeout(autoPlayResumeTimer.current);
+      }
+    };
+  }, []);
+
+  // Centralized safe action trigger with debounce to eliminate duplicate calls
+  const triggerSlideAction = (slide) => {
+    if (!slide || !slide.action) return;
+    const now = Date.now();
+    if (now - lastActionTime.current < 400) {
+      return;
+    }
+    lastActionTime.current = now;
+    slide.action();
+  };
+
+  // Touch handlers with drag threshold to cleanly separate swipe from click
   const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
+    if (!e.touches || !e.touches[0]) return;
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    touchStartX.current = x;
+    touchStartY.current = y;
+    touchEndX.current = x; // Reset to start pos so zero delta if no move occurs
+    touchStartTime.current = Date.now();
+    isDragging.current = false;
+
+    // Immediately pause auto-play on touch
     setIsPaused(true);
+    if (autoPlayResumeTimer.current) {
+      clearTimeout(autoPlayResumeTimer.current);
+    }
   };
 
   const handleTouchMove = (e) => {
+    if (!e.touches || !e.touches[0]) return;
     touchEndX.current = e.touches[0].clientX;
+    const deltaX = Math.abs(touchEndX.current - touchStartX.current);
+    const deltaY = Math.abs(e.touches[0].clientY - touchStartY.current);
+
+    // If movement exceeds 12px, mark as dragging so clicks don't misfire during an intentional swipe
+    if (deltaX > 12 || deltaY > 12) {
+      isDragging.current = true;
+    }
   };
 
-  const handleTouchEnd = () => {
-    setIsPaused(false);
-    const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 40) {
+  const handleTouchEnd = (e) => {
+    const endX = touchEndX.current || touchStartX.current;
+    const diff = touchStartX.current - endX;
+    const endY = e.changedTouches?.[0]?.clientY ?? touchStartY.current;
+    const diffY = Math.abs((touchStartY.current || 0) - endY);
+    const elapsed = Date.now() - (touchStartTime.current || 0);
+
+    // Genuine horizontal swipe: threshold > 35px and more horizontal than vertical
+    if (Math.abs(diff) > 35 && Math.abs(diff) > diffY) {
+      lastSwipeTime.current = Date.now();
+      isDragging.current = true;
       if (diff > 0) {
         // Swipe left -> next
         setCurrentIndex((prev) => (prev + 1) % slides.length);
@@ -88,7 +151,47 @@ export default function TopSlidingBanner({
         // Swipe right -> prev
         setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
       }
+    } else if (Math.abs(diff) <= 12 && diffY <= 12 && elapsed < 350 && !isDragging.current) {
+      // Immediate response on the first tap: execute action instantly without waiting for synthetic click
+      const slideEl = e.target?.closest?.('[data-slide-index]');
+      const tappedIdx = slideEl ? parseInt(slideEl.getAttribute('data-slide-index'), 10) : currentIndex;
+      const targetSlide = slides[tappedIdx] || slides[currentIndex];
+      if (targetSlide) {
+        triggerSlideAction(targetSlide);
+      }
     }
+
+    // Reset touch coordinates so subsequent quick taps never inherit stale drag values
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+    touchStartY.current = 0;
+
+    // Reset dragging flag after a brief delay
+    setTimeout(() => {
+      isDragging.current = false;
+    }, 150);
+
+    // Resume auto-play only after a calm delay (4 seconds)
+    scheduleAutoPlayResume(4000);
+  };
+
+  // Safe click handler that triggers for desktop clicks or browser synthetic clicks
+  const handleCardClick = (e, slide) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Suppress clicks that occur during or immediately following a drag/swipe gesture
+    if (Date.now() - lastSwipeTime.current < 400 || isDragging.current) {
+      return;
+    }
+    triggerSlideAction(slide);
+  };
+
+  const handleDotClick = (index) => {
+    setCurrentIndex(index);
+    setIsPaused(true);
+    scheduleAutoPlayResume(4000);
   };
 
   // Smooth scroll listener for animated Munajat header transformation
@@ -174,8 +277,11 @@ export default function TopSlidingBanner({
         {/* Carousel Container */}
         <div 
           className="top-banner-carousel-wrap"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          onMouseEnter={() => {
+            setIsPaused(true);
+            if (autoPlayResumeTimer.current) clearTimeout(autoPlayResumeTimer.current);
+          }}
+          onMouseLeave={() => scheduleAutoPlayResume(2000)}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -185,12 +291,12 @@ export default function TopSlidingBanner({
             className="top-banner-carousel-track"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {slides.map((slide) => (
-              <div key={slide.id} className="top-banner-carousel-slide">
+            {slides.map((slide, index) => (
+              <div key={slide.id} className="top-banner-carousel-slide" data-slide-index={index}>
                 {/* Glassmorphic Card - Curved Type with Glass Shine */}
                 <div 
                   className="glass-shine top-banner-card"
-                  onClick={slide.action}
+                  onClick={(e) => handleCardClick(e, slide)}
                   role="button"
                   tabIndex={0}
                   aria-label={slide.title}
@@ -233,7 +339,7 @@ export default function TopSlidingBanner({
                     className={`top-banner-action-btn ${slide.buttonClass}`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      slide.action?.();
+                      handleCardClick(e, slide);
                     }}
                   >
                     <span>{isEnglish ? 'Explore Now!' : 'കാണുക'}</span>
@@ -252,7 +358,7 @@ export default function TopSlidingBanner({
           {slides.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => handleDotClick(index)}
               className={`top-banner-dot ${index === currentIndex ? 'active' : 'inactive'}`}
               aria-label={`Go to slide ${index + 1}`}
               role="tab"
