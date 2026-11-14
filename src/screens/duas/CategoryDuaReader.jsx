@@ -31,6 +31,7 @@ import {
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import { translateCategory, translateSubcategory, translateHint } from '../../utils/translations';
 import { getStoredSettings } from '../../utils/storage';
+import { Share } from '@capacitor/share';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
@@ -127,16 +128,34 @@ const DuaMultiCard = ({
   };
 
   const handleShare = async () => {
-    const textParts = [dua.dua, isEnglish ? (dua.trans_en || dua.trans) : dua.trans, dua.ref].filter(Boolean);
+    const textParts = [
+      dua.dua,
+      isEnglish ? (dua.trans_en || dua.trans) : dua.trans,
+      dua.ref ? `(${dua.ref})` : null
+    ].filter(Boolean);
     const text = textParts.join('\n\n');
+
+    try {
+      await Share.share({
+        title: 'Munajat - Dua',
+        text,
+        dialogTitle: 'Share'
+      });
+      return;
+    } catch (err) {
+      if (err && (err.name === 'AbortError' || String(err).toLowerCase().includes('cancel'))) {
+        return;
+      }
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${duaNumber || dua.id}`,
+          title: 'Munajat - Dua',
           text
         });
       } catch {
-        // Ignored
+        // Ignored or cancelled
       }
     } else {
       handleCopy();

@@ -13,6 +13,7 @@ import {
   Check,
   ArrowLeft
 } from 'lucide-react';
+import { Share } from '@capacitor/share';
 import './FavoritesScreen.css';
 
 /**
@@ -217,10 +218,23 @@ export default function FavoritesScreen({
 
     const shareText = parts.join('\n\n');
 
+    try {
+      await Share.share({
+        title: dua.titleMl || dua.titleEn || 'Munajat - Dua',
+        text: shareText,
+        dialogTitle: 'Share'
+      });
+      return;
+    } catch (err) {
+      if (err && (err.name === 'AbortError' || String(err).toLowerCase().includes('cancel'))) {
+        return;
+      }
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: dua.titleMl || dua.titleEn || 'Dua',
+          title: dua.titleMl || dua.titleEn || 'Munajat - Dua',
           text: shareText
         });
       } catch {
