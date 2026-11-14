@@ -8,6 +8,7 @@ export default function TopSlidingBanner({
   onOpenAsmaulHusna,
   searchQuery = '',
   onSearchChange,
+  onOpenSearch,
   settings
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -369,14 +370,21 @@ export default function TopSlidingBanner({
 
         {/* Floating Search Bar */}
         {onSearchChange && (
-          <div className="top-banner-search-bar">
+          <div 
+            className="top-banner-search-bar"
+            onClick={() => onOpenSearch && onOpenSearch()}
+          >
             <Search size={19} className="top-banner-search-icon" />
             <input 
               type="text"
               className="top-banner-search-input"
               placeholder={isEnglish ? "Search" : "Search"}
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onFocus={() => onOpenSearch && onOpenSearch()}
+              onChange={(e) => {
+                if (onOpenSearch) onOpenSearch();
+                onSearchChange(e.target.value);
+              }}
               aria-label="Search"
             />
           </div>

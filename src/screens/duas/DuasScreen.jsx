@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { 
   Search, 
   X, 
@@ -26,6 +26,7 @@ import { CATEGORIES } from '../../data/categories';
 import { CATEGORIES_DATA, CATEGORY_THEMES } from '../../data/categoriesData';
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import { translateCategory, translateSubcategory } from '../../utils/translations';
+import { cleanMalayalamText, getSearchVariants } from '../../utils/manglishTransliteration';
 import TopSlidingBanner from './TopSlidingBanner';
 import AsmaulHusnaScreen from './AsmaulHusnaScreen';
 import CategoryDuaReader from './CategoryDuaReader';
@@ -62,10 +63,41 @@ export default function DuasScreen({
   onReadingStateChange
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchActive, setIsSearchActive] = useState(false);
   const [isAsmaulHusnaOpen, setIsAsmaulHusnaOpen] = useState(false);
   const [expandedCatId, setExpandedCatId] = useState(null);
   const [activeReading, setActiveReading] = useState(null);
   const searchInputRef = useRef(null);
+  const isComposingRef = useRef(false);
+
+  const focusInputToEnd = useCallback(() => {
+    const el = searchInputRef.current;
+    if (!el) return;
+    if (document.activeElement !== el) {
+      el.focus({ preventScroll: true });
+    }
+  }, []);
+
+  const handleCompositionStart = () => {
+    isComposingRef.current = true;
+  };
+
+  const handleCompositionEnd = (e) => {
+    isComposingRef.current = false;
+    const val = e.target.value;
+    setSearchQuery(val);
+    requestAnimationFrame(() => {
+      focusInputToEnd();
+    });
+  };
+
+  const handleSearchInputChange = (e) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    if (!isSearchActive) {
+      setIsSearchActive(true);
+    }
+  };
 
   // Handle mobile hardware back button for DuasScreen subviews
   useEffect(() => {
@@ -77,12 +109,36 @@ export default function DuasScreen({
   }, [isAsmaulHusnaOpen]);
 
   useEffect(() => {
-    if (!searchQuery.trim()) return;
+    if (!isSearchActive && !searchQuery.trim()) return;
     return registerBackButtonHandler(() => {
-      setSearchQuery('');
+      if (searchQuery.trim()) {
+        setSearchQuery('');
+        focusInputToEnd();
+      } else {
+        setIsSearchActive(false);
+      }
       return true;
     }, 60);
-  }, [searchQuery]);
+  }, [isSearchActive, searchQuery, focusInputToEnd]);
+
+  // Ensure input gets and retains focus when search opens
+  useEffect(() => {
+    if (isSearchActive) {
+      const timer = setTimeout(() => {
+        focusInputToEnd();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isSearchActive, focusInputToEnd]);
+
+  // Maintain input focus across text updates and Manglish transliteration commits
+  useEffect(() => {
+    if (isSearchActive && !isComposingRef.current) {
+      requestAnimationFrame(() => {
+        focusInputToEnd();
+      });
+    }
+  }, [searchQuery, isSearchActive, focusInputToEnd]);
 
   useEffect(() => {
     if (!selectedCategoryId) return;
@@ -113,20 +169,118 @@ export default function DuasScreen({
     ? duas.filter(d => d.categoryId === activeCategory.id)
     : [];
 
-  // Duas matching search across all duas
-  const searchResults = searchQuery.trim() === ''
-    ? []
-    : duas.filter(d => 
-        d.titleMl.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        d.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (d.transliteration && d.transliteration.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        d.arabic.includes(searchQuery) ||
-        d.meaningMl.includes(searchQuery) ||
-        (d.tags && d.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
-      );
+  // Search dataset derived strictly from "പ്രധാന വിഭാഗങ്ങൾ" (Main Categories) section and their Duas
+  const mainCategoriesSearchIndex = useMemo(() => {
+    const list = [];
+    (CATEGORIES_DATA || []).forEach((cat) => {
+      const subs = cat.subcategories || [];
+      const totalDuasInCat = subs.reduce((acc, s) => acc + (s.duas?.length || 0), 0);
+      const catNameEn = CATEGORY_THEMES[cat.originalId]?.nameEn || translateCategory(cat, 'en');
+      const cleanCatName = (cat.name || '').replace(/[\u200B-\u200D\uFEFF]/g, '');
 
-  const handleSearchItemClick = (d) => {
-    onSelectDua(d);
+      // 1. Category item
+      list.push({
+        type: 'category',
+        uniqueKey: `cat_${cat.id}`,
+        category: cat,
+        nameMl: cleanCatName,
+        nameEn: catNameEn,
+        nameAr: cat.nameArabic || '',
+        subCount: subs.length,
+        duaCount: totalDuasInCat,
+        displaySubtitleMl: `${subs.length} ഉപവിഭാഗങ്ങൾ • ${totalDuasInCat} ദുആകൾ`,
+        displaySubtitleEn: `${subs.length} Subcategories • ${totalDuasInCat} Duas`,
+        searchableText: cleanMalayalamText(`${cleanCatName} ${catNameEn} ${cat.nameArabic || ''}`)
+      });
+
+      // 2. Subcategory items
+      subs.forEach((sub) => {
+        const subNameEn = translateSubcategory(sub, 'en');
+        const cleanSubName = (sub.name || '').replace(/[\u200B-\u200D\uFEFF]/g, '');
+        const subDuaCount = sub.duas?.length || 0;
+
+        list.push({
+          type: 'subcategory',
+          uniqueKey: `sub_${cat.id}_${sub.id}`,
+          category: cat,
+          subcategory: sub,
+          nameMl: cleanSubName,
+          nameEn: subNameEn,
+          nameAr: sub.nameArabic || '',
+          duaCount: subDuaCount,
+          parentNameMl: `${cleanCatName} • ${subDuaCount} ദുആകൾ`,
+          parentNameEn: `${catNameEn} • ${subDuaCount} Duas`,
+          searchableText: cleanMalayalamText(`${cleanCatName} ${cleanSubName} ${catNameEn} ${subNameEn} ${sub.nameArabic || ''}`)
+        });
+
+        // 3. Duas inside this subcategory
+        (sub.duas || []).forEach((d, dIdx) => {
+          const rawTitleMl = ((d.desc || d.hint || `ദുആ #${d.id}`)).replace(/[\u200B-\u200D\uFEFF]/g, '');
+          const rawTitleEn = d.hint || (d.trans_en ? (d.trans_en.length > 55 ? d.trans_en.slice(0, 55) + '...' : d.trans_en) : `Dua #${d.id}`);
+
+          list.push({
+            type: 'dua',
+            uniqueKey: `dua_${cat.id}_${sub.id}_${d.id}_${dIdx}`,
+            category: cat,
+            subcategory: sub,
+            dua: d,
+            duaIndex: dIdx,
+            id: d.id,
+            titleMl: rawTitleMl,
+            titleEn: rawTitleEn,
+            parentNameMl: `${cleanCatName} > ${cleanSubName}`,
+            parentNameEn: `${catNameEn} > ${subNameEn}`,
+            searchableText: cleanMalayalamText([
+              cleanCatName,
+              catNameEn,
+              cleanSubName,
+              subNameEn,
+              d.desc,
+              d.trans,
+              d.trans_en,
+              d.hint,
+              d.transli,
+              d.transli_en,
+              d.ref,
+              d.dua
+            ].filter(Boolean).join(' '))
+          });
+        });
+      });
+    });
+    return list;
+  }, []);
+
+  // Filter search results exclusively from Main Categories based on Malayalam and Manglish variants
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim();
+    if (!q) return [];
+    const variants = getSearchVariants(q);
+    if (variants.length === 0) return [];
+
+    return mainCategoriesSearchIndex.filter(item => {
+      return variants.some(v => item.searchableText.includes(v));
+    });
+  }, [searchQuery, mainCategoriesSearchIndex]);
+
+  const handleSearchItemClick = (item) => {
+    if (item.type === 'category') {
+      onSelectCategory(item.category.id);
+    } else if (item.type === 'subcategory') {
+      setActiveReading({ 
+        category: item.category, 
+        subcategory: item.subcategory, 
+        index: 0 
+      });
+      if (onReadingStateChange) onReadingStateChange(true);
+    } else if (item.type === 'dua') {
+      setActiveReading({ 
+        category: item.category, 
+        subcategory: item.subcategory, 
+        index: item.duaIndex 
+      });
+      if (onReadingStateChange) onReadingStateChange(true);
+    }
   };
 
   return (
@@ -173,7 +327,7 @@ export default function DuasScreen({
           settings={settings}
           onViewChange={(v) => onReadingStateChange && onReadingStateChange(v === 'reading')}
         />
-      ) : searchQuery.trim() !== '' ? (
+      ) : isSearchActive || searchQuery.trim() !== '' ? (
         <div className="search-active-container">
           <div className="search-bar-wrap" style={{ marginTop: '6px' }}>
             <Search size={18} className="search-icon-left" />
@@ -183,12 +337,23 @@ export default function DuasScreen({
               className="search-input"
               placeholder="Search"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchInputChange}
+              onCompositionStart={handleCompositionStart}
+              onCompositionEnd={handleCompositionEnd}
               autoFocus
             />
             <button 
+              type="button"
               className="search-clear-btn" 
-              onClick={() => setSearchQuery('')}
+              onClick={() => {
+                if (searchQuery) {
+                  setSearchQuery('');
+                  focusInputToEnd();
+                } else {
+                  setIsSearchActive(false);
+                }
+              }}
+              aria-label="Clear search"
             >
               <X size={16} />
             </button>
@@ -202,28 +367,37 @@ export default function DuasScreen({
 
           {searchResults.length === 0 ? (
             <div className="empty-state">
-              <p className="empty-title">{isEnglish ? "No Duas Found" : "ദുആകൾ കണ്ടെത്താനായില്ല"}</p>
+              <p className="empty-title">{isEnglish ? "No Results Found" : "ഫലങ്ങൾ കണ്ടെത്താനായില്ല"}</p>
               <p className="empty-desc">
-                {isEnglish ? "Please try another keyword." : "മറ്റൊരു വാക്ക് നൽകി വീണ്ടും തിരയുക."}
+                {isEnglish 
+                  ? "Try searching in Malayalam or Manglish (e.g. ravile, urakkam, safar)." 
+                  : "മലയാളത്തിലോ മംഗ്ലീഷിലോ തിരയുക (ഉദാ: ravile, urakkam, safar)."}
               </p>
             </div>
           ) : (
             <div className="category-duas-list">
-              {searchResults.map((d) => {
-                const cat = CATEGORIES.find(c => c.id === d.categoryId);
+              {searchResults.map((item) => {
+                const title = isEnglish ? (item.titleEn || item.nameEn) : (item.titleMl || item.nameMl);
+                const subtitle = isEnglish ? (item.parentNameEn || item.displaySubtitleEn) : (item.parentNameMl || item.displaySubtitleMl);
+                const badge = item.type === 'category'
+                  ? (isEnglish ? 'Category' : 'പ്രധാന വിഭാഗം')
+                  : item.type === 'subcategory'
+                  ? (isEnglish ? 'Subcategory' : 'ഉപവിഭാഗം')
+                  : `#${item.id}`;
+
                 return (
                   <div 
-                    key={d.id} 
+                    key={item.uniqueKey} 
                     className="dua-list-item-card"
-                    onClick={() => handleSearchItemClick(d)}
+                    onClick={() => handleSearchItemClick(item)}
                   >
                     <div className="dua-item-content">
                       <div className="dua-item-title-text">
-                        {isEnglish ? d.titleEn : d.titleMl}
+                        {title}
                       </div>
                       <div className="dua-item-meta-sub">
-                        <span>{cat ? (isEnglish ? cat.titleEn : cat.titleMl) : ''}</span>
-                        {d.authenticity && <span>• {d.authenticity}</span>}
+                        <span>{subtitle}</span>
+                        {badge && <span>• {badge}</span>}
                       </div>
                     </div>
                     <ChevronRight size={18} className="dua-item-chevron" />
@@ -304,6 +478,7 @@ export default function DuasScreen({
             onOpenAsmaulHusna={() => setIsAsmaulHusnaOpen(true)}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            onOpenSearch={() => setIsSearchActive(true)}
             settings={settings}
           />
 
