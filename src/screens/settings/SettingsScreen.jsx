@@ -9,8 +9,7 @@ import {
   ChevronDown, 
   ChevronRight, 
   X,
-  Sparkles,
-  ShieldCheck
+  Sparkles
 } from 'lucide-react';
 import './SettingsScreen.css';
 
@@ -250,7 +249,7 @@ export default function SettingsScreen({
       {/* 5. Version Info */}
       <p className="settings-version-text">Munajat Version 2.0.1</p>
 
-      {/* About App Dialog Modal */}
+      {/* About App Dialog Modal (Glassmorphic) */}
       {showAboutModal && (
         <div 
           className="settings-modal-backdrop" 
@@ -259,46 +258,70 @@ export default function SettingsScreen({
           <div 
             className="settings-modal-content" 
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="about-modal-title"
           >
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
-              <button 
-                onClick={() => setShowAboutModal(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B' }}
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
+            {/* Ambient Background Glow Effects */}
+            <div className="about-modal-glow about-modal-glow-emerald" />
+            <div className="about-modal-glow about-modal-glow-gold" />
+
+            {/* Close Button */}
+            <button 
+              type="button"
+              className="about-modal-close-btn"
+              onClick={() => setShowAboutModal(false)}
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Logo Wrapper */}
+            <div className="about-modal-logo-wrapper">
+              <img 
+                src="/munajat_logo.png" 
+                alt="Munajat Logo" 
+                className="about-modal-logo-img"
+              />
             </div>
 
-            <div style={{ width: '64px', height: '64px', borderRadius: '16px', backgroundColor: '#ECFDF5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>
-              <ShieldCheck size={36} />
+            {/* Title & Version */}
+            <h3 id="about-modal-title" className="about-modal-title">
+              مناجاة (Munajat)
+            </h3>
+            <div className="about-modal-version-badge">
+              <span className="about-modal-version-dot" />
+              <span>Version 2.0.1</span>
             </div>
-
-            <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 6px 0' }}>مناجاة (Munajat)</h3>
-            <p style={{ fontSize: '13px', color: '#059669', fontWeight: 600, margin: '0 0 14px 0' }}>Version 2.0.1</p>
             
-            <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #64748B)', lineHeight: 1.6, margin: '0 0 20px 0' }}>
+            {/* Description */}
+            <p className="about-modal-desc">
               Authentic Islamic Duas & Adhkar from Quran & Sunnah with full Malayalam translations, transliterations, word-by-word meanings, and audio recitation.
             </p>
 
-            <div style={{ fontSize: '12px', color: '#94A3B8', borderTop: '1px solid #F1F5F9', paddingTop: '14px', marginBottom: '16px' }}>
-              Developed with devotion by <strong>Burooj 4 Tech</strong>
-                <div style={{ fontSize: '12px', color: '#94A3B8', borderTop: '1px solid #F1F5F9', paddingTop: '14px', marginBottom: '16px' }}>
-              App logo designed by <strong>Swalih</strong>
-              
+            {/* Credits Section */}
+            <div className="about-modal-credits">
+              <div className="about-modal-credit-row">
+                <span className="about-modal-credit-label">Developed with devotion by</span>
+                <span className="about-modal-credit-name">Burooj 4 Tech</span>
+              </div>
+              <div className="about-modal-credit-row">
+                <span className="about-modal-credit-label">App logo designed by</span>
+                <span className="about-modal-credit-name">Swalih</span>
+              </div>
             </div>
-             </div>
 
+            {/* Splash Screen Button */}
             {onShowSplash && (
               <button 
-                className="fav-explore-btn"
-                style={{ width: '100%', justifyContent: 'center' }}
+                type="button"
+                className="about-modal-splash-btn"
                 onClick={() => {
                   setShowAboutModal(false);
                   onShowSplash();
                 }}
               >
-                <Sparkles size={16} />
+                <Sparkles size={16} className="about-modal-sparkle-icon" />
                 <span>View Splash Screen</span>
               </button>
             )}

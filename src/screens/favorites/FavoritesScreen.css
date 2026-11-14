@@ -438,18 +438,54 @@
 
 .fav-copied-tooltip {
   position: absolute;
-  top: -32px;
+  top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   background: #064E3B;
   color: #FFFFFF;
   font-size: 11.5px;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
   white-space: nowrap;
   pointer-events: none;
+  z-index: 100;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  animation: fav-tooltip-fade 0.18s ease-out;
+}
+
+.fav-copied-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #064E3B transparent;
+}
+
+@keyframes fav-tooltip-fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+[data-theme="dark"] .fav-copied-tooltip {
+  background: #059669;
+  color: #FFFFFF;
+  border-color: rgba(52, 211, 153, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .fav-copied-tooltip::before {
+  border-color: transparent transparent #059669 transparent;
 }
 
 /* ═══════ ARABIC DUA TEXT ═══════ */

@@ -31,6 +31,7 @@ import {
 import { registerBackButtonHandler } from '../../utils/backButtonManager';
 import { translateCategory, translateSubcategory, translateHint } from '../../utils/translations';
 import { getStoredSettings } from '../../utils/storage';
+import { Share } from '@capacitor/share';
 import './CategoryDuaReader.css';
 
 const AUDIO_BASE = 'https://crimson-cell-3d4c.mubarakar95.workers.dev/';
@@ -127,16 +128,34 @@ const DuaMultiCard = ({
   };
 
   const handleShare = async () => {
-    const textParts = [dua.dua, isEnglish ? (dua.trans_en || dua.trans) : dua.trans, dua.ref].filter(Boolean);
+    const textParts = [
+      dua.dua,
+      isEnglish ? (dua.trans_en || dua.trans) : dua.trans,
+      dua.ref ? `(${dua.ref})` : null
+    ].filter(Boolean);
     const text = textParts.join('\n\n');
+
+    try {
+      await Share.share({
+        title: 'Munajat - Dua',
+        text,
+        dialogTitle: 'Share'
+      });
+      return;
+    } catch (err) {
+      if (err && (err.name === 'AbortError' || String(err).toLowerCase().includes('cancel'))) {
+        return;
+      }
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${duaNumber || dua.id}`,
+          title: 'Munajat - Dua',
           text
         });
       } catch {
-        // Ignored
+        // Ignored or cancelled
       }
     } else {
       handleCopy();
@@ -1028,13 +1047,26 @@ export default function CategoryDuaReader({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [view, currentIndex, activeDuas.length, currentSectionIndex, nextSection, prevSection, handleBackToHomeOrCategories]);
 
-  // Keep active pill scrolled into view in pagination bar
+  // Keep active pill scrolled into view strictly inside the capsule bar container without causing document layout shift
   const pillBarRef = useRef(null);
   useEffect(() => {
     if (view === 'reading' && pillBarRef.current) {
-      const activeEl = pillBarRef.current.querySelector('.cdr-number-pill.active');
+      const container = pillBarRef.current;
+      const activeEl = container.querySelector('.cdr-number-pill.active');
       if (activeEl) {
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const pillLeft = activeEl.offsetLeft;
+        const pillWidth = activeEl.offsetWidth;
+        const containerWidth = container.clientWidth;
+        const targetScrollLeft = pillLeft - (containerWidth / 2) + (pillWidth / 2);
+
+        container.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: 'smooth'
+        });
+      }
+      // Guard against any accidental horizontal window/body scroll
+      if (window.scrollX !== 0 || document.documentElement.scrollLeft !== 0) {
+        window.scrollTo(0, 0);
       }
     }
   }, [currentIndex, view]);
