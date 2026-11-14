@@ -1028,13 +1028,26 @@ export default function CategoryDuaReader({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [view, currentIndex, activeDuas.length, currentSectionIndex, nextSection, prevSection, handleBackToHomeOrCategories]);
 
-  // Keep active pill scrolled into view in pagination bar
+  // Keep active pill scrolled into view strictly inside the capsule bar container without causing document layout shift
   const pillBarRef = useRef(null);
   useEffect(() => {
     if (view === 'reading' && pillBarRef.current) {
-      const activeEl = pillBarRef.current.querySelector('.cdr-number-pill.active');
+      const container = pillBarRef.current;
+      const activeEl = container.querySelector('.cdr-number-pill.active');
       if (activeEl) {
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const pillLeft = activeEl.offsetLeft;
+        const pillWidth = activeEl.offsetWidth;
+        const containerWidth = container.clientWidth;
+        const targetScrollLeft = pillLeft - (containerWidth / 2) + (pillWidth / 2);
+
+        container.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: 'smooth'
+        });
+      }
+      // Guard against any accidental horizontal window/body scroll
+      if (window.scrollX !== 0 || document.documentElement.scrollLeft !== 0) {
+        window.scrollTo(0, 0);
       }
     }
   }, [currentIndex, view]);
